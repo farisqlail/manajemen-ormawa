@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClubController;
+use App\Http\Controllers\DivisionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,4 +32,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard.index');
     })->name('dashboard');
+
+    //clubs
+    Route::resource('clubs', ClubController::class);
+
+    //divisions
+    Route::get('/clubs/{id_club}/divisions', [DivisionController::class, 'index'])->name('divisions.index');
+    Route::get('/clubs/{id_club}/divisions/create', [DivisionController::class, 'create'])->name('divisions.create');
+    Route::get('/divisions/{id}/edit', [DivisionController::class, 'edit'])->name('divisions.edit');
+    Route::post('/clubs/{id_club}/divisions', [DivisionController::class, 'store'])->name('divisions.store');
+    Route::put('/divisions/{id}', [DivisionController::class, 'update'])->name('divisions.update');
+    Route::delete('/divisions/{id}', [DivisionController::class, 'destroy'])->name('divisions.destroy');
 });
