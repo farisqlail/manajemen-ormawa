@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clubs;
+use App\Models\Division;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -33,7 +35,9 @@ class AuthController extends Controller
 
     public function registerForm()
     {
-        return view('auth.register');
+        $clubs = Clubs::all();
+        $divisions = Division::all();
+        return view('auth.register', compact('clubs', 'divisions'));
     }
 
     public function register(Request $request)
@@ -42,12 +46,18 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'id_club' => ['required', 'integer'],
+            'id_division' => ['required', 'integer'],
         ]);
 
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'id_club' => $data['id_club'],
+            'id_division' => $data['id_division'],
+            'role' => 'ormawa',
+            'status' => 'pending'
         ]);
 
         Auth::login($user);

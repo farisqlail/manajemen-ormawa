@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -45,6 +45,24 @@
                 <div class="form-group">
                     <label for="password_confirmation">Confirm Password:</label>
                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_club">Club:</label>
+                    <select class="form-control" id="id_club" name="id_club" required>
+                        <option value="">Select a Club</option>
+                        @foreach($clubs as $club)
+                            <option value="{{ $club->id }}">{{ $club->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_division">Division:</label>
+                    <select class="form-control" id="id_division" name="id_division" required>
+                        <option value="">Select a Division</option>
+                        @foreach($divisions as $division)
+                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Register</button>
             </form>

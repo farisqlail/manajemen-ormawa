@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'id_club',
+        'id_division',
+        'status'
     ];
 
     /**
@@ -41,4 +45,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function club()
+    {
+        return $this->belongsTo(Clubs::class, 'id_club');
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class, 'id_division');
+    }
 }

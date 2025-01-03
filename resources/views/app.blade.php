@@ -57,7 +57,7 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="/prokers">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Proker</span></a>
             </li>
@@ -75,7 +75,7 @@
                         <h6 class="collapse-header">Organisasi :</h6>
                         <a class="collapse-item" href="/clubs">Ormawa</a>
                         <a class="collapse-item" href="buttons.html">Struktur</a>
-                        <a class="collapse-item" href="cards.html">Anggota</a>
+                        <a class="collapse-item" href="/anggotas">Anggota</a>
                     </div>
                 </div>
             </li>

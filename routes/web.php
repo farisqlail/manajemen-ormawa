@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\ProkerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,4 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/clubs/{id_club}/divisions', [DivisionController::class, 'store'])->name('divisions.store');
     Route::put('/divisions/{id}', [DivisionController::class, 'update'])->name('divisions.update');
     Route::delete('/divisions/{id}', [DivisionController::class, 'destroy'])->name('divisions.destroy');
+
+    Route::resource('prokers', ProkerController::class);
+
+    Route::resource('anggotas', AnggotaController::class);
 });
