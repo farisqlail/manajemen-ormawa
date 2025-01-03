@@ -73,7 +73,11 @@
                 <div id="organization" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Organisasi :</h6>
+                        @if(Auth::user()->role === 'ormawa')
+                        <a class="collapse-item" href="/profile">Profile</a>
+                        @else
                         <a class="collapse-item" href="/clubs">Ormawa</a>
+                        @endif
                         <a class="collapse-item" href="buttons.html">Struktur</a>
                         <a class="collapse-item" href="/anggotas">Anggota</a>
                     </div>

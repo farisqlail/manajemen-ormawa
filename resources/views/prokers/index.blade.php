@@ -2,46 +2,34 @@
 
 @section('content')
 <div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <h2>Proker List</h2>
-            <a href="{{ route('prokers.create') }}" class="btn btn-primary mb-3">Add New Proker</a>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Club ID</th>
-                        <th>Name</th>
-                        <th>Document LPJ</th>
-                        <th>Budget</th>
-                        <th>Target Event</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($prokers as $proker)
-                    <tr>
-                        <td>{{ $proker->id }}</td>
-                        <td>{{ $proker->id_club }}</td>
-                        <td>{{ $proker->name }}</td>
-                        <td>{{ $proker->document_lpj }}</td>
-                        <td>{{ $proker->budget }}</td>
-                        <td>{{ $proker->target_event }}</td>
-                        <td>{{ $proker->status }}</td>
-                        <td>
-                            <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-warning">Edit</a>
-                            <form action="{{ route('prokers.destroy', $proker->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    <h2>List Proker</h2>
+    <a href="{{ route('prokers.create') }}" class="btn btn-primary mb-3">Ajukan Proker</a>
+    <div class="row">
+        @foreach ($prokers as $proker)
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><b>{{ $proker->name }}</b></h5>
+                    <p class="card-text"><strong>Budget:</strong> Rp {{ number_format($proker->budget, 0, ',', '.') }}</p>
+                    <p class="card-text"><strong>Target Event:</strong> {{ $proker->target_event }}</p>
+                    <p class="card-text"><strong>Status:</strong> {{ $proker->status }}</p>
+
+                    <div class="d-flex">
+                        <a href="{{ Storage::url($proker->document_lpj) }}" class="btn btn-info mr-2" download>Download</a>
+                        <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-warning mr-2">
+                            <i class="fas fa-fw fa-pen"></i>
+                        </a>
+                        <form action="{{ route('prokers.destroy', $proker->id) }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-fw fa-trash"></i></button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
         </div>
+        @endforeach
     </div>
 </div>
 @endsection

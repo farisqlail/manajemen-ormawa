@@ -4,17 +4,13 @@
    @section('content')
    <div class="container mt-5">
        <h2>Edit Proker</h2>
-       <form action="{{ route('prokers.update', $proker->id) }}" method="POST">
+       <form action="{{ route('prokers.update', $proker->id) }}" method="POST" enctype="multipart/form-data">
            @csrf
            @method('PUT')
            <div class="form-group">
-               <label for="id_club">Club:</label>
-               <select class="form-control" id="id_club" name="id_club" required>
-                   <option value="">Select a Club</option>
-                   @foreach($clubs as $club)
-                   <option value="{{ $club->id }}" {{ $proker->id_club == $club->id ? 'selected' : '' }}>{{ $club->name }}</option>
-                   @endforeach
-               </select>
+               <label for="club_id">Oramawa</label>
+               <input type="text" class="form-control" id="club_id" value="{{ Auth::user()->club->name ?? 'N/A' }}" readonly>
+               <input type="hidden" name="id_club" value="{{ Auth::user()->id_club }}">
            </div>
            <div class="form-group">
                <label for="name">Name:</label>
