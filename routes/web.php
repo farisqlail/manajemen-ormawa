@@ -69,4 +69,13 @@ Route::middleware('auth')->group(function () {
 
     //user
     Route::resource('users', AuthController::class)->except(['loginForm', 'login', 'registerForm', 'register', 'logout']);
+    Route::post('/users/{id}/approve', [AuthController::class, 'approveUser'])->name('users.approve');
+    Route::delete('/users/{id}', [AuthController::class, 'reject'])->name('users.reject');
+
+    //dasboard
+    Route::get('/prokers/club/{clubId}', [DashboardController::class, 'showClubProkers'])->name('prokers.club');
+    Route::post('/prokers/{id}/approve', [ProkerController::class, 'approveProker'])->name('prokers.approve');
+    Route::delete('/prokers/{id}/reject', [ProkerController::class, 'rejectProker'])->name('prokers.reject');
+    Route::get('/prokers/{id}/download', [ProkerController::class, 'downloadLPJ'])->name('prokers.download');
+
 });

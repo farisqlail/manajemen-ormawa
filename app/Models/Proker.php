@@ -17,4 +17,9 @@ class Proker extends Model
         'target_event',
         'status',
     ];
+
+    public function club()
+    {
+        return $this->belongsTo(Clubs::class, 'id_club');
+    }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             margin: 0;
             background-color: #f8f9fa;
         }
+
         .card {
             width: 100%;
             max-width: 400px;
@@ -21,6 +23,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="card">
         <div class="card-body">
@@ -36,8 +39,12 @@
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <div class="mt-3" align="center">
+                    <a href="/register">Daftar ormawa</a>
+                </div>
             </form>
         </div>
     </div>
 </body>
+
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anggota;
 use App\Models\Clubs;
 use App\Models\Division;
 use Illuminate\Http\Request;
@@ -134,28 +135,52 @@ class AuthController extends Controller
             'role' => ['required', 'string'],
             'status' => ['required', 'string'],
         ]);
-    
+
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->id_club = $data['id_club'];
         $user->id_division = $data['id_division'];
         $user->role = $data['role'];
         $user->status = $data['status'];
-    
+
         // Update password only if it's filled
         if ($request->filled('password')) {
             $user->password = Hash::make($data['name'] . '123'); // Set password to name + '123'
         }
-    
+
         $user->save();
-    
+
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
-    }    
+    }
 
     // Menghapus pengguna
     public function destroy(User $user)
     {
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+    }
+
+    public function approveUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = 'active';
+        $user->save();
+
+        Anggota::create([
+            'name' => $user->name,
+            'email' => $user->email,
+            'id_club' => $user->id_club,
+            'id_division' => $user->id_division,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'User approved successfully.');
+    }
+
+    public function reject($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User rejected successfully.');
     }
 }

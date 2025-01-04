@@ -15,4 +15,9 @@ class Clubs extends Model
     {
         return $this->hasMany(Division::class, 'id_clubs');
     }
+
+    public function prokers()
+    {
+        return $this->hasMany(Proker::class, 'id_club'); 
+    }
 }

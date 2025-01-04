@@ -98,4 +98,36 @@ class ProkerController extends Controller
         $proker->delete();
         return redirect()->route('prokers.index')->with('success', 'Proker deleted successfully.');
     }
+
+    public function downloadLPJ($id)
+    {
+        $proker = Proker::findOrFail($id);
+
+        if (!$proker->document_lpj) {
+            return redirect()->back()->with('error', 'Document not found.');
+        }
+
+        $clubName = $proker->club->name; 
+        $fileName = "{$proker->name}_{$clubName}." . pathinfo($proker->document_lpj, PATHINFO_EXTENSION);
+
+        return response()->download(storage_path('app/public' . '/' . $proker->document_lpj), $fileName);
+    }
+
+    public function approveProker($id)
+    {
+        $proker = Proker::findOrFail($id);
+        $proker->status = 'approved';
+        $proker->save();
+
+        return redirect()->back()->with('success', 'Proker approved successfully.');
+    }
+
+    public function rejectProker($id)
+    {
+        $proker = Proker::findOrFail($id);
+        $proker->status = 'rejected';
+        $proker->save();
+
+        return redirect()->back()->with('success', 'Proker rejected successfully.');
+    }
 }
