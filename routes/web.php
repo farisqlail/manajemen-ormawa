@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClubController;
@@ -62,4 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/user', [UserProfileController::class, 'show'])->name('profile.user.show')->middleware('auth');
     Route::get('/profile/edit/{id}', [UserProfileController::class, 'edit'])->name('profile.user.edit')->middleware('auth');
     Route::put('/profile/update/{id}', [UserProfileController::class, 'update'])->name('profile.user.update')->middleware('auth');
+
+    //activity
+    Route::resource('activities', ActivityController::class);
 });
