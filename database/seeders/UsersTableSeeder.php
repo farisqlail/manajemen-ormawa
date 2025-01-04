@@ -12,33 +12,32 @@ class UsersTableSeeder extends Seeder
         // Membuat user admin
         User::create([
             'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'), // Ganti dengan password yang aman
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('admin123'),
             'role' => 'admin',
             'status' => 'active',
-            'id_club' => null, // Admin tidak memiliki klub
-            'id_division' => null, // Admin tidak memiliki divisi
+            'id_club' => null, 
+            'id_division' => null, 
         ]);
 
-        // Membuat beberapa user ormawa
         User::create([
             'name' => 'Ormawa User 1',
-            'email' => 'ormawa1@example.com',
-            'password' => bcrypt('password'), // Ganti dengan password yang aman
+            'email' => 'ormawa1@gmail.com',
+            'password' => bcrypt('ormawa123'),
             'role' => 'ormawa',
             'status' => 'active',
-            'id_club' => 1, // Ganti dengan ID klub yang valid
-            'id_division' => 1, // Ganti dengan ID divisi yang valid
+            'id_club' => 1, 
+            'id_division' => 1, 
         ]);
 
         User::create([
             'name' => 'Ormawa User 2',
-            'email' => 'ormawa2@example.com',
-            'password' => bcrypt('password'), // Ganti dengan password yang aman
+            'email' => 'ormawa2@gmail.com',
+            'password' => bcrypt('ormawa123'),
             'role' => 'ormawa',
             'status' => 'active',
-            'id_club' => 1, // Ganti dengan ID klub yang valid
-            'id_division' => 2, // Ganti dengan ID divisi yang valid
+            'id_club' => 1,
+            'id_division' => 2, 
         ]);
     }
 }

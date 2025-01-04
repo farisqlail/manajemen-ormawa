@@ -2,16 +2,17 @@
 
 @section('content')
 <div class="container">
-    <h1>Add Club</h1>
-    <form action="{{ route('clubs.store') }}" method="POST" enctype="multipart/form-data"> <!-- Tambahkan enctype -->
+    <h1>Edit Club</h1>
+    <form action="{{ route('clubs.updateOrmawa', $club->id) }}" method="POST" enctype="multipart/form-data"> <!-- Tambahkan enctype -->
         @csrf
+        @method('PUT')
         <div class="form-group mb-3">
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+            <input type="text" id="name" name="name" value="{{ $club->name }}" class="form-control" required>
         </div>
         <div class="form-group mb-3">
             <label for="description">Description</label>
-            <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+            <textarea id="description" name="description" class="form-control" rows="4" required>{{ $club->description }}</textarea>
         </div>
         <div class="form-group mb-3">
             <label for="logo">Logo</label>
@@ -44,16 +45,18 @@
             </div>
             @endif
         </div>
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('clubs.index') }}" class="btn btn-secondary">Kembali</a>
+        <button type="submit" class="btn btn-primary">Ubah</button>
+        <a href="{{ route('profile') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 
 <script>
-    document.querySelector('.custom-file-input').addEventListener('change', function(e) {
-        var fileName = e.target.files[0].name;
-        var nextSibling = e.target.nextElementSibling;
-        nextSibling.innerText = fileName;
+    document.querySelectorAll('.custom-file-input').forEach(input => {
+        input.addEventListener('change', function(e) {
+            var fileName = e.target.files[0].name;
+            var nextSibling = e.target.nextElementSibling;
+            nextSibling.innerText = fileName;
+        });
     });
 </script>
 @endsection

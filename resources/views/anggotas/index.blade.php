@@ -17,6 +17,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if($anggotas->isEmpty())
+                    <tr>
+                        <td colspan="5" class="text-center">Tidak ada anggota yang ditemukan.</td>
+                    </tr>
+                    @else
                     @foreach ($anggotas as $anggota)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
@@ -33,6 +38,7 @@
                         </td>
                     </tr>
                     @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

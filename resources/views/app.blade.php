@@ -80,12 +80,11 @@
                         @else
                         <a class="collapse-item" href="/clubs">Ormawa</a>
                         @endif
-                        <a class="collapse-item" href="buttons.html">Struktur</a>
                         <a class="collapse-item" href="/anggotas">Anggota</a>
                     </div>
                 </div>
             </li>
-
+            @if(Auth::user()->role !== 'ormawa')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#setting"
                     aria-expanded="true" aria-controls="setting">
@@ -100,6 +99,7 @@
                     </div>
                 </div>
             </li>
+            @endif
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -135,13 +135,17 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{{ asset('sb-admin/img/undraw_profile.svg') }}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="/profile/user">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

@@ -9,7 +9,7 @@ class Clubs extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'logo', 'photo_structure',];
 
     public function divisions()
     {

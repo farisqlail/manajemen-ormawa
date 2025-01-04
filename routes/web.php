@@ -5,7 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProkerController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +38,8 @@ Route::middleware('auth')->group(function () {
 
     //clubs
     Route::resource('clubs', ClubController::class);
+    Route::get('/clubs/{id}/editOramawa', [ClubController::class, 'editOrmawa'])->name('clubs.editOrmawa');
+    Route::put('/clubs/ormawa/{id}', [ClubController::class, 'updateOrmawa'])->name('clubs.updateOrmawa');
 
     //divisions
     Route::get('/clubs/{id_club}/divisions', [DivisionController::class, 'index'])->name('divisions.index');
@@ -45,7 +49,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/divisions/{id}', [DivisionController::class, 'update'])->name('divisions.update');
     Route::delete('/divisions/{id}', [DivisionController::class, 'destroy'])->name('divisions.destroy');
 
+    //prokers
     Route::resource('prokers', ProkerController::class);
 
+    //anggota
     Route::resource('anggotas', AnggotaController::class);
+
+    //proker ormawa
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');
+
+    //profile user
+    Route::get('/profile/user', [UserProfileController::class, 'show'])->name('profile.user.show')->middleware('auth');
+    Route::get('/profile/edit/{id}', [UserProfileController::class, 'edit'])->name('profile.user.edit')->middleware('auth');
+    Route::put('/profile/update/{id}', [UserProfileController::class, 'update'])->name('profile.user.update')->middleware('auth');
 });

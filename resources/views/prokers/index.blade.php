@@ -5,6 +5,13 @@
     <h2>List Proker</h2>
     <a href="{{ route('prokers.create') }}" class="btn btn-primary mb-3">Ajukan Proker</a>
     <div class="row">
+        @if($prokers->isEmpty())
+        <div class="col-12">
+            <div class="alert alert-warning text-center" role="alert">
+                Tidak ada proker yang ditemukan. Silakan ajukan proker baru.
+            </div>
+        </div>
+        @else
         @foreach ($prokers as $proker)
         <div class="col-md-3 mb-4">
             <div class="card">
@@ -30,6 +37,7 @@
             </div>
         </div>
         @endforeach
+        @endif
     </div>
 </div>
 @endsection
