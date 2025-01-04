@@ -64,6 +64,11 @@
                     <span>Proker</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="/users">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Pengguna</span></a>
+            </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">

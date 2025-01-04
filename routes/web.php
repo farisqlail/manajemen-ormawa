@@ -66,4 +66,7 @@ Route::middleware('auth')->group(function () {
 
     //activity
     Route::resource('activities', ActivityController::class);
+
+    //user
+    Route::resource('users', AuthController::class)->except(['loginForm', 'login', 'registerForm', 'register', 'logout']);
 });
