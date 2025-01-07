@@ -5,7 +5,9 @@
     <div class="card">
         <div class="card-body">
             <h2>Kegiatan</h2>
+            @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
             <a href="{{ route('activities.create') }}" class="btn btn-primary mb-3">Tambah Kegiatan</a>
+            @endif
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -13,7 +15,11 @@
                         <th>Nama Kegiatan</th>
                         <th>Deskripsi</th>
                         <th>Foto Kegiatan</th>
+                        @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
                         <th>Actions</th>
+                        @else
+                        <th>Actions</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +38,7 @@
                             <img src="{{ Storage::url($photo) }}" width="50" height="50" alt="Photo">
                             @endforeach
                         </td>
+                        @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
                         <td>
                             <a href="{{ route('activities.edit', $activity->id) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ route('activities.destroy', $activity->id) }}" method="POST" style="display:inline-block;">
@@ -40,6 +47,11 @@
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </td>
+                        @else
+                        <td>
+                            <a href="{{ route('activities.show', $activity->id) }}" class="btn btn-info">Lihat</a>
+                        </td>
+                        @endif
                     </tr>
                     @endforeach
                     @endif

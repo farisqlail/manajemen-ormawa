@@ -44,6 +44,13 @@ class ActivityController extends Controller
         return redirect()->route('activities.index')->with('success', 'Activity created successfully.');
     }
 
+    public function show($id)
+    {
+        $activity = Activity::findOrFail($id);
+
+        return view('activities.show', compact('activity'));
+    }
+
     public function edit(Activity $activity)
     {
         return view('activities.edit', compact('activity'));
@@ -77,7 +84,6 @@ class ActivityController extends Controller
 
     public function destroy(Activity $activity)
     {
-        // Hapus foto dari storage
         $photos = json_decode($activity->photos, true);
         foreach ($photos as $photo) {
             Storage::disk('public')->delete($photo);

@@ -58,17 +58,21 @@
                 Ormawa
             </div>
 
+            @if(Auth::user()->role === 'ormawa' && Auth::user()->status === 'active')
             <li class="nav-item">
                 <a class="nav-link" href="/prokers">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Proker</span></a>
             </li>
+            @endif
 
+            @if(Auth::user()->role === 'admin')
             <li class="nav-item">
                 <a class="nav-link" href="/users">
                     <i class="fas fa-fw fa-user"></i>
                     <span>Pengguna</span></a>
             </li>
+            @endif
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -90,22 +94,6 @@
                     </div>
                 </div>
             </li>
-            @if(Auth::user()->role !== 'ormawa')
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#setting"
-                    aria-expanded="true" aria-controls="setting">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Setting</span>
-                </a>
-                <div id="setting" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Organisasi :</h6>
-                        <a class="collapse-item" href="buttons.html">Struktur</a>
-                        <a class="collapse-item" href="cards.html">Anggota</a>
-                    </div>
-                </div>
-            </li>
-            @endif
 
             <!-- Divider -->
             <hr class="sidebar-divider">

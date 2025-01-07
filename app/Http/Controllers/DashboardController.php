@@ -14,7 +14,9 @@ class DashboardController extends Controller
         $pendingUsers = User::where('status', 'pending')->get();
         $pendingProkers = Proker::where('status', 'pending')->get();
         $pendingProkersAdmin = Proker::where('status', 'pending')->with('club')->get()->groupBy('id_club');
-        $nonPendingProkers = Proker::where('status', '!=', 'pending')->get();
+        $nonPendingProkers = Proker::where('status', '!=', 'pending')  
+                                ->where('id_club', Auth::user()->id_club) 
+                                ->get();  
         $approvedProkers = Proker::where('status', 'approved')->with('club')->get()->groupBy('id_club');
         $members = Anggota::where('id_club', Auth::user()->id_club)->paginate(10);
 

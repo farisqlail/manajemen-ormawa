@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Edit Club</h1>
-    <form action="{{ route('clubs.update', $club->id) }}" method="POST" enctype="multipart/form-data"> <!-- Tambahkan enctype -->
+    <form action="{{ route('clubs.update', $club->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="form-group mb-3">

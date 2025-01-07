@@ -10,6 +10,7 @@
 
     @if(Auth::user()->role == 'ormawa')
     <div class="row mt-4">
+        @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
         <div class="col-md-6">
             <h4>Prokers Pending <span class="badge badge-primary rounded-circle">{{ $pendingProkers->count() }}</span></h4>
             <div class="list-group">
@@ -25,6 +26,7 @@
                 @endif
             </div>
         </div>
+        @endif
 
         <div class="col-md-6">
             <h4>Proker Mendatang</h4>
@@ -34,13 +36,13 @@
                 @else
                 @foreach($nonPendingProkers as $proker)
                 <a href="{{ route('prokers.show', $proker->id) }}" class="list-group-item list-group-item-action">
-                    {{ $proker->name }} - Tanggal Target: {{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }} <!-- Menampilkan tanggal target -->
-                    @if($proker->status == 'approved') <!-- Menampilkan label status jika proker disetujui -->
+                    {{ $proker->name }} - Tanggal Target: {{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}
+                    @if($proker->status == 'approved' && Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
                     <span class="badge badge-success float-right">Approved</span>
-                    @elseif($proker->status == 'rejected') <!-- Menampilkan label status jika proker ditolak -->
+                    @elseif($proker->status == 'rejected')
                     <span class="badge badge-danger float-right">Rejected</span>
                     @else
-                    <span class="badge badge-secondary float-right">Other</span> <!-- Label untuk status lain -->
+                    <span class="badge badge-secondary float-right">Sedang Berjalan</span>
                     @endif
                 </a>
                 @endforeach

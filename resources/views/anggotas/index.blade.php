@@ -5,7 +5,9 @@
     <div class="card">
         <div class="card-body">
             <h2>Anggota List</h2>
+            @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
             <a href="{{ route('anggotas.create') }}" class="btn btn-primary mb-3">Tambah Anggota</a>
+            @endif
             <table class="table table-bordered">
                 <thead>
                     <tr>

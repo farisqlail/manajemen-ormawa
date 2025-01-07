@@ -4,10 +4,12 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-center mb-4">Profile Ormawa</h1>
+        @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
         <div class="d-flex justify-content-center">
             <a href="{{ route('clubs.editOrmawa', $club->id) }}" class="btn btn-primary btn-lg mr-2">Edit Profile</a>
             <a href="{{ route('clubs.index') }}" class="btn btn-secondary btn-lg">Kembali</a>
         </div>
+        @endif
     </div>
 
     <div class="card shadow-lg border-0">

@@ -49,8 +49,10 @@ class ProkerController extends Controller
         }
     }
 
-    public function show(Proker $proker)
+    public function show($id)
     {
+        $proker = Proker::with('club')->findOrFail($id); 
+
         return view('prokers.show', compact('proker'));
     }
 
@@ -107,7 +109,7 @@ class ProkerController extends Controller
             return redirect()->back()->with('error', 'Document not found.');
         }
 
-        $clubName = $proker->club->name; 
+        $clubName = $proker->club->name;
         $fileName = "{$proker->name}_{$clubName}." . pathinfo($proker->document_lpj, PATHINFO_EXTENSION);
 
         return response()->download(storage_path('app/public' . '/' . $proker->document_lpj), $fileName);
