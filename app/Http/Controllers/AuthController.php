@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Anggota;
 use App\Models\Clubs;
 use App\Models\Division;
+use App\Models\Proker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -14,7 +15,9 @@ class AuthController extends Controller
 {
     public function loginForm()
     {
-        return view('auth.login');
+        $prokers = Proker::with('club')->get()->groupBy('id_club');  
+
+        return view('auth.login', compact('prokers'));
     }
 
     public function login(Request $request)
@@ -38,7 +41,9 @@ class AuthController extends Controller
     {
         $clubs = Clubs::all();
         $divisions = Division::all();
-        return view('auth.register', compact('clubs', 'divisions'));
+        $prokers = Proker::with('club')->get()->groupBy('id_club');  
+
+        return view('auth.register', compact('clubs', 'divisions', 'prokers'));
     }
 
     public function register(Request $request)

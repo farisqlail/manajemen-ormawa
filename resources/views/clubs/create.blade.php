@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Add Club</h1>
+    <h1>Tambah Ormawa</h1>
     <form action="{{ route('clubs.store') }}" method="POST" enctype="multipart/form-data"> <!-- Tambahkan enctype -->
         @csrf
         <div class="form-group mb-3">

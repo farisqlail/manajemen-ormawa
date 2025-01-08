@@ -39,8 +39,8 @@ Route::middleware('auth')->group(function () {
 
     //clubs
     Route::resource('clubs', ClubController::class);
-    Route::get('/clubs/{id}/editOramawa', [ClubController::class, 'editOrmawa'])->name('clubs.editOrmawa');
-    Route::put('/clubs/ormawa/{id}', [ClubController::class, 'updateOrmawa'])->name('clubs.updateOrmawa');
+    Route::get('/clubs/{club}/editOramawa', [ClubController::class, 'editOrmawa'])->name('clubs.editOrmawa');
+    Route::put('/clubs/ormawa/{club}', [ClubController::class, 'updateOrmawa'])->name('clubs.updateOrmawa');
 
     //divisions
     Route::get('/clubs/{id_club}/divisions', [DivisionController::class, 'index'])->name('divisions.index');

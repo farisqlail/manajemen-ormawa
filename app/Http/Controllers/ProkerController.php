@@ -12,9 +12,11 @@ class ProkerController extends Controller
 {
     public function index()
     {
-        $prokers = Proker::all();
+        $idClub = Auth::user()->id_club;
+        $prokers = Proker::where('id_club', $idClub)->get();
+
         return view('prokers.index', compact('prokers'));
-    }
+    }  
 
     public function create()
     {
@@ -51,7 +53,7 @@ class ProkerController extends Controller
 
     public function show($id)
     {
-        $proker = Proker::with('club')->findOrFail($id); 
+        $proker = Proker::with('club')->findOrFail($id);
 
         return view('prokers.show', compact('proker'));
     }

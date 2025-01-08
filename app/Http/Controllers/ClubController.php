@@ -52,9 +52,8 @@ class ClubController extends Controller
         return view('clubs.edit', compact('club'));
     }
 
-    public function editOrmawa($id)
+    public function editOrmawa(Clubs $club)
     {
-        $club = Clubs::findOrFail($id);
         return view('clubs.editOrmawa', compact('club'));
     }
 
@@ -120,7 +119,7 @@ class ClubController extends Controller
 
             $club->update($data);
 
-            return redirect()->route('Profile')->with('success', 'Club updated successfully.');
+            return redirect()->route('profile')->with('success', 'Club updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to update Club: ' . $e->getMessage());
         }
