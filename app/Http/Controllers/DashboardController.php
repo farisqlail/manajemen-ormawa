@@ -12,16 +12,22 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $pendingUsers = User::where('status', 'pending')->get();
-        $pendingProkers = Proker::where('status', 'pending')->get();
+        $pendingProkers = Proker::where('status', 'pending')
+            ->where('target_event', '>=', now()) 
+            ->get();
         $pendingProkersAdmin = Proker::where('status', 'pending')->with('club')->get()->groupBy('id_club');
-        $nonPendingProkers = Proker::where('status', '!=', 'pending')  
-                                ->where('id_club', Auth::user()->id_club) 
-                                ->get();  
+
+        $nonPendingProkers = Proker::where('status', '!=', 'pending')
+            ->where('id_club', Auth::user()->id_club)
+            ->where('target_event', '>=', now()) 
+            ->get();
+
         $approvedProkers = Proker::where('status', 'approved')->with('club')->get()->groupBy('id_club');
         $members = Anggota::where('id_club', Auth::user()->id_club)->paginate(10);
 
         return view('dashboard.index', compact('pendingUsers', 'pendingProkers', 'nonPendingProkers', 'members', 'pendingProkersAdmin', 'approvedProkers'));
     }
+
 
     public function showClubProkers($clubId)
     {

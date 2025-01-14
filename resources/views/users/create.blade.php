@@ -49,6 +49,7 @@
                     <label for="role">Role</label>
                     <select id="role" name="role" class="form-control" required>
                         <option value="admin">Admin</option>
+                        <option value="ketua">Ketua</option>
                         <option value="ormawa">Ormawa</option>
                     </select>
                 </div>

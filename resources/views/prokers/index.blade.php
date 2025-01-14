@@ -3,7 +3,9 @@
 @section('content')
 <div class="container mt-5">
     <h2>List Proker</h2>
+    @if(Auth::user()->role == 'ketua')
     <a href="{{ route('prokers.create') }}" class="btn btn-primary mb-3">Ajukan Proker</a>
+    @endif
     <div class="row">
         @if($prokers->isEmpty())
         <div class="col-12">
@@ -21,6 +23,7 @@
                     <p class="card-text"><strong>Target Event:</strong> {{ $proker->target_event }}</p>
                     <p class="card-text"><strong>Status:</strong> {{ $proker->status }}</p>
 
+                    @if(Auth::user()->role == 'ketua')
                     <div class="d-flex">
                         <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-warning mr-2">
                             <i class="fas fa-fw fa-pen"></i>
@@ -37,6 +40,7 @@
                             LPJ
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

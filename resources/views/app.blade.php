@@ -58,7 +58,7 @@
                 Ormawa
             </div>
 
-            @if(Auth::user()->role === 'ormawa' && Auth::user()->status === 'active')
+            @if(Auth::user()->role === 'ormawa' || Auth::user()->role == 'ketua' && Auth::user()->status === 'active')
             <li class="nav-item">
                 <a class="nav-link" href="/prokers">
                     <i class="fas fa-fw fa-chart-area"></i>
@@ -84,7 +84,7 @@
                 <div id="organization" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Organisasi :</h6>
-                        @if(Auth::user()->role === 'ormawa')
+                        @if(Auth::user()->role === 'ormawa' || Auth::user()->role == 'ketua')
                         <a class="collapse-item" href="/profile">Profile</a>
                         <a class="collapse-item" href="/anggotas">Anggota</a>
                         <a class="collapse-item" href="{{route('divisions.index', ['id_club' => Auth::user()->id_club])}}">Divisi</a>
