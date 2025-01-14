@@ -10,69 +10,70 @@
         body {
             display: flex;
             justify-content: center;
-            align-items: stretch;
+            /* Mengatur agar item di dalam flex container bisa menyesuaikan lebar */
+            align-items: center;
             /* Mengatur agar item di dalam flex container bisa menyesuaikan tinggi */
             height: 100vh;
+            /* Mengatur tinggi body menjadi 100% dari viewport */
             margin: 0;
             background-color: #f8f9fa;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            /* Mengatur agar item ditampilkan dalam satu baris */
+            justify-content: center;
+            /* Mengatur agar item di dalam container bisa menyesuaikan lebar */
+            align-items: flex-start;
+            /* Mengatur agar item di dalam container bisa menyesuaikan tinggi */
+            flex-wrap: wrap;
+            /* Mengizinkan item untuk membungkus jika diperlukan */
         }
 
         .card {
             width: 100%;
             max-width: 400px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: auto;
-            /* Center card */
+            margin: 20px;
+            /* Menambahkan margin untuk jarak antar elemen */
         }
 
         .proker-list {
+            width: 100%;
             max-width: 600px;
-            /* Lebar maksimum untuk daftar proker */
-            margin-left: 20px;
-            /* Spasi kiri untuk daftar proker */
-            overflow-y: auto;
-            /* Menambahkan scroll jika konten melebihi tinggi */
-            height: 100vh;
-            /* Tinggi menyesuaikan layar */
+            margin: 20px;
+            /* Menambahkan margin untuk jarak antar elemen */
+            height: auto;
             padding: 20px;
-            /* Padding untuk daftar proker */
             background-color: white;
-            /* Warna latar belakang untuk card */
             border-radius: 8px;
-            /* Sudut melengkung */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            /* Bayangan untuk card */
         }
 
         .proker-list h5 {
             margin-top: 20px;
-            /* Spasi atas untuk judul ormawa */
         }
 
         @media (max-width: 768px) {
             body {
                 padding-top: 20px;
-
+                /* Menambahkan padding atas untuk tampilan mobile */
                 padding-bottom: 20px;
+                /* Menambahkan padding bawah untuk tampilan mobile */
             }
 
+            .card,
             .proker-list {
-                margin-left: 0;
-                margin-top: 20px;
-                padding-top: 40px;
-                margin-bottom: 40px;
-                height: auto;
-            }
-
-            .card {
-                margin-top: 20px;
+                margin: 10px 0;
+                /* Mengatur margin untuk tampilan mobile */
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid d-flex flex-column flex-md-row justify-content-center align-items-stretch">
+    <div class="container">
         <div class="card">
             <div class="card-body">
                 <h2>Daftar Ormawa</h2>
@@ -87,7 +88,7 @@
                         <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password </label>
+                        <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="form-group">
@@ -118,20 +119,20 @@
         </div>
 
         <div class="proker-list">
-            <h2 class="text-center mb-4">Daftar Proker</h2>
+            <h2 class="text-center mb-4">Daftar Ormawa</h2>
             @if($prokers->isEmpty())
-            <p class="text-muted text-center">No prokers available.</p>
+            <p class="text-muted text-center">Tidak ada proker yang tersedia.</p>
             @else
-            @foreach($prokers as $clubId => $clubProkers)
-            <h5>Ormawa: {{ $clubProkers->first()->club->name }}</h5>
             <ul class="list-group mb-3">
-                @foreach($clubProkers as $proker)
-                <li class="list-group-item">
-                    {{ $proker->name }} - Tanggal Target: {{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}
+                @foreach($prokers as $clubId => $clubProkers)
+                @if($clubProkers->isNotEmpty())
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ $clubProkers->first()->club->name }}</span>
+                    <a href="{{ route('ormawa.profile', $clubProkers->first()->club->id) }}" class="btn btn-primary btn-sm">Lihat Ormawa</a>
                 </li>
+                @endif
                 @endforeach
             </ul>
-            @endforeach
             @endif
         </div>
     </div>

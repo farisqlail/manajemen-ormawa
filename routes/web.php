@@ -22,9 +22,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
+
+Route::get('/', [AuthController::class, 'loginForm'])->name('login');
+
+Route::get('/ormawa/{id}', [ClubController::class, 'showProfile'])->name('ormawa.profile');  
+Route::get('/ormawa/{id}/prokers', [ClubController::class, 'showProkers'])->name('ormawa.prokers');  
+Route::get('/ormawa/{id}/activities', [ClubController::class, 'showActivities'])->name('ormawa.activities');  
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'loginForm'])->name('login');

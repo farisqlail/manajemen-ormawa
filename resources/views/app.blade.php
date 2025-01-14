@@ -87,6 +87,7 @@
                         @if(Auth::user()->role === 'ormawa')
                         <a class="collapse-item" href="/profile">Profile</a>
                         <a class="collapse-item" href="/anggotas">Anggota</a>
+                        <a class="collapse-item" href="{{route('divisions.index', ['id_club' => Auth::user()->id_club])}}">Divisi</a>
                         <a class="collapse-item" href="/activities">Kegiatan</a>
                         @else
                         <a class="collapse-item" href="/clubs">Ormawa</a>

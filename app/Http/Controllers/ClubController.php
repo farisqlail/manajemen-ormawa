@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Clubs;
+use App\Models\Proker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -129,5 +131,14 @@ class ClubController extends Controller
     {
         $club->delete();
         return redirect()->route('clubs.index')->with('success', 'Club deleted successfully.');
+    }
+
+    public function showProfile($id)
+    {
+        $club = Clubs::findOrFail($id);
+        $prokers = Proker::where('id_club', $id)->get();
+        $activities = Activity::where('id_club', $id)->get();
+
+        return view('ormawa.profile', compact('club', 'prokers', 'activities'));
     }
 }

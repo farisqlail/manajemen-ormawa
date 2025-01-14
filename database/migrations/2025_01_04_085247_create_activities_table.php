@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->bigIncrements('id_club')->unsigned();
             $table->string('name');
             $table->text('description');
             $table->json('photos')->nullable();
