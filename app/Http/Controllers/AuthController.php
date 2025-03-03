@@ -74,7 +74,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        $request->session()->invalidate();
+        $request->session()->invalidate(); 
         $request->session()->regenerateToken();
         return redirect('/login');
     }
@@ -100,7 +100,6 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'id_club' => ['required', 'integer'],
-            'id_division' => ['required', 'integer'],
             'role' => ['required', 'string'],
             'status' => ['required', 'string'],
         ]);
@@ -113,7 +112,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($password),
             'id_club' => $data['id_club'],
-            'id_division' => $data['id_division'],
+            'id_division' => $request->get('id_division'),
             'role' => $data['role'],
             'status' => $data['status'],
         ]);
@@ -136,7 +135,6 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'id_club' => ['required', 'integer'],
-            'id_division' => ['required', 'integer'],
             'role' => ['required', 'string'],
             'status' => ['required', 'string'],
         ]);
@@ -144,7 +142,7 @@ class AuthController extends Controller
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->id_club = $data['id_club'];
-        $user->id_division = $data['id_division'];
+        $user->id_division = $request->get('id_division');
         $user->role = $data['role'];
         $user->status = $data['status'];
 

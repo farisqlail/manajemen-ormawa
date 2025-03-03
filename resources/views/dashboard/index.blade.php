@@ -8,7 +8,7 @@
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'ketua')
+    @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'pembina')
     <div class="row mt-4">
         @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
         <div class="col-md-6">

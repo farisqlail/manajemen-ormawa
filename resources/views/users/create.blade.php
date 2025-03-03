@@ -11,14 +11,22 @@
                     <label for="name">Nama Lengkap</label>
                     <input type="text" id="name" name="name" class="form-control" required oninput="setPassword()" placeholder="cnth: agus ...">
                     @error('name')
-                        <div class="text-danger">{{ $message }}</div>
+                    <div class="text-danger">{{ $message }}</div>
                     @enderror
+                </div>
+                <div class="form-group mb-3">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" class="form-control" required onchange="toggleDivision()">
+                        <option value="admin">Admin</option>
+                        <option value="pembina">Pembina</option>
+                        <option value="ormawa">Ormawa</option>
+                    </select>
                 </div>
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" class="form-control" required placeholder="cnth: agus@gmail.com ...">
                     @error('email')
-                        <div class="text-danger">{{ $message }}</div>
+                    <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group mb-3">
@@ -33,24 +41,17 @@
                     <label for="id_club">Club</label>
                     <select id="id_club" name="id_club" class="form-control" required>
                         @foreach ($clubs as $club)
-                            <option value="{{ $club->id }}">{{ $club->name }}</option>
+                        <option value="{{ $club->id }}">{{ $club->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-3" id="division-group">
                     <label for="id_division">Division</label>
-                    <select id="id_division" name="id_division" class="form-control" required>
+                    <select id="id_division" name="id_division" class="form-control">
+                        <option value="">Pilih Division</option> <!-- Tambahkan opsi kosong -->
                         @foreach ($divisions as $division)
-                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                        <option value="{{ $division->id }}">{{ $division->name }}</option>
                         @endforeach
-                    </select>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="role">Role</label>
-                    <select id="role" name="role" class="form-control" required>
-                        <option value="admin">Admin</option>
-                        <option value="ketua">Ketua</option>
-                        <option value="ormawa">Ormawa</option>
                     </select>
                 </div>
                 <input type="hidden" id="status" name="status" value="active">
@@ -71,7 +72,7 @@
         const passwordInput = document.getElementById('password');
         const passwordConfirmationInput = document.getElementById('password_confirmation');
         const nameValue = nameInput.value.trim();
-        
+
         if (nameValue) {
             passwordInput.value = nameValue + '123';
             passwordConfirmationInput.value = nameValue + '123';
@@ -80,5 +81,22 @@
             passwordConfirmationInput.value = '';
         }
     }
+
+    function toggleDivision() {
+        const role = document.getElementById('role').value;
+        const divisionGroup = document.getElementById('division-group');
+        const division = document.getElementById('id_division');
+
+        if (role === 'pembina') {
+            divisionGroup.style.display = 'none'; // Sembunyikan div Division
+            division.removeAttribute('required'); // Hilangkan required
+        } else {
+            divisionGroup.style.display = 'block'; // Tampilkan kembali
+            division.setAttribute('required', 'required'); // Tambahkan required
+        }
+    }
+
+    // Panggil fungsi saat halaman pertama kali dimuat untuk menyesuaikan tampilan
+    document.addEventListener("DOMContentLoaded", toggleDivision);
 </script>
 @endsection

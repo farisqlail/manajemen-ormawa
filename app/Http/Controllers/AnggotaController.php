@@ -34,7 +34,6 @@ class AnggotaController extends Controller
     {
         $request->validate([
             'id_club' => 'required|integer',
-            'id_division' => 'required|integer',
             'name' => 'required|string|max:255',
         ]);
 
@@ -61,7 +60,6 @@ class AnggotaController extends Controller
     {
         $request->validate([
             'id_club' => 'required|integer',
-            'id_division' => 'required|integer',
             'name' => 'required|string|max:255',
         ]);
 
