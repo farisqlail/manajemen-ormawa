@@ -65,6 +65,8 @@ Route::middleware('auth')->group(function () {
 
     //proker ormawa
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');
+    Route::get('/prokers/{id}/export', [ProkerController::class, 'exportProposalToWord'])->name('prokers.export');
+
 
     //profile user
     Route::get('/profile/user', [UserProfileController::class, 'show'])->name('profile.user.show')->middleware('auth');

@@ -10,11 +10,7 @@
             <p><strong>Nama Klub:</strong> {{ $proker->club->name }}</p>
             @if(Auth::user()->role === 'ormawa' && Auth::user()->status === 'active' || Auth::user()->role === 'admin')
             <p><strong>Dokumen LPJ:</strong>
-                @if($proker->document_lpj)
-                <a href="{{ asset('storage/' . $proker->document_lpj) }}" class="btn btn-primary btn-sm" download>Download LPJ</a>
-                @else
-                <span class="text-muted">No document available</span>
-                @endif
+                {!!$proker->proposal!!}
             </p>
             @endif
             <p><strong>Anggaran:</strong> {{ number_format($proker->budget, 2, ',', '.') }} IDR</p>

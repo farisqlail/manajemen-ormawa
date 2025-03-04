@@ -12,7 +12,8 @@ class Proker extends Model
     protected $fillable = [
         'id_club',
         'name',
-        'document_lpj',
+        'proposal',
+        'laporan',
         'budget',
         'target_event',
         'status',

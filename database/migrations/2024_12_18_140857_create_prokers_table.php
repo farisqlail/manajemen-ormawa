@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->biginteger('id_club');
             $table->string('name');
-            $table->string('document_lpj');
+            $table->longText('proposal');
+            $table->longText('laporan')->nullable();
             $table->biginteger('budget');
             $table->date('target_event');
             $table->string('status');
