@@ -40,6 +40,12 @@
                <label for="description">Proposal</label>
                <textarea class="form-control" id="proposal" name="proposal" required>{!! $proker->proposal !!}</textarea>
            </div>
+           @if($proker->status == 'approved')
+           <div class="form-group">
+               <label for="laporan">Laporan</label>
+               <textarea class="form-control" id="laporan" name="laporan" required>{!! $proker->laporan !!}</textarea>
+           </div>
+           @endif
            <button type="submit" class="btn btn-primary">Update</button>
        </form>
    </div>
@@ -48,5 +54,6 @@
    <script src="https://cdn.ckeditor.com/4.20.0/standard/ckeditor.js"></script>
    <script>
        CKEDITOR.replace('proposal');
+       CKEDITOR.replace('laporan');
    </script>
    @endsection

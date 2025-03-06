@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
     //proker ormawa
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');
     Route::get('/prokers/{id}/export', [ProkerController::class, 'exportProposalToWord'])->name('prokers.export');
+    Route::get('/prokers/{id}/export/laporan', [ProkerController::class, 'exportLaporanToWord'])->name('prokers.exportLaporan');
 
 
     //profile user
@@ -85,6 +86,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/prokers/club/{clubId}', [DashboardController::class, 'showClubProkers'])->name('prokers.club');
     Route::post('/prokers/{id}/approve', [ProkerController::class, 'approveProker'])->name('prokers.approve');
     Route::delete('/prokers/{id}/reject', [ProkerController::class, 'rejectProker'])->name('prokers.reject');
+    Route::post('/prokers/{id}/approve/laporan', [ProkerController::class, 'approveProkerLaporan'])->name('prokers.approve.laporan');
+    Route::delete('/prokers/{id}/reject/laporan', [ProkerController::class, 'rejectProkerLaporan'])->name('prokers.reject.laporan');
     Route::get('/prokers/{id}/download', [ProkerController::class, 'downloadLPJ'])->name('prokers.download');
 
 });

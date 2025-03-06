@@ -20,6 +20,7 @@ return new class extends Migration
             $table->biginteger('budget');
             $table->date('target_event');
             $table->string('status');
+            $table->string('status_laporan')->nullable();
             $table->timestamps();
         });
     }

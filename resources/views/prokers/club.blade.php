@@ -21,7 +21,8 @@
                 <th>No</th>
                 <th>Nama Proker</th>
                 <th>Berlangsung pada</th>
-                <th>LPJ</th>
+                <th>Proposal</th>
+                <th>Laporan (LPJ)</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -32,17 +33,40 @@
                 <td>{{ $proker->name }}</td>
                 <td>{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</td>
                 <td>
-                    @if($proker->document_lpj)
-                    <a href="{{ route('prokers.download', $proker->id) }}" class="btn btn-primary btn-sm">Download LPJ</a>
-                    @else
-                    <span class="text-muted">No document available</span>
-                    @endif
+                    <a href="{{ route('prokers.export', $proker->id) }}" class="btn btn-primary mr-2 btn-sm">
+                        Proposal
+                    </a>
                 </td>
                 <td>
+                    <a href="{{ route('prokers.exportLaporan', $proker->id) }}" class="btn btn-info mr-2 btn-sm">
+                        Laporan
+                    </a>
+                </td>
+                <td>
+                    @if(Auth::user()->role == 'pembina' && ($proker->status == 'pending' || $proker->status_laporan == ''))
                     <form action="{{ route('prokers.approve', $proker->id) }}" method="POST" style="display:inline-block;">
                         @csrf
-                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                        <button type="submit" class="btn btn-success btn-sm">Approve Pembina</button>
                     </form>
+                    @elseif(Auth::user()->role == 'pembina' && ($proker->status == 'approve' || $proker->status_laporan == 'pending'))
+                    <form action="{{ route('prokers.approve.laporan', $proker->id) }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        <button type="submit" class="btn btn-success btn-sm">Approve Pembina Laporan</button>
+                    </form>
+                    @endif
+
+                    @if(Auth::user()->role == 'admin' && ($proker->status == 'pembina' || $proker->status_laporan == ''))
+                    <form action="{{ route('prokers.approve.admin', $proker->id) }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        <button type="submit" class="btn btn-info btn-sm">Approve Admin</button>
+                    </form>
+                    @elseif(Auth::user()->role == 'admin' && ($proker->status == 'approve' || $proker->status_laporan == 'pembina'))
+                    <form action="{{ route('prokers.approve.laporan', $proker->id) }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        <button type="submit" class="btn btn-success btn-sm">Approve Admin Laporan</button>
+                    </form>
+                    @endif
+
                     <form action="{{ route('prokers.reject', $proker->id) }}" method="POST" style="display:inline-block;">
                         @csrf
                         @method('DELETE')

@@ -17,6 +17,7 @@ class Proker extends Model
         'budget',
         'target_event',
         'status',
+        'status_laporan',
     ];
 
     public function club()

@@ -53,6 +53,45 @@
 
     <div class="row mt-4">
         <div class="col-md-12">
+            <h4>Prokers Pending <span class="badge badge-primary rounded-circle">{{ $pendingProkersAdmin->count() }}</span></h4>
+            <div class="card">
+                <div class="card-body">
+                    @if($pendingProkersAdmin->isEmpty())
+                    <p class="text-muted">No pending prokers available.</p>
+                    @else
+                    @foreach($pendingProkersAdmin as $clubId => $prokers)
+                    <h5>Club: {{ $prokers->first()->club->name }}</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th>Target Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($prokers as $proker)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $proker->name }}</td>
+                                <td>{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</td>
+                                <td>
+                                    <a href="{{ route('prokers.club', $proker->id) }}" class="btn btn-info btn-sm">View Proker</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    @endforeach
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <h4>Data Anggota</h4>
@@ -89,13 +128,13 @@
     @elseif(Auth::user()->role == 'admin')
     <div class="row mt-4">
         <div class="col-md-12">
-            <h4>Prokers Pending <span class="badge badge-primary rounded-circle">{{ $pendingProkersAdmin->count() }}</span></h4>
+            <h4>Prokers Pending <span class="badge badge-primary rounded-circle">{{ $pendingProkersPembinaAdmin->count() }}</span></h4>
             <div class="card">
                 <div class="card-body">
-                    @if($pendingProkersAdmin->isEmpty())
+                    @if($pendingProkersPembinaAdmin->isEmpty())
                     <p class="text-muted">No pending prokers available.</p>
                     @else
-                    @foreach($pendingProkersAdmin as $clubId => $prokers)
+                    @foreach($pendingProkersPembinaAdmin as $clubId => $prokers)
                     <h5>Club: {{ $prokers->first()->club->name }}</h5>
                     <table class="table table-bordered">
                         <thead>

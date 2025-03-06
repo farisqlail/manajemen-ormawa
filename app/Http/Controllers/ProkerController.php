@@ -69,25 +69,19 @@ class ProkerController extends Controller
             $request->validate([
                 'id_club' => 'required|integer',
                 'name' => 'required|string',
-                'document_lpj' => 'nullable|file|mimes:pdf,doc,docx',
+                'proposal' => 'required|string',
                 'budget' => 'required|integer',
                 'target_event' => 'required|date',
             ]);
-
-            if ($request->hasFile('document_lpj')) {
-                if ($proker->document_lpj) {
-                    Storage::disk('public')->delete($proker->document_lpj);
-                }
-                $filePath = $request->file('document_lpj')->store('lpj_documents', 'public');
-                $proker->document_lpj = $filePath;
-            }
 
             $proker->update([
                 'id_club' => $request->id_club,
                 'name' => $request->name,
                 'budget' => $request->budget,
                 'target_event' => $request->target_event,
-                'status' => "pending",
+                'laporan' => $request->laporan,
+                'status_laporan' => $request->laporan ? 'pending' : null,
+                'status' => $proker->status,
             ]);
 
             return redirect()->route('prokers.index')->with('success', 'Proker updated successfully.');
@@ -115,11 +109,16 @@ class ProkerController extends Controller
 
         return response()->download(storage_path('app/public' . '/' . $proker->document_lpj), $fileName);
     }
-
     public function approveProker($id)
     {
         $proker = Proker::findOrFail($id);
-        $proker->status = 'approved';
+
+        if (Auth::user()->role == 'pembina' && $proker->status == 'pending') {
+            $proker->status = 'pembina';
+        } elseif (Auth::user()->role == 'admin' && $proker->status == 'pembina') {
+            $proker->status = 'approved';
+        }
+
         $proker->save();
 
         return redirect()->back()->with('success', 'Proker approved successfully.');
@@ -129,6 +128,29 @@ class ProkerController extends Controller
     {
         $proker = Proker::findOrFail($id);
         $proker->status = 'rejected';
+        $proker->save();
+
+        return redirect()->back()->with('success', 'Proker rejected successfully.');
+    }
+    public function approveProkerLaporan($id)
+    {
+        $proker = Proker::findOrFail($id);
+
+        if (Auth::user()->role == 'pembina' && $proker->status_laporan == 'pending') {
+            $proker->status_laporan = 'pembina';
+        } elseif (Auth::user()->role == 'admin' && $proker->status_laporan == 'pembina') {
+            $proker->status_laporan = 'approved';
+        }
+
+        $proker->save();
+
+        return redirect()->back()->with('success', 'Proker approved successfully.');
+    }
+
+    public function rejectProkerLaporan($id)
+    {
+        $proker = Proker::findOrFail($id);
+        $proker->status_laporan = 'rejected';
         $proker->save();
 
         return redirect()->back()->with('success', 'Proker rejected successfully.');
@@ -158,6 +180,35 @@ class ProkerController extends Controller
 
         // Simpan sebagai file HTML dan ubah ekstensi ke .doc
         $fileName = 'Proposal_' . str_replace(' ', '_', $proker->name) . '.doc';
+        Storage::disk('local')->put($fileName, $html);
+
+        // Download file
+        return response()->download(storage_path("app/$fileName"))->deleteFileAfterSend(true);
+    }
+    public function exportLaporanToWord($id)
+    {
+        $proker = Proker::findOrFail($id);
+
+        $html = "<html>
+        <head>
+            <meta charset='utf-8'>
+            <title>Laporan Proker</title>
+        </head>
+        <body>
+            <h2 style='text-align: center;'>Laporan Proker</h2>
+            <h3>Nama Proker: {$proker->name}</h3>
+            <p><strong>Budget:</strong> Rp " . number_format($proker->budget, 0, ',', '.') . "</p>
+            <p><strong>Target Event:</strong> {$proker->target_event}</p>
+            <p><strong>Status:</strong> {$proker->status_laporan}</p>
+            <hr>
+            <h3>Deskripsi Proker</h3>
+            {$proker->laporan}  <!-- Ambil langsung dari database -->
+        </body>
+    </html>";
+
+
+        // Simpan sebagai file HTML dan ubah ekstensi ke .doc
+        $fileName = 'Laporan_' . str_replace(' ', '_', $proker->name) . '.doc';
         Storage::disk('local')->put($fileName, $html);
 
         // Download file
