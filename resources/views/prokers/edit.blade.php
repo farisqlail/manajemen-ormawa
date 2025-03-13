@@ -6,6 +6,14 @@
        <h2>Edit Proker</h2>
        <form action="{{ route('prokers.update', $proker->id) }}" method="POST" enctype="multipart/form-data">
            @csrf
+           @method('PUT')
+           @if($proker->status_laporan == '' && $proker->status !== 'approved')
+           <input type="text" class="form-control" id="status" name="status" value="pending" hidden>
+           <input type="text" class="form-control" id="status_laporan" name="status_laporan" value="" hidden>
+           @else
+           <input type="text" class="form-control" id="status" name="status" value="approved" hidden>
+           <input type="text" class="form-control" id="status_laporan" name="status_laporan" value="pending" hidden>
+           @endif
            <div class="row">
                <div class="col">
                    <div class="form-group">
@@ -21,7 +29,6 @@
                    </div>
                </div>
            </div>
-           @method('PUT')
            <div class="row">
                <div class="col">
                    <div class="form-group">

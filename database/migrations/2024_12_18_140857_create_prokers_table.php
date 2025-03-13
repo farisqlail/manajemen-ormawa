@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('target_event');
             $table->string('status');
             $table->string('status_laporan')->nullable();
+            $table->longText('reason')->nullable();
             $table->timestamps();
         });
     }

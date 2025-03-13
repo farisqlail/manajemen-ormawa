@@ -85,7 +85,7 @@ Route::middleware('auth')->group(function () {
     //dasboard
     Route::get('/prokers/club/{clubId}', [DashboardController::class, 'showClubProkers'])->name('prokers.club');
     Route::post('/prokers/{id}/approve', [ProkerController::class, 'approveProker'])->name('prokers.approve');
-    Route::delete('/prokers/{id}/reject', [ProkerController::class, 'rejectProker'])->name('prokers.reject');
+    Route::put('/prokers/{id}/reject', [ProkerController::class, 'rejectProker'])->name('prokers.reject');
     Route::post('/prokers/{id}/approve/laporan', [ProkerController::class, 'approveProkerLaporan'])->name('prokers.approve.laporan');
     Route::delete('/prokers/{id}/reject/laporan', [ProkerController::class, 'rejectProkerLaporan'])->name('prokers.reject.laporan');
     Route::get('/prokers/{id}/download', [ProkerController::class, 'downloadLPJ'])->name('prokers.download');

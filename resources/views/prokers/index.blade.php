@@ -48,6 +48,12 @@
                                 @endif
                             </p>
                             @endif
+                            @if($proker->reason !== "")
+                            <div>
+                                <strong>Alasan Penolakan:</strong>
+                                <p>{{ $proker->reason }}</p>
+                            </div>
+                            @endif
                         </div>
 
                         <div>

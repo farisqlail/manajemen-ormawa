@@ -80,8 +80,9 @@ class ProkerController extends Controller
                 'budget' => $request->budget,
                 'target_event' => $request->target_event,
                 'laporan' => $request->laporan,
-                'status_laporan' => $request->laporan ? 'pending' : null,
-                'status' => $proker->status,
+                'status_laporan' => $request->get('status_laporan'),
+                'status' => $request->get('status'),
+                'reason' => ''
             ]);
 
             return redirect()->route('prokers.index')->with('success', 'Proker updated successfully.');
@@ -114,9 +115,11 @@ class ProkerController extends Controller
         $proker = Proker::findOrFail($id);
 
         if (Auth::user()->role == 'pembina' && $proker->status == 'pending') {
-            $proker->status = 'pembina';
+            $proker->status = 'approved';
+            $proker->reason = '';
         } elseif (Auth::user()->role == 'admin' && $proker->status == 'pembina') {
             $proker->status = 'approved';
+            $proker->reason = '';
         }
 
         $proker->save();
@@ -124,13 +127,22 @@ class ProkerController extends Controller
         return redirect()->back()->with('success', 'Proker approved successfully.');
     }
 
-    public function rejectProker($id)
+    public function rejectProker(Request $request, $id)
     {
         $proker = Proker::findOrFail($id);
-        $proker->status = 'rejected';
-        $proker->save();
+        if (Auth::user()->role == 'pembina' && $proker->status !== 'pembina' && $proker->status_laporan == '') {
+            $proker->status = 'rejected';
+            $proker->reason = $request->get('reason');
+            $proker->save();
 
-        return redirect()->back()->with('success', 'Proker rejected successfully.');
+            return redirect()->back()->with('success', 'Proker rejected successfully.');
+        } else {
+            $proker->status_laporan = 'rejected';
+            $proker->reason = $request->get('reason');
+            $proker->save();
+
+            return redirect()->back()->with('success', 'Proker rejected successfully.');
+        }
     }
     public function approveProkerLaporan($id)
     {
@@ -138,8 +150,10 @@ class ProkerController extends Controller
 
         if (Auth::user()->role == 'pembina' && $proker->status_laporan == 'pending') {
             $proker->status_laporan = 'pembina';
+            $proker->reason = '';
         } elseif (Auth::user()->role == 'admin' && $proker->status_laporan == 'pembina') {
             $proker->status_laporan = 'approved';
+            $proker->reason = '';
         }
 
         $proker->save();
@@ -147,10 +161,11 @@ class ProkerController extends Controller
         return redirect()->back()->with('success', 'Proker approved successfully.');
     }
 
-    public function rejectProkerLaporan($id)
+    public function rejectProkerLaporan(Request $request, $id)
     {
         $proker = Proker::findOrFail($id);
         $proker->status_laporan = 'rejected';
+        $proker->reason = $request->get('reason');
         $proker->save();
 
         return redirect()->back()->with('success', 'Proker rejected successfully.');
