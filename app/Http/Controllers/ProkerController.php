@@ -174,55 +174,138 @@ class ProkerController extends Controller
     public function exportProposalToWord($id)
     {
         $proker = Proker::findOrFail($id);
+        $club = Clubs::where('id', $proker->id_club)->first();
+        $logoPath = storage_path('app/public/' . $club->logo);
+
+        if (file_exists($logoPath)) {
+            $imageData = base64_encode(file_get_contents($logoPath));
+            $clubLogo = "data:image/png;base64," . $imageData;
+        } else {
+            $clubLogo = 'https://via.placeholder.com/80';
+        }
 
         $html = "<html>
         <head>
             <meta charset='utf-8'>
             <title>Proposal Proker</title>
+            <style>
+                @page {
+                    size: A4;
+                    margin-top: 3cm;
+                    margin-bottom: 2cm;
+                    margin-left: 3cm;
+                    margin-right: 2cm;
+                }
+                body {
+                    font-family: Arial, sans-serif;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .header {
+                    text-align: center;
+                    font-size: 14px;
+                    font-weight: bold;
+                    border-bottom: 1px solid #000;
+                    padding-bottom: 5px;
+                    margin-bottom: 20px;
+                }
+                .page-break {
+                    page-break-before: always;
+                }
+            </style>
         </head>
         <body>
-            <h2 style='text-align: center;'>Proposal Proker</h2>
-            <h3>Nama Proker: {$proker->name}</h3>
-            <p><strong>Budget:</strong> Rp " . number_format($proker->budget, 0, ',', '.') . "</p>
-            <p><strong>Target Event:</strong> {$proker->target_event}</p>
-            <p><strong>Status:</strong> {$proker->status}</p>
-            <hr>
-            <h3>Deskripsi Proker</h3>
-            {$proker->proposal}  <!-- Ambil langsung dari database -->
+            <table>
+                <thead>
+                    <tr>
+                        <td class='header'><img src='https://upload.wikimedia.org/wikipedia/id/2/23/UNUSA.png' width='80' height='80'></td>
+                        <td class='header' align='center'>
+                            <span>KOPERASI MAHASISWA</span><br>
+                            <span>UNIVERSITAS NAHDLATUL ULAMA SURABAYA</span><br>
+                            <span>Badan Hukum No: 003412/BH/M.KUKM.12/02/2017</span>
+                        </td>
+                        <td class='header'><img src='{$clubLogo}' width='80' height='80'></td>
+                    </tr>
+                </thead>
+            </table>
+
+            <div>{$proker->proposal}</div>
         </body>
-    </html>";
+        </html>";
 
-
-        // Simpan sebagai file HTML dan ubah ekstensi ke .doc
         $fileName = 'Proposal_' . str_replace(' ', '_', $proker->name) . '.doc';
         Storage::disk('local')->put($fileName, $html);
 
-        // Download file
         return response()->download(storage_path("app/$fileName"))->deleteFileAfterSend(true);
     }
+
+
     public function exportLaporanToWord($id)
     {
         $proker = Proker::findOrFail($id);
+        $club = Clubs::where('id', $proker->id_club)->first();
+        $logoPath = storage_path('app/public/' . $club->logo);
+
+        if (file_exists($logoPath)) {
+            $imageData = base64_encode(file_get_contents($logoPath));
+            $clubLogo = "data:image/png;base64," . $imageData;
+        } else {
+            $clubLogo = 'https://via.placeholder.com/80';
+        }
 
         $html = "<html>
         <head>
             <meta charset='utf-8'>
             <title>Laporan Proker</title>
+            <style>
+                @page {
+                    size: A4;
+                    margin-top: 3cm;
+                    margin-bottom: 2cm;
+                    margin-left: 3cm;
+                    margin-right: 2cm;
+                }
+                body {
+                    font-family: Arial, sans-serif;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .header {
+                    text-align: center;
+                    font-size: 14px;
+                    font-weight: bold;
+                    border-bottom: 1px solid #000;
+                    padding-bottom: 5px;
+                    margin-bottom: 20px;
+                }
+                .page-break {
+                    page-break-before: always;
+                }
+            </style>
         </head>
         <body>
-            <h2 style='text-align: center;'>Laporan Proker</h2>
-            <h3>Nama Proker: {$proker->name}</h3>
-            <p><strong>Budget:</strong> Rp " . number_format($proker->budget, 0, ',', '.') . "</p>
-            <p><strong>Target Event:</strong> {$proker->target_event}</p>
-            <p><strong>Status:</strong> {$proker->status_laporan}</p>
-            <hr>
-            <h3>Deskripsi Proker</h3>
-            {$proker->laporan}  <!-- Ambil langsung dari database -->
+            <table>
+                <thead>
+                    <tr>
+                        <td class='header'><img src='https://upload.wikimedia.org/wikipedia/id/2/23/UNUSA.png' width='80' height='80'></td>
+                        <td class='header' align='center'>
+                            <span>KOPERASI MAHASISWA</span><br>
+                            <span>UNIVERSITAS NAHDLATUL ULAMA SURABAYA</span><br>
+                            <span>Badan Hukum No: 003412/BH/M.KUKM.12/02/2017</span>
+                        </td>
+                        <td class='header'><img src='{$clubLogo}' width='80' height='80'></td>
+                    </tr>
+                </thead>
+            </table>
+
+            <div>{$proker->laporan}</div>
         </body>
-    </html>";
+        </html>";
 
-
-        // Simpan sebagai file HTML dan ubah ekstensi ke .doc
         $fileName = 'Laporan_' . str_replace(' ', '_', $proker->name) . '.doc';
         Storage::disk('local')->put($fileName, $html);
 
