@@ -80,9 +80,9 @@ class DashboardController extends Controller
     {
         $prokers = Proker::where('id_club', $clubId)->get();
 
-        if ($prokers->isEmpty()) {
-            return redirect()->back()->with('error', 'Tidak ada proker untuk club ini.');
-        }
+        // if ($prokers->isEmpty()) {
+        //     return redirect()->back()->with('error', 'Tidak ada proker untuk club ini.');
+        // }
 
         if (Auth::user()->role == 'pembina') {
             $pendingProkers = $prokers->where('status', 'pending')

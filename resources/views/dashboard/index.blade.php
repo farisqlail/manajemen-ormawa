@@ -77,7 +77,7 @@
                                 <td>{{ $proker->name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</td>
                                 <td>
-                                    <a href="{{ route('prokers.club', $proker->id) }}" class="btn btn-info btn-sm">View Proker</a>
+                                    <a href="{{ route('prokers.club', $clubId) }}" class="btn btn-info btn-sm">View Proker</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -152,7 +152,7 @@
                                 <td>{{ $proker->name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</td>
                                 <td>
-                                    <a href="{{ route('prokers.club', $proker->id) }}" class="btn btn-info btn-sm">View Proker</a>
+                                    <a href="{{ route('prokers.club', $clubId) }}" class="btn btn-info btn-sm">View Proker</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -191,7 +191,7 @@
                                 <td>{{ $proker->name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</td>
                                 <td>
-                                    <a href="{{ route('prokers.club', $proker->id) }}" class="btn btn-info btn-sm">View Proker</a>
+                                    <a href="{{ route('prokers.club', $clubId) }}" class="btn btn-info btn-sm">View Proker</a>
                                 </td>
                             </tr>
                             @endforeach
