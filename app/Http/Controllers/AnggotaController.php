@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Anggota;
 use App\Models\Clubs; // Pastikan model Clubs ada
 use App\Models\Division; // Pastikan model Division ada
+use App\Models\Proker;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +18,16 @@ class AnggotaController extends Controller
         $anggotas = Anggota::with(['club', 'division'])
             ->where('id_club', $userIdClub)
             ->get();
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
 
-        return view('anggotas.index', compact('anggotas'));
+        return view('anggotas.index', compact('anggotas', 'notification', 'notificationCount'));
     }
 
     public function create()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clubs;
 use App\Models\Division;
+use App\Models\Proker;
 use Illuminate\Http\Request;
 
 class DivisionController extends Controller
@@ -12,7 +13,16 @@ class DivisionController extends Controller
     {
         $club = Clubs::findOrFail($id_club);
         $divisions = Division::where('id_clubs', $id_club)->get();
-        return view('divisions.index', compact('divisions', 'club'));
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('divisions.index', compact('divisions', 'club', 'notification', 'notificationCount'));
     }
 
     public function create($id_club)
@@ -60,7 +70,7 @@ class DivisionController extends Controller
     {
         $division = Division::findOrFail($id);
         $division->delete();
-        
+
         return redirect()->back()->with('success', 'Division deleted successfully.');
     }
 }

@@ -53,12 +53,12 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
+            @if(Auth::user()->role === 'ormawa')
             <!-- Heading -->
             <div class="sidebar-heading">
                 Ormawa
             </div>
 
-            @if(Auth::user()->role === 'ormawa' || Auth::user()->role == 'pembina' && Auth::user()->status === 'active')
             <li class="nav-item">
                 <a class="nav-link" href="/prokers">
                     <i class="fas fa-fw fa-chart-area"></i>
@@ -72,8 +72,14 @@
                     <i class="fas fa-fw fa-user"></i>
                     <span>Pengguna</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/clubs">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>clubs</span></a>
+            </li>
             @endif
 
+            @if(Auth::user()->role === 'ormawa')
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#organization"
@@ -95,9 +101,9 @@
                     </div>
                 </div>
             </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
+            @endif
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -123,6 +129,39 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+
+                        @if(Auth::user()->role == 'pembina' || Auth::user()->role == 'admin')
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter" id="notificationCounter">{{$notificationCount}}</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Alerts Center
+                                </h6>
+                                @foreach($notification as $item)
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">{{$item->club->name}}</div>
+                                        <span class="font-weight-bold">{{ $item->name }}</span>
+                                    </div>
+                                </a>
+                                @endforeach
+
+                            </div>
+                        </li>
+                        @endif
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -229,6 +268,19 @@
     <script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js"></script>
     <script>
         CKEDITOR.replace('description');
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("alertsDropdown").addEventListener("click", function() {
+                let notificationCounter = document.getElementById("notificationCounter");
+
+                if (notificationCounter) {
+                    notificationCounter.textContent = "0";
+                    notificationCounter.classList.add("d-none");
+                }
+            });
+        });
     </script>
 
 </body>

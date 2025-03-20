@@ -15,8 +15,16 @@ class ProkerController extends Controller
     {
         $idClub = Auth::user()->id_club;
         $prokers = Proker::where('id_club', $idClub)->get();
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
 
-        return view('prokers.index', compact('prokers'));
+        return view('prokers.index', compact('prokers', 'notification', 'notificationCount'));
     }
 
     public function create()

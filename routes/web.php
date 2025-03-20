@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProkerController;
 use App\Http\Controllers\UserProfileController;
@@ -89,5 +90,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/prokers/{id}/approve/laporan', [ProkerController::class, 'approveProkerLaporan'])->name('prokers.approve.laporan');
     Route::delete('/prokers/{id}/reject/laporan', [ProkerController::class, 'rejectProkerLaporan'])->name('prokers.reject.laporan');
     Route::get('/prokers/{id}/download', [ProkerController::class, 'downloadLPJ'])->name('prokers.download');
+
+    Route::post('/reset-notification', [NotificationController::class, 'resetNotification']);
 
 });

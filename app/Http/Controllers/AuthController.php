@@ -15,7 +15,7 @@ class AuthController extends Controller
 {
     public function loginForm()
     {
-        $prokers = Proker::with('club')->get()->groupBy('id_club');  
+        $prokers = Proker::with('club')->get()->groupBy('id_club');
 
         return view('auth.login', compact('prokers'));
     }
@@ -41,7 +41,7 @@ class AuthController extends Controller
     {
         $clubs = Clubs::all();
         $divisions = Division::all();
-        $prokers = Proker::with('club')->get()->groupBy('id_club');  
+        $prokers = Proker::with('club')->get()->groupBy('id_club');
 
         return view('auth.register', compact('clubs', 'divisions', 'prokers'));
     }
@@ -74,7 +74,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        $request->session()->invalidate(); 
+        $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');
     }
@@ -82,7 +82,16 @@ class AuthController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('users.index', compact('users'));
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('users.index', compact('users', 'notification', 'notificationCount'));
     }
 
     // Menampilkan form untuk membuat pengguna baru
@@ -90,7 +99,16 @@ class AuthController extends Controller
     {
         $clubs = Clubs::all();
         $divisions = Division::all();
-        return view('users.create', compact('clubs', 'divisions'));
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('users.create', compact('clubs', 'divisions', 'notification', 'notificationCount'));
     }
 
     // Menyimpan pengguna baru
@@ -125,7 +143,16 @@ class AuthController extends Controller
     {
         $clubs = Clubs::all();
         $divisions = Division::all();
-        return view('users.edit', compact('user', 'clubs', 'divisions'));
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('users.edit', compact('user', 'clubs', 'divisions', 'notification', 'notificationCount'));
     }
 
     // Memperbarui pengguna

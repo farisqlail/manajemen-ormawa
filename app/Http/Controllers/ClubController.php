@@ -13,12 +13,30 @@ class ClubController extends Controller
     public function index()
     {
         $clubs = Clubs::all();
-        return view('clubs.index', compact('clubs'));
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('clubs.index', compact('clubs', 'notification', 'notificationCount'));
     }
 
     public function create()
     {
-        return view('clubs.create');
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('clubs.create', compact('notification', 'notificationCount'));
     }
 
     public function store(Request $request)
@@ -51,7 +69,16 @@ class ClubController extends Controller
 
     public function edit(Clubs $club)
     {
-        return view('clubs.edit', compact('club'));
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('clubs.edit', compact('club', 'notification', 'notificationCount'));
     }
 
     public function editOrmawa(Clubs $club)

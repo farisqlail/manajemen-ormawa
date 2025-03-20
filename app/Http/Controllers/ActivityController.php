@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Proker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,7 +12,16 @@ class ActivityController extends Controller
     public function index()
     {
         $activities = Activity::all();
-        return view('activities.index', compact('activities'));
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('activities.index', compact('activities', 'notification', 'notificationCount'));
     }
 
     public function create()

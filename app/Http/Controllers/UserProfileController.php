@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Proker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -10,13 +11,22 @@ class UserProfileController extends Controller
 {
     public function show()
     {
-        $user = Auth::user(); 
-        return view('auth.show', compact('user'));
+        $user = Auth::user();
+        $notification = Proker::where(function ($query) {
+            $query->whereNull('status_laporan')
+                ->orWhere('status_laporan', 'pending');
+        })
+            ->with('club')
+            ->where('status', 'pending')
+            ->get();
+        $notificationCount = $notification->count();
+
+        return view('auth.show', compact('user', 'notification', 'notificationCount'));
     }
 
     public function edit()
     {
-        $user = Auth::user(); 
+        $user = Auth::user();
         return view('auth.edit', compact('user'));
     }
 
