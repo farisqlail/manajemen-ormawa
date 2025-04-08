@@ -320,4 +320,21 @@ class ProkerController extends Controller
         // Download file
         return response()->download(storage_path("app/$fileName"))->deleteFileAfterSend(true);
     }
+
+    public function uploadPdf(Request $request, $id)
+    {
+        $request->validate([
+            'pdf_file' => 'required|mimes:pdf|max:2048'
+        ]);
+
+        $proker = Proker::findOrFail($id);
+
+        if ($request->hasFile('pdf_file')) {
+            $path = $request->file('pdf_file')->store('pdf_files', 'public');
+            $proker->pdf_file = $path;
+            $proker->save();
+        }
+
+        return redirect()->back()->with('success', 'File PDF berhasil diunggah.');
+    }
 }

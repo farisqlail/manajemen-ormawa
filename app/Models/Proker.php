@@ -18,7 +18,8 @@ class Proker extends Model
         'target_event',
         'status',
         'status_laporan',
-        'reason'
+        'reason',
+        'pdf_file'
     ];
 
     public function club()

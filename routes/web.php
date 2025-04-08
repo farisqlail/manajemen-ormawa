@@ -68,7 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');
     Route::get('/prokers/{id}/export', [ProkerController::class, 'exportProposalToWord'])->name('prokers.export');
     Route::get('/prokers/{id}/export/laporan', [ProkerController::class, 'exportLaporanToWord'])->name('prokers.exportLaporan');
-
+    Route::post('/prokers/upload-pdf/{id}', [ProkerController::class, 'uploadPdf'])->name('prokers.uploadPdf');
 
     //profile user
     Route::get('/profile/user', [UserProfileController::class, 'show'])->name('profile.user.show')->middleware('auth');

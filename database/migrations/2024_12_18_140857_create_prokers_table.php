@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('status_laporan')->nullable();
             $table->longText('reason')->nullable();
+            $table->string('pdf_file')->nullable();
             $table->timestamps();
         });
     }

@@ -80,6 +80,19 @@
                                 </a>
                                 @endif
                             </div>
+
+                            @if($proker->status == 'approved' && $proker->status_laporan == 'approved' && $proker->pdf_file == null)
+                            <form action="{{ route('prokers.uploadPdf', $proker->id) }}" method="POST" enctype="multipart/form-data" class="mt-3" id="upload-form-{{ $proker->id }}">
+                                @csrf
+                                <input type="file" name="pdf_file" id="pdf-file-{{ $proker->id }}" accept="application/pdf" style="display: none;" onchange="document.getElementById('upload-form-{{ $proker->id }}').submit();">
+                                <button type="button" class="btn btn-success mt-2" onclick="document.getElementById('pdf-file-{{ $proker->id }}').click();">
+                                    Upload File PDF
+                                </button>
+                            </form>
+                            @elseif($proker->pdf_file)
+                            <p class="mt-3"><strong>File PDF:</strong> <a href="{{ asset('storage/' . $proker->pdf_file) }}" target="_blank">Lihat File</a></p>
+                            @endif
+
                             @endif
                         </div>
                     </div>
