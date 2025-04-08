@@ -2,54 +2,39 @@
 
 @section('content')
 <div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="text-center mb-4">Profile Ormawa</h1>
-        <div class="d-flex justify-content-center">
-            <a href="{{ route('clubs.editOrmawa', $club->id) }}" class="btn btn-primary btn-lg mr-2">Edit Profile</a>
-            <a href="{{ route('clubs.index') }}" class="btn btn-secondary btn-lg">Kembali</a>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h2 class="fw-bold text-primary mb-3">🧾 Profil Ormawa</h2>
+        <div class="d-flex gap-2">
+            <a href="{{ route('clubs.editOrmawa', $club->id) }}" class="btn btn-outline-primary">
+                <i class="bi bi-pencil-square me-1"></i> Edit Profil
+            </a>
+            <a href="{{ route('clubs.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Kembali
+            </a>
         </div>
     </div>
 
-    <div class="card shadow-lg border-0">
-        <div class="card-body text-center">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="display-4"><b>{{ $club->name }}</b></h5>
-                @if($club->logo)
-                <img src="{{ asset('storage/' . $club->logo) }}" alt="Logo" class="img-fluid rounded-circle" style="max-width: 100px; height: auto;">
-                @endif
-            </div>
-
-            <p class="card-text lead">{!! $club->description !!}</p>
-
-            @if($club->photo_structure)
-            <div class="mb-4">
-                <img src="{{ asset('storage/' . $club->photo_structure) }}" alt="Photo Struktur" class="img-fluid rounded" style="max-width: 300px;">
-            </div>
+    <div class="card shadow-sm border-0 p-4">
+        <div class="text-center mb-4">
+            @if($club->logo)
+            <img src="{{ asset('storage/' . $club->logo) }}" alt="Logo Ormawa" class="rounded-circle shadow-sm mb-3"
+                style="width: 120px; height: 120px; object-fit: cover;">
             @endif
-
+            <h3 class="fw-bold">{{ $club->name }}</h3>
         </div>
+
+        <div class="text-center">
+            <p class="lead text-muted">{!! $club->description !!}</p>
+        </div>
+
+        @if($club->photo_structure)
+        <div class="mt-5 text-center">
+            <h5 class="fw-semibold text-secondary mb-3">Struktur Organisasi</h5>
+            <img src="{{ asset('storage/' . $club->photo_structure) }}" alt="Struktur Organisasi"
+                class="img-fluid rounded border shadow-sm" style="max-width: 500px;">
+        </div>
+        @endif
     </div>
 </div>
 
-<style>
-    body {
-        background-color: #f8f9fa;
-        /* Warna latar belakang yang lembut */
-    }
-
-    .card {
-        border-radius: 15px;
-        /* Sudut yang lebih halus untuk kartu */
-    }
-
-    .card-title {
-        color: #007bff;
-        /* Warna judul */
-    }
-
-    .lead {
-        color: #6c757d;
-        /* Warna teks deskripsi */
-    }
-</style>
 @endsection
