@@ -27,6 +27,19 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+        $user = \App\Models\User::where('email', $credentials['email'])->first();
+
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Email tidak ditemukan di sistem.',
+            ]);
+        }
+
+        if ($user->status === 'nonactive') {
+            return back()->withErrors([
+                'email' => 'Akun Anda belum aktif. Silakan lakukan registrasi ulang atau aktivasi.',
+            ]);
+        }
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -34,9 +47,10 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Email atau password salah.',
         ]);
     }
+
 
     public function registerForm()
     {
@@ -180,7 +194,7 @@ class AuthController extends Controller
         $user->status = $data['status'];
 
         if ($request->filled('password')) {
-            $user->password = Hash::make($data['name'] . '123'); 
+            $user->password = Hash::make($data['name'] . '123');
         }
 
         $user->save();
