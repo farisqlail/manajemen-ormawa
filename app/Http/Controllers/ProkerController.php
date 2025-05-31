@@ -39,19 +39,22 @@ class ProkerController extends Controller
             $request->validate([
                 'id_club' => 'required',
                 'name' => 'required|string',
-                'proposal' => 'required|string',
+                'proposal_file' => 'required|file|mimes:pdf,doc,docx|max:5120',
                 'budget' => 'required|integer',
                 'target_event' => 'required|date',
             ]);
 
+            $filePath = $request->file('proposal_file')->store('proposals', 'public');
+
             Proker::create([
                 'id_club' => $request->id_club,
                 'name' => $request->name,
-                'proposal' => $request->proposal,
+                'proposal' => $filePath,
                 'budget' => $request->budget,
                 'target_event' => $request->target_event,
                 'status' => "pending",
             ]);
+
             return redirect()->route('prokers.index')->with('success', 'Proker created successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to create Proker: ' . $e->getMessage());
@@ -77,28 +80,45 @@ class ProkerController extends Controller
             $request->validate([
                 'id_club' => 'required|integer',
                 'name' => 'required|string',
-                'proposal' => 'required|string',
                 'budget' => 'required|integer',
                 'target_event' => 'required|date',
+                'proposal_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+                'laporan_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
             ]);
 
-            $proker->update([
+            $dataToUpdate = [
                 'id_club' => $request->id_club,
                 'name' => $request->name,
                 'budget' => $request->budget,
                 'target_event' => $request->target_event,
-                'laporan' => $request->laporan,
                 'status_laporan' => $request->get('status_laporan'),
                 'status' => $request->get('status'),
-                'reason' => ''
-            ]);
+                'reason' => '',
+            ];
+
+            if ($request->hasFile('proposal_file')) {
+                if ($proker->proposal && Storage::disk('public')->exists($proker->proposal)) {
+                    Storage::disk('public')->delete($proker->proposal);
+                }
+                $proposalPath = $request->file('proposal_file')->store('proposals', 'public');
+                $dataToUpdate['proposal'] = $proposalPath;
+            }
+
+            if ($request->hasFile('laporan_file')) {
+                if ($proker->laporan && Storage::disk('public')->exists($proker->laporan)) {
+                    Storage::disk('public')->delete($proker->laporan);
+                }
+                $laporanPath = $request->file('laporan_file')->store('laporan', 'public');
+                $dataToUpdate['laporan'] = $laporanPath;
+            }
+
+            $proker->update($dataToUpdate);
 
             return redirect()->route('prokers.index')->with('success', 'Proker updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to update Proker: ' . $e->getMessage());
         }
     }
-
     public function destroy(Proker $proker)
     {
         $proker->delete();
@@ -122,10 +142,11 @@ class ProkerController extends Controller
     {
         $proker = Proker::findOrFail($id);
 
-        if (Auth::user()->role == 'pembina' && $proker->status == 'pending') {
-            $proker->status = 'pembina';
-            $proker->reason = '';
-        } elseif (Auth::user()->role == 'admin' && $proker->status == 'pembina') {
+        // if (Auth::user()->role == 'pembina' && $proker->status == 'pending') {
+        //     $proker->status = 'pembina';
+        //     $proker->reason = '';
+        // } else
+        if (Auth::user()->role == 'admin') {
             $proker->status = 'approved';
             $proker->reason = '';
         }
@@ -138,28 +159,18 @@ class ProkerController extends Controller
     public function rejectProker(Request $request, $id)
     {
         $proker = Proker::findOrFail($id);
-        if (Auth::user()->role == 'pembina' && $proker->status !== 'pembina' && $proker->status_laporan == '') {
-            $proker->status = 'rejected';
-            $proker->reason = $request->get('reason');
-            $proker->save();
 
-            return redirect()->back()->with('success', 'Proker rejected successfully.');
-        } else {
-            $proker->status_laporan = 'rejected';
-            $proker->reason = $request->get('reason');
-            $proker->save();
+        $proker->status_laporan = 'rejected';
+        $proker->reason = $request->get('reason');
+        $proker->save();
 
-            return redirect()->back()->with('success', 'Proker rejected successfully.');
-        }
+        return redirect()->back()->with('success', 'Proker rejected successfully.');
     }
     public function approveProkerLaporan($id)
     {
         $proker = Proker::findOrFail($id);
 
-        if (Auth::user()->role == 'pembina' && $proker->status_laporan == 'pending') {
-            $proker->status_laporan = 'pembina';
-            $proker->reason = '';
-        } elseif (Auth::user()->role == 'admin' && $proker->status_laporan == 'pembina') {
+        if (Auth::user()->role == 'admin' && $proker->status_laporan == 'pending') {
             $proker->status_laporan = 'approved';
             $proker->reason = '';
         }
@@ -248,7 +259,6 @@ class ProkerController extends Controller
 
         return response()->download(storage_path("app/$fileName"))->deleteFileAfterSend(true);
     }
-
 
     public function exportLaporanToWord($id)
     {

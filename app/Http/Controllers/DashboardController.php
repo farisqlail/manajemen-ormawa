@@ -50,10 +50,10 @@ class DashboardController extends Controller
             ->groupBy('id_club');
 
 
-        $pendingProkersPembinaAdmin = Proker::where('status', 'pembina')
+        $pendingProkersPembinaAdmin = Proker::where('status', 'pending')
             ->orWhere(function ($query) {
                 $query->whereNotNull('status_laporan')
-                    ->where('status_laporan', 'pembina');
+                    ->where('status_laporan', 'pending');
             })
             ->with('club')
             ->get()
@@ -104,13 +104,10 @@ class DashboardController extends Controller
             ->where('status', 'pending')
             ->get();
         $notificationCount = $notification->count();
-
-        if (Auth::user()->role == 'pembina') {
+        
+        if (Auth::user()->role == 'admin') {
             $pendingProkers = $prokers->where('status', 'pending')
                 ->merge($prokers->where('status_laporan', 'pending'));
-        } elseif (Auth::user()->role == 'admin') {
-            $pendingProkers = $prokers->where('status', 'pembina')
-                ->merge($prokers->where('status_laporan', 'pembina'));
         } else {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses.');
         }

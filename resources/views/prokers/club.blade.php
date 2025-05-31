@@ -18,6 +18,13 @@
             @if($pendingProkers->isEmpty())
             <p class="text-muted">Tidak ada proker yang sedang pending diormawa ini.</p>
             @else
+
+            @php
+            $showLaporanColumn = $pendingProkers->contains(function($proker) {
+            return !empty($proker->status_laporan) && $proker->status_laporan !== '';
+            });
+            @endphp
+
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -25,7 +32,9 @@
                         <th>Nama Proker</th>
                         <th>Berlangsung pada</th>
                         <th>Proposal</th>
+                        @if($showLaporanColumn)
                         <th>Laporan (LPJ)</th>
+                        @endif
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -40,25 +49,28 @@
                                 Proposal
                             </a>
                         </td>
+                        @if($showLaporanColumn)
                         <td>
+                            @if(!empty($proker->status_laporan) && $proker->status_laporan !== '')
                             <a href="{{ route('prokers.exportLaporan', $proker->id) }}" class="btn btn-info mr-2 btn-sm">
                                 Laporan
                             </a>
+                            @endif
                         </td>
+                        @endif
                         <td>
-                            @if(Auth::user()->role == 'admin' && $proker->status_laporan == '')
+                            @if(Auth::user()->role == 'admin' && $proker->status == 'pending')
                             <form action="{{ route('prokers.approve', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 <button type="submit" class="btn btn-info btn-sm">Approve</button>
                             </form>
-                            @elseif(Auth::user()->role == 'admin' && $proker->status == 'approve')
+                            @elseif(Auth::user()->role == 'admin' && $proker->status_laporan == 'pending')
                             <form action="{{ route('prokers.approve.laporan', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 <button type="submit" class="btn btn-success btn-sm">Approve</button>
                             </form>
                             @endif
 
-                            <!-- Tombol Open Reject -->
                             <button class="btn btn-danger btn-sm" onclick="openRejectModal({{ $proker->id }})">
                                 Reject
                             </button>
