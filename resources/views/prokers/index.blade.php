@@ -27,8 +27,6 @@
                             <p class="card-text"><strong>Status Proposal:</strong>
                                 @if($proker->status == 'pending')
                                 <span class="badge badge-warning">Pending</span>
-                                @elseif($proker->status == 'pembina')
-                                <span class="badge badge-warning">Pending Kemahasiswaan</span>
                                 @elseif($proker->status == 'approved')
                                 <span class="badge badge-success">Approved</span>
                                 @elseif($proker->status =='rejected')
@@ -39,8 +37,6 @@
                             <p class="card-text"><strong>Status Laporan:</strong>
                                 @if($proker->status_laporan == 'pending')
                                 <span class="badge badge-warning">Pending</span>
-                                @elseif($proker->status_laporan == 'pembina')
-                                <span class="badge badge-warning">Pending Kemahasiswaan</span>
                                 @elseif($proker->status_laporan == 'approved')
                                 <span class="badge badge-success">Approved</span>
                                 @elseif($proker->status_laporan =='rejected')

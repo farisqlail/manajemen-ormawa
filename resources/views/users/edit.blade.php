@@ -50,7 +50,6 @@
                     <label for="role">Role</label>
                     <select id="role" name="role" class="form-control" required>
                         <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="pembina" {{ $user->role == 'pembina' ? 'selected' : '' }}>Pembina</option>
                         <option value="ormawa" {{ $user->role == 'ormawa' ? 'selected' : '' }}>Ormawa</option>
                     </select>
                 </div>

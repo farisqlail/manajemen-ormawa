@@ -123,7 +123,7 @@ class ProkerController extends Controller
         $proker = Proker::findOrFail($id);
 
         if (Auth::user()->role == 'pembina' && $proker->status == 'pending') {
-            $proker->status = 'approved';
+            $proker->status = 'pembina';
             $proker->reason = '';
         } elseif (Auth::user()->role == 'admin' && $proker->status == 'pembina') {
             $proker->status = 'approved';

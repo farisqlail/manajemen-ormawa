@@ -22,6 +22,7 @@
             <label for="password_confirmation">Confirm Password</label>
             <input type="password" id="password_confirmation" name="password_confirmation" class="form-control">
         </div>
+        <input type="text" id="status" name="status" value="active" class="form-control" hidden>
         <button type="submit" class="btn btn-primary">Update Profile</button>
         <a href="{{ route('profile.user.show') }}" class="btn btn-secondary">Kembali</a>
     </form>

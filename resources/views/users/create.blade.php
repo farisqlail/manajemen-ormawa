@@ -18,7 +18,6 @@
                     <label for="role">Role</label>
                     <select id="role" name="role" class="form-control" required onchange="toggleDivision()">
                         <option value="admin">Admin</option>
-                        <option value="pembina">Pembina</option>
                         <option value="ormawa">Ormawa</option>
                     </select>
                 </div>
@@ -48,16 +47,16 @@
                 <div class="form-group mb-3" id="division-group">
                     <label for="id_division">Division</label>
                     <select id="id_division" name="id_division" class="form-control">
-                        <option value="">Pilih Division</option> <!-- Tambahkan opsi kosong -->
+                        <option value="">Pilih Division</option>
                         @foreach ($divisions as $division)
                         <option value="{{ $division->id }}">{{ $division->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <input type="hidden" id="status" name="status" value="active">
+                <input type="hidden" id="status" name="status" value="nonactive">
                 <div class="form-group mb-3">
                     <label>Status</label>
-                    <input type="text" class="form-control" value="Active" readonly>
+                    <input type="text" class="form-control" value="Non Active" readonly>
                 </div>
                 <button type="submit" class="btn btn-primary">Buat Pengguna</button>
                 <a href="{{ route('users.index') }}" class="btn btn-secondary">Kembali</a>
@@ -83,20 +82,13 @@
     }
 
     function toggleDivision() {
-        const role = document.getElementById('role').value;
         const divisionGroup = document.getElementById('division-group');
         const division = document.getElementById('id_division');
 
-        if (role === 'pembina') {
-            divisionGroup.style.display = 'none'; // Sembunyikan div Division
-            division.removeAttribute('required'); // Hilangkan required
-        } else {
-            divisionGroup.style.display = 'block'; // Tampilkan kembali
-            division.setAttribute('required', 'required'); // Tambahkan required
-        }
+        divisionGroup.style.display = 'block';
+        division.setAttribute('required', 'required');
     }
 
-    // Panggil fungsi saat halaman pertama kali dimuat untuk menyesuaikan tampilan
     document.addEventListener("DOMContentLoaded", toggleDivision);
 </script>
 @endsection

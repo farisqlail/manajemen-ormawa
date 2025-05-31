@@ -39,11 +39,13 @@ class UserProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'status' => 'nullable|string',
         ]);
 
         $data = [
             'name' => $request->name,
-            'email' => $request->email
+            'email' => $request->email,
+            'status' => $request->status
         ];
 
         if ($request->filled('password')) {

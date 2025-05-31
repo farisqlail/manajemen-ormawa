@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-body">
             <h2>Kegiatan</h2>
-            @if(Auth::user()->role == 'pembina')
+            @if(Auth::user()->role == 'ormawa')
             <a href="{{ route('activities.create') }}" class="btn btn-primary mb-3">Tambah Kegiatan</a>
             @endif
             <table class="table table-bordered">
@@ -15,7 +15,7 @@
                         <th>Nama Kegiatan</th>
                         <th>Deskripsi</th>
                         <th>Foto Kegiatan</th>
-                        @if(Auth::user()->role == 'pembina')
+                        @if(Auth::user()->role == 'ormawa')
                         <th>Actions</th>
                         @else
                         <th>Actions</th>
@@ -38,7 +38,7 @@
                             <img src="{{ Storage::url($photo) }}" width="50" height="50" alt="Photo">
                             @endforeach
                         </td>
-                        @if(Auth::user()->role == 'pembina')
+                        @if(Auth::user()->role == 'ormawa')
                         <td>
                             <a href="{{ route('activities.edit', $activity->id) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ route('activities.destroy', $activity->id) }}" method="POST" style="display:inline-block;">

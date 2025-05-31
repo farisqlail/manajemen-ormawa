@@ -72,6 +72,9 @@
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Masuk</button>
+                <div class="text-center mt-2">
+                    <a href="/register" class="w-100">Daftar sebagai ormawa</a>
+                </div>
             </form>
         </div>
 
@@ -79,20 +82,20 @@
         <div class="side-panel">
             <h2 class="mb-4">Daftar Ormawa</h2>
             @if($prokers->isEmpty())
-                <p class="text-muted">Belum ada data ormawa.</p>
+            <p class="text-muted">Belum ada data ormawa.</p>
             @else
-                <ul class="list-group ormawa-list">
-                    @foreach($prokers as $clubId => $clubProkers)
-                        @if($clubProkers->isNotEmpty())
-                            <li class="list-group-item">
-                                <span>{{ $clubProkers->first()->club->name }}</span>
-                                <a href="{{ route('ormawa.profile', $clubProkers->first()->club->id) }}" class="btn btn-outline-primary btn-sm">
-                                    Lihat Profil
-                                </a>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
+            <ul class="list-group ormawa-list">
+                @foreach($prokers as $clubId => $clubProkers)
+                @if($clubProkers->isNotEmpty())
+                <li class="list-group-item">
+                    <span>{{ $clubProkers->first()->club->name }}</span>
+                    <a href="{{ route('ormawa.profile', $clubProkers->first()->club->id) }}" class="btn btn-outline-primary btn-sm">
+                        Lihat Profil
+                    </a>
+                </li>
+                @endif
+                @endforeach
+            </ul>
             @endif
         </div>
     </div>

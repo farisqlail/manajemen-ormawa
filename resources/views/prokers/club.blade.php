@@ -46,24 +46,12 @@
                             </a>
                         </td>
                         <td>
-                            @if(Auth::user()->role == 'pembina' && ($proker->status == 'pending' || $proker->status_laporan == ''))
-                            <form action="{{ route('prokers.approve', $proker->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                            </form>
-                            @elseif(Auth::user()->role == 'pembina' && ($proker->status == 'approve' || $proker->status_laporan == 'pending'))
-                            <form action="{{ route('prokers.approve.laporan', $proker->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                            </form>
-                            @endif
-
-                            @if(Auth::user()->role == 'admin' && ($proker->status == 'pembina' || $proker->status_laporan == ''))
+                            @if(Auth::user()->role == 'admin' && $proker->status_laporan == '')
                             <form action="{{ route('prokers.approve', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 <button type="submit" class="btn btn-info btn-sm">Approve</button>
                             </form>
-                            @elseif(Auth::user()->role == 'admin' && ($proker->status == 'approve' || $proker->status_laporan == 'pembina'))
+                            @elseif(Auth::user()->role == 'admin' && $proker->status == 'approve')
                             <form action="{{ route('prokers.approve.laporan', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 <button type="submit" class="btn btn-success btn-sm">Approve</button>

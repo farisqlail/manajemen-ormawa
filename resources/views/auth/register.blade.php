@@ -2,133 +2,96 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register - Sistem Ormawa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         body {
+            background: linear-gradient(to right, #4e73df, #1cc88a);
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
-            /* Mengatur agar item di dalam flex container bisa menyesuaikan lebar */
             align-items: center;
-            /* Mengatur agar item di dalam flex container bisa menyesuaikan tinggi */
-            height: 100vh;
-            /* Mengatur tinggi body menjadi 100% dari viewport */
-            margin: 0;
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: row;
-            /* Mengatur agar item ditampilkan dalam satu baris */
             justify-content: center;
-            /* Mengatur agar item di dalam container bisa menyesuaikan lebar */
-            align-items: flex-start;
-            /* Mengatur agar item di dalam container bisa menyesuaikan tinggi */
+        }
+
+        .register-container {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
             flex-wrap: wrap;
-            /* Mengizinkan item untuk membungkus jika diperlukan */
         }
 
-        .card {
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 20px;
-            /* Menambahkan margin untuk jarak antar elemen */
+        .register-form {
+            flex: 1 1 400px;
+            padding: 2rem;
         }
 
-        .proker-list {
-            width: 100%;
-            max-width: 600px;
-            margin: 20px;
-            /* Menambahkan margin untuk jarak antar elemen */
-            height: auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .side-panel {
+            flex: 1 1 600px;
+            background-color: #f4f4f4;
+            padding: 2rem;
+            overflow-y: auto;
         }
 
-        .proker-list h5 {
-            margin-top: 20px;
+        .side-panel h2 {
+            color: #4e73df;
+        }
+
+        .ormawa-list .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         @media (max-width: 768px) {
-            body {
-                padding-top: 20px;
-                /* Menambahkan padding atas untuk tampilan mobile */
-                padding-bottom: 20px;
-                /* Menambahkan padding bawah untuk tampilan mobile */
-            }
-
-            .card,
-            .proker-list {
-                margin: 10px 0;
-                /* Mengatur margin untuk tampilan mobile */
+            .register-container {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <h2>Daftar Ormawa</h2>
-                <form method="POST" action="{{ route('register') }}">
-                    @csrf
-                    <div class="form-group">
-                        <label for="name">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password_confirmation">Konfirmasi Password</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="id_club">Ormawa Dituju</label>
-                        <select class="form-control" id="id_club" name="id_club" required>
-                            <option value="">Select a Club</option>
-                            @foreach($clubs as $club)
-                            <option value="{{ $club->id }}">{{ $club->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="id_division">Divisi Dituju</label>
-                        <select class="form-control" id="id_division" name="id_division" required>
-                            <option value="">Select a Division</option>
-                            @foreach($divisions as $division)
-                            <option value="{{ $division->id }}">{{ $division->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Daftar</button>
-                </form>
-            </div>
+    <div class="register-container">
+        {{-- Register Form --}}
+        <div class="register-form">
+            <h2 class="text-center mb-4 text-primary fw-bold">Daftar Sistem</h2>
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+                <div class="mb-4">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" required autofocus value="{{ old('email') }}" />
+                    @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Daftar</button>
+                <div class="text-center mt-2">
+                    <a href="/login" class="w-100">Sudah punya akun</a>
+                </div>
+            </form>
         </div>
 
-        <div class="proker-list">
-            <h2 class="text-center mb-4">Daftar Ormawa</h2>
+        {{-- Side Panel: Daftar Ormawa --}}
+        <div class="side-panel">
+            <h2 class="mb-4">Daftar Ormawa</h2>
             @if($prokers->isEmpty())
-            <p class="text-muted text-center">Tidak ada proker yang tersedia.</p>
+            <p class="text-muted">Belum ada data ormawa.</p>
             @else
-            <ul class="list-group mb-3">
+            <ul class="list-group ormawa-list">
                 @foreach($prokers as $clubId => $clubProkers)
                 @if($clubProkers->isNotEmpty())
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <li class="list-group-item">
                     <span>{{ $clubProkers->first()->club->name }}</span>
-                    <a href="{{ route('ormawa.profile', $clubProkers->first()->club->id) }}" class="btn btn-primary btn-sm">Lihat Ormawa</a>
+                    <a href="{{ route('ormawa.profile', $clubProkers->first()->club->id) }}" class="btn btn-outline-primary btn-sm">
+                        Lihat Profil
+                    </a>
                 </li>
                 @endif
                 @endforeach
@@ -136,6 +99,47 @@
             @endif
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if(session('email_active'))
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Email sudah terdaftar',
+            text: 'Silakan login menggunakan email tersebut.',
+        });
+    </script>
+    @endif
+
+    @if(session('email_not_found'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Email belum terdaftar di sistem',
+            text: 'Silakan periksa kembali atau hubungi administrator.',
+        });
+    </script>
+    @endif
+
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            // Optional: redirect otomatis, misal ke dashboard
+            window.location.href = "{{ route('dashboard') }}";
+        });
+    </script>
+    @endif
+
 </body>
 
 </html>

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -48,28 +49,38 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'id_club' => ['required', 'integer'],
-            'id_division' => ['required', 'integer'],
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'email'],
         ]);
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'id_club' => $data['id_club'],
-            'id_division' => $data['id_division'],
-            'role' => 'ormawa',
-            'status' => 'pending'
-        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
-        Auth::login($user);
+        $user = User::where('email', $request->email)->first();
 
-        return redirect()->route('dashboard');
+        if ($user) {
+            if ($user->status === 'active') {
+                return redirect()->back()
+                    ->with('email_active', true)
+                    ->withInput();
+            } elseif ($user->status === 'nonactive') {
+                $user->password = Hash::make('12345678');
+                $user->save();
+
+                Auth::login($user);
+
+                return redirect()->route('dashboard')->with('success', 'Registrasi berhasil, Anda telah login otomatis.');
+            }
+        } else {
+            return redirect()->back()
+                ->with('email_not_found', true)
+                ->withInput();
+        }
     }
+
 
     public function logout(Request $request)
     {
@@ -94,7 +105,6 @@ class AuthController extends Controller
         return view('users.index', compact('users', 'notification', 'notificationCount'));
     }
 
-    // Menampilkan form untuk membuat pengguna baru
     public function create()
     {
         $clubs = Clubs::all();
@@ -111,7 +121,6 @@ class AuthController extends Controller
         return view('users.create', compact('clubs', 'divisions', 'notification', 'notificationCount'));
     }
 
-    // Menyimpan pengguna baru
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -122,8 +131,7 @@ class AuthController extends Controller
             'status' => ['required', 'string'],
         ]);
 
-        // Set password to name + '123'
-        $password = $data['name'] . '123';
+        $password = '12345678';
 
         User::create([
             'name' => $data['name'],
@@ -138,7 +146,6 @@ class AuthController extends Controller
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
-    // Menampilkan form untuk mengedit pengguna
     public function edit(User $user)
     {
         $clubs = Clubs::all();
@@ -155,7 +162,6 @@ class AuthController extends Controller
         return view('users.edit', compact('user', 'clubs', 'divisions', 'notification', 'notificationCount'));
     }
 
-    // Memperbarui pengguna
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
@@ -173,9 +179,8 @@ class AuthController extends Controller
         $user->role = $data['role'];
         $user->status = $data['status'];
 
-        // Update password only if it's filled
         if ($request->filled('password')) {
-            $user->password = Hash::make($data['name'] . '123'); // Set password to name + '123'
+            $user->password = Hash::make($data['name'] . '123'); 
         }
 
         $user->save();
@@ -183,7 +188,6 @@ class AuthController extends Controller
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    // Menghapus pengguna
     public function destroy(User $user)
     {
         $user->delete();

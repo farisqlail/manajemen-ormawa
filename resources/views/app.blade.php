@@ -90,7 +90,7 @@
                 <div id="organization" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Organisasi :</h6>
-                        @if(Auth::user()->role === 'ormawa' || Auth::user()->role == 'pembina')
+                        @if(Auth::user()->role === 'ormawa')
                         <a class="collapse-item" href="/profile">Profile</a>
                         <a class="collapse-item" href="/anggotas">Anggota</a>
                         <a class="collapse-item" href="{{route('divisions.index', ['id_club' => Auth::user()->id_club])}}">Divisi</a>
@@ -130,7 +130,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        @if(Auth::user()->role == 'pembina' || Auth::user()->role == 'admin')
+                        @if(Auth::user()->role == 'admin')
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
@@ -269,6 +269,7 @@
     <script>
         CKEDITOR.replace('description');
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

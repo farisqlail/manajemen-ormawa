@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-body">
             <h1>Divisions for {{ $club->name }}</h1>
-            @if(Auth::user()->role == 'pembina')
+            @if(Auth::user()->role == 'ormawa')
             <a href="{{ route('divisions.create', $club->id) }}" class="btn btn-primary mb-3">Tambah Divisi</a>
             @endif
 
@@ -17,7 +17,7 @@
                     <tr>
                         <th>#</th>
                         <th>Nama Divisi</th>
-                        @if(Auth::user()->role == 'pembina')
+                        @if(Auth::user()->role == 'ormawa')
                         <th>Actions</th>
                         @endif
                     </tr>
@@ -27,7 +27,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $division->name }}</td>
-                        @if(Auth::user()->role == 'pembina')
+                        @if(Auth::user()->role == 'ormawa')
                         <td>
                             <a href="{{ route('divisions.edit', $division->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('divisions.destroy', $division->id) }}" method="POST" style="display:inline;">
