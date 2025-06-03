@@ -14,7 +14,7 @@ class ProkerController extends Controller
     public function index()
     {
         $idClub = Auth::user()->id_club;
-        $prokers = Proker::where('id_club', $idClub)->get();
+        $prokers = Proker::where('id_club', $idClub)->paginate(2);
         $notification = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
