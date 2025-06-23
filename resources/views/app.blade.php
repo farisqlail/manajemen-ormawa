@@ -11,6 +11,7 @@
 
     <title>Manajemen Ormawa</title>
 
+    <link rel="shortcut icon" href="{{ asset('/assets/logo.png') }}" type="image/x-icon">
     <!-- Custom fonts for this template-->
     <link href="{{asset('sb-admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -34,8 +35,8 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+                <div class="sidebar-brand-icon">
+                    <img src="{{ asset('/assets/logo.png') }}" width="50" alt="">
                 </div>
                 <div class="sidebar-brand-text mx-3">SiMawa</div>
             </a>

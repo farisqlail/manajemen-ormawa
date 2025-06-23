@@ -48,7 +48,7 @@
 </head>
 
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <div class="club-header text-center">
             <img src="{{ asset('storage/' . $club->logo) }}" alt="Logo" class="logo-img mb-3">
             <h1 class="fw-bold">{{ $club->name }}</h1>

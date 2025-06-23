@@ -5,6 +5,7 @@
     <h2>Create Activity</h2>
     <form action="{{ route('activities.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <input type="number" name="id_club" value="{{Auth::user()->id_club}}" hidden>
         <div class="form-group mb-3">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" class="form-control" required>

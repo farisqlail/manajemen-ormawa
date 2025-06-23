@@ -6,6 +6,7 @@
     <form action="{{ route('activities.update', $activity->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+        <input type="number" name="id_club" value="{{Auth::user()->id_club}}" hidden>
         <div class="form-group mb-3">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" value="{{ $activity->name }}" class="form-control" required>

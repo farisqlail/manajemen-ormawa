@@ -31,10 +31,14 @@ class DashboardController extends Controller
             ->orWhereNotNull('status_laporan')
             ->get();
 
-        $pendingProkers = Proker::where('status', 'pending')
-            ->where('target_event', '>=', now())
-            ->orWhere(function ($query) {
-                $query->whereNotNull('status_laporan')
+        $pendingProkers = Proker::where('id_club', $user->id_club)
+            ->where(function ($query) {
+                $query->where('status', 'pending')
+                    ->where('target_event', '>=', now());
+            })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('id_club', $user->id_club)
+                    ->whereNotNull('status_laporan')
                     ->where('status_laporan', 'pending');
             })
             ->get();
@@ -59,11 +63,14 @@ class DashboardController extends Controller
             ->get()
             ->groupBy('id_club');
 
-        $nonPendingProkers = Proker::where('status', '!=', 'pembina')
-            ->where('id_club', $user->id_club)
-            ->where('target_event', '>=', now())
-            ->orWhere(function ($query) {
-                $query->whereNotNull('status_laporan')
+        $nonPendingProkers = Proker::where('id_club', $user->id_club)
+            ->where(function ($query) {
+                $query->where('status', '!=', 'pembina')
+                    ->where('target_event', '>=', now());
+            })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('id_club', $user->id_club)
+                    ->whereNotNull('status_laporan')
                     ->where('status_laporan', '!=', 'pending');
             })
             ->get();
@@ -104,7 +111,7 @@ class DashboardController extends Controller
             ->where('status', 'pending')
             ->get();
         $notificationCount = $notification->count();
-        
+
         if (Auth::user()->role == 'admin') {
             $pendingProkers = $prokers->where('status', 'pending')
                 ->merge($prokers->where('status_laporan', 'pending'));

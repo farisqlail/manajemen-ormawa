@@ -6,15 +6,27 @@
         <div class="card-body">
             <h2>List Proker</h2>
 
-            @if(Auth::user()->role == 'ormawa')
-            <a href="{{ route('prokers.create') }}" class="btn btn-primary mb-3">Ajukan Proker</a>
-            @endif
+            <div class="d-flex justify-content-between flex-wrap align-items-center mb-3">
+                @if(Auth::user()->role == 'ormawa')
+                <a href="{{ route('prokers.create') }}" class="btn btn-primary mb-2">Ajukan Proker</a>
+                @endif
+
+                <form method="GET" action="{{ route('prokers.index') }}" class="mb-2" style="min-width: 250px;">
+                    <div class="input-group">
+                        <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Cari nama proker...">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-outline-primary">Cari</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
             @if($prokers->isEmpty())
             <div class="alert alert-warning text-center" role="alert">
                 Tidak ada proker yang ditemukan. Silakan ajukan proker baru.
             </div>
             @else
+
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>

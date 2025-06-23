@@ -44,14 +44,9 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group mb-3" id="division-group">
-                    <label for="id_division">Division</label>
-                    <select id="id_division" name="id_division" class="form-control">
-                        <option value="">Pilih Division</option>
-                        @foreach ($divisions as $division)
-                        <option value="{{ $division->id }}">{{ $division->name }}</option>
-                        @endforeach
-                    </select>
+                <div class="form-group mb-3" id="">
+                    <label for="">PIC</label>
+                    <input type="text" value="Ketua" class="form-control" readonly>
                 </div>
                 <input type="hidden" id="status" name="status" value="nonactive">
                 <div class="form-group mb-3">

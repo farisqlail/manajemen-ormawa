@@ -11,10 +11,19 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProkerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $idClub = Auth::user()->id_club;
-        $prokers = Proker::where('id_club', $idClub)->paginate(2);
+        $search = $request->input('search');
+
+        $query = Proker::where('id_club', $idClub);
+
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $prokers = $query->paginate(10)->appends(['search' => $search]);
+
         $notification = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
@@ -22,9 +31,10 @@ class ProkerController extends Controller
             ->with('club')
             ->where('status', 'pending')
             ->get();
+
         $notificationCount = $notification->count();
 
-        return view('prokers.index', compact('prokers', 'notification', 'notificationCount'));
+        return view('prokers.index', compact('prokers', 'notification', 'notificationCount', 'search'));
     }
 
     public function create()

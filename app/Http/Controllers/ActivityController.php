@@ -32,6 +32,7 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'id_club' => 'required',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi foto
@@ -46,6 +47,7 @@ class ActivityController extends Controller
         }
 
         Activity::create([
+            'id_club' => $request->id_club,
             'name' => $request->name,
             'description' => $request->description,
             'photos' => json_encode($photos),
@@ -69,6 +71,7 @@ class ActivityController extends Controller
     public function update(Request $request, Activity $activity)
     {
         $request->validate([
+            'id_club' => 'required',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi foto
@@ -84,6 +87,7 @@ class ActivityController extends Controller
         }
 
         $activity->update([
+            'id_club' => $request->id_club,
             'name' => $request->name,
             'description' => $request->description,
             'photos' => json_encode($photos),
