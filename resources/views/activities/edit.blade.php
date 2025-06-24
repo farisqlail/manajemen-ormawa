@@ -16,7 +16,7 @@
             <textarea id="description" name="description" class="form-control" required>{{ $activity->description }}</textarea>
         </div>
         <div class="form-group mb-3">
-            <label for="photos">Photos (max 5)</label>
+            <label for="photos">Photos (max 5) <small class="text-danger">MAX: 2MB</small></label>
             <input type="file" id="photos" name="photos[]" class="form-control" multiple>
         </div>
         <div class="mb-3">
