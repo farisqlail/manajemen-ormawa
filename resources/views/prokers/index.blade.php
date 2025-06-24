@@ -88,7 +88,10 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-fw fa-trash"></i></button>
                                 </form>
-                                <a href="{{ route('prokers.export', $proker->id) }}" class="btn btn-primary btn-sm mr-2 mb-2">
+                                <!-- <a href="{{ route('prokers.export', $proker->id) }}" class="btn btn-primary btn-sm mr-2 mb-2">
+                                    Proposal
+                                </a> -->
+                                <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-primary btn-sm mr-2 mb-2">
                                     Proposal
                                 </a>
                                 @if($proker->status == 'approved' && $proker->laporan == "")

@@ -40,7 +40,7 @@
         </div>
 
         {{-- Proposal File Upload --}}
-        <div class="form-group mb-4">
+        <!-- <div class="form-group mb-4">
             <label for="proposal_file" class="form-label">Proposal (File PDF atau DOC)</label>
             <input type="file" class="d-none" id="proposal_file" name="proposal_file" accept=".pdf,.doc,.docx">
             <label for="proposal_file" class="btn btn-outline-primary w-100 text-center" style="cursor: pointer; padding-top: 3rem; padding-bottom: 3rem;">
@@ -48,7 +48,7 @@
             </label>
             <small class="form-text text-muted mt-1">Upload file baru jika ingin mengganti file proposal.</small>
             <div id="proposal-file-chosen" class="mt-2 text-secondary"></div>
-        </div>
+        </div> -->
 
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>

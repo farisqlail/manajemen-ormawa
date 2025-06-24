@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Edit Ormawa</h1>
-    <form action="{{ route('clubs.updateOrmawa', $club->id) }}" method="POST" enctype="multipart/form-data"> 
+    <form action="{{ route('clubs.updateOrmawa', $club->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="form-group mb-3">
@@ -15,7 +15,7 @@
             <textarea id="description" name="description" class="form-control" rows="4" required>{{ $club->description }}</textarea>
         </div>
         <div class="form-group mb-3">
-            <label for="logo">Logo</label>
+            <label for="logo">Logo <small class="text-danger">MAX: 2MB</small></label>
             <div class="input-group">
                 <div class="custom-file">
                     <input type="file" id="logo" name="logo" class="custom-file-input" accept="image/*">
@@ -31,7 +31,7 @@
         </div>
 
         <div class="form-group mb-3">
-            <label for="photo_structure">Photo Struktur</label>
+            <label for="photo_structure">Photo Struktur  <small class="text-danger">MAX: 2MB</small></label>
             <div class="input-group">
                 <div class="custom-file">
                     <input type="file" id="photo_structure" name="photo_structure" class="custom-file-input" accept="image/*">

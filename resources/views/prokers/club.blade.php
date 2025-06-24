@@ -45,9 +45,13 @@
                         <td>{{ $proker->name }}</td>
                         <td>{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</td>
                         <td>
+                            @if(!empty($proker->proposal))
                             <a href="{{ route('prokers.export', $proker->id) }}" class="btn btn-primary mr-2 btn-sm">
                                 Proposal
                             </a>
+                            @else
+                            <span>-</span>
+                            @endif
                         </td>
                         @if($showLaporanColumn)
                         <td>
@@ -59,6 +63,7 @@
                         </td>
                         @endif
                         <td>
+                            @if(!empty($proker->proposal))
                             @if(Auth::user()->role == 'admin' && $proker->status == 'pending')
                             <form action="{{ route('prokers.approve', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
@@ -74,6 +79,9 @@
                             <button class="btn btn-danger btn-sm" onclick="openRejectModal({{ $proker->id }})">
                                 Reject
                             </button>
+                            @else
+                            <span>-</span>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

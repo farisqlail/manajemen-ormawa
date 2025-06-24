@@ -49,12 +49,15 @@ class ProkerController extends Controller
             $request->validate([
                 'id_club' => 'required',
                 'name' => 'required|string',
-                'proposal_file' => 'required|file|mimes:pdf,doc,docx|max:5120',
+                'proposal_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
                 'budget' => 'required|integer',
                 'target_event' => 'required|date',
             ]);
 
-            $filePath = $request->file('proposal_file')->store('proposals', 'public');
+            $filePath = null;
+            if ($request->hasFile('proposal_file')) {
+                $filePath = $request->file('proposal_file')->store('proposals', 'public');
+            }
 
             Proker::create([
                 'id_club' => $request->id_club,
@@ -203,142 +206,35 @@ class ProkerController extends Controller
     public function exportProposalToWord($id)
     {
         $proker = Proker::findOrFail($id);
-        $club = Clubs::where('id', $proker->id_club)->first();
-        $logoPath = storage_path('app/public/' . $club->logo);
 
-        if (file_exists($logoPath)) {
-            $imageData = base64_encode(file_get_contents($logoPath));
-            $clubLogo = "data:image/png;base64," . $imageData;
-        } else {
-            $clubLogo = 'https://via.placeholder.com/80';
+        if (!$proker->proposal || !Storage::disk('public')->exists($proker->proposal)) {
+            return redirect()->back()->with('error', 'File proposal tidak ditemukan.');
         }
 
-        $html = "<html>
-        <head>
-            <meta charset='utf-8'>
-            <title>Proposal Proker</title>
-            <style>
-                @page {
-                    size: A4;
-                    margin-top: 3cm;
-                    margin-bottom: 2cm;
-                    margin-left: 3cm;
-                    margin-right: 2cm;
-                }
-                body {
-                    font-family: Arial, sans-serif;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                .header {
-                    text-align: center;
-                    font-size: 14px;
-                    font-weight: bold;
-                    border-bottom: 1px solid #000;
-                    padding-bottom: 5px;
-                    margin-bottom: 20px;
-                }
-                .page-break {
-                    page-break-before: always;
-                }
-            </style>
-        </head>
-        <body>
-            <table>
-                <thead>
-                    <tr>
-                        <td class='header'><img src='https://upload.wikimedia.org/wikipedia/id/2/23/UNUSA.png' width='80' height='80'></td>
-                        <td class='header' align='center'>
-                            <span>KOPERASI MAHASISWA</span><br>
-                            <span>UNIVERSITAS NAHDLATUL ULAMA SURABAYA</span><br>
-                            <span>Badan Hukum No: 003412/BH/M.KUKM.12/02/2017</span>
-                        </td>
-                        <td class='header'><img src='{$clubLogo}' width='80' height='80'></td>
-                    </tr>
-                </thead>
-            </table>
+        $fileContent = Storage::disk('public')->get($proker->proposal);
+        $extension = pathinfo($proker->proposal, PATHINFO_EXTENSION);
+        $filename = 'Proposal_' . str_replace(' ', '_', $proker->name) . '.' . $extension;
 
-            <div>{$proker->proposal}</div>
-        </body>
-        </html>";
-
-        $fileName = 'Proposal_' . str_replace(' ', '_', $proker->name) . '.doc';
-        Storage::disk('local')->put($fileName, $html);
-
-        return response()->download(storage_path("app/$fileName"))->deleteFileAfterSend(true);
+        return response()->streamDownload(function () use ($fileContent) {
+            echo $fileContent;
+        }, $filename);
     }
 
     public function exportLaporanToWord($id)
     {
         $proker = Proker::findOrFail($id);
-        $club = Clubs::where('id', $proker->id_club)->first();
-        $logoPath = storage_path('app/public/' . $club->logo);
 
-        if (file_exists($logoPath)) {
-            $imageData = base64_encode(file_get_contents($logoPath));
-            $clubLogo = "data:image/png;base64," . $imageData;
-        } else {
-            $clubLogo = 'https://via.placeholder.com/80';
+        if (!$proker->laporan || !Storage::disk('public')->exists($proker->laporan)) {
+            return redirect()->back()->with('error', 'File laporan tidak ditemukan.');
         }
 
-        $html = "<html>
-        <head>
-            <meta charset='utf-8'>
-            <title>Laporan Proker</title>
-            <style>
-                @page {
-                    size: A4;
-                    margin-top: 3cm;
-                    margin-bottom: 2cm;
-                    margin-left: 3cm;
-                    margin-right: 2cm;
-                }
-                body {
-                    font-family: Arial, sans-serif;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                .header {
-                    text-align: center;
-                    font-size: 14px;
-                    font-weight: bold;
-                    border-bottom: 1px solid #000;
-                    padding-bottom: 5px;
-                    margin-bottom: 20px;
-                }
-                .page-break {
-                    page-break-before: always;
-                }
-            </style>
-        </head>
-        <body>
-            <table>
-                <thead>
-                    <tr>
-                        <td class='header'><img src='https://upload.wikimedia.org/wikipedia/id/2/23/UNUSA.png' width='80' height='80'></td>
-                        <td class='header' align='center'>
-                            <span>KOPERASI MAHASISWA</span><br>
-                            <span>UNIVERSITAS NAHDLATUL ULAMA SURABAYA</span><br>
-                            <span>Badan Hukum No: 003412/BH/M.KUKM.12/02/2017</span>
-                        </td>
-                        <td class='header'><img src='{$clubLogo}' width='80' height='80'></td>
-                    </tr>
-                </thead>
-            </table>
+        $fileContent = Storage::disk('public')->get($proker->laporan);
+        $extension = pathinfo($proker->laporan, PATHINFO_EXTENSION);
+        $filename = 'Laporan_' . str_replace(' ', '_', $proker->name) . '.' . $extension;
 
-            <div>{$proker->laporan}</div>
-        </body>
-        </html>";
-
-        $fileName = 'Laporan_' . str_replace(' ', '_', $proker->name) . '.doc';
-        Storage::disk('local')->put($fileName, $html);
-
-        // Download file
-        return response()->download(storage_path("app/$fileName"))->deleteFileAfterSend(true);
+        return response()->streamDownload(function () use ($fileContent) {
+            echo $fileContent;
+        }, $filename);
     }
 
     public function uploadPdf(Request $request, $id)

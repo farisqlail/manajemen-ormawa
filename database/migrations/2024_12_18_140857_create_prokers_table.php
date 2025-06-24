@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->biginteger('id_club');
             $table->string('name');
-            $table->string('proposal');
+            $table->string('proposal')->nullable();
             $table->string('laporan')->nullable();
             $table->biginteger('budget');
             $table->date('target_event');
