@@ -13,7 +13,7 @@
 
                 <form method="GET" action="{{ route('prokers.index') }}" class="mb-2" style="min-width: 250px;">
                     <div class="input-group">
-                        <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Cari nama proker...">
+                        <input type="text" name="search" value="{{ request('pencarian') }}" class="form-control" placeholder="Cari nama proker...">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-outline-primary">Cari</button>
                         </div>
@@ -21,7 +21,7 @@
                 </form>
             </div>
 
-            @if($prokers->isEmpty())
+            @if($daftarProker->isEmpty())
             <div class="alert alert-warning text-center" role="alert">
                 Tidak ada proker yang ditemukan. Silakan ajukan proker baru.
             </div>
@@ -42,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($prokers as $proker)
+                    @foreach ($daftarProker as $proker)
                     <tr>
                         <td>{{ $proker->name }}</td>
                         <td>Rp {{ number_format($proker->budget, 0, ',', '.') }}</td>
@@ -88,18 +88,17 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-fw fa-trash"></i></button>
                                 </form>
-                                <!-- <a href="{{ route('prokers.export', $proker->id) }}" class="btn btn-primary btn-sm mr-2 mb-2">
-                                    Proposal
-                                </a> -->
-                                <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-primary btn-sm mr-2 mb-2">
+                                @if($proker->proposal !== null)
+                                <a href="{{ route('prokers.export', $proker->id) }}" class="btn btn-primary mr-2 btn-sm">
                                     Proposal
                                 </a>
+                                @endif
                                 @if($proker->status == 'approved' && $proker->laporan == "")
                                 <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-info btn-sm mr-2 mb-2">
-                                    Upload LPJ
+                                    Upload Laporan
                                 </a>
-                                @elseif($proker->laporan !== "")
-                                <a href="{{ route('prokers.exportLaporan', $proker->id) }}" class="btn btn-info btn-sm mr-2 mb-2">
+                                @elseif($proker->laporan !== null)
+                                <a href="{{ route('prokers.exportLaporan', $proker->id) }}" class="btn btn-info mr-2 btn-sm">
                                     Laporan
                                 </a>
                                 @endif
@@ -112,7 +111,7 @@
             </table>
 
             <div class="d-flex justify-content-end">
-                {{ $prokers->links() }}
+                {{ $daftarProker->links() }}
             </div>
             @endif
         </div>

@@ -16,49 +16,40 @@ class AuthController extends Controller
 {
     public function loginForm()
     {
-        $prokers = Proker::with('club')->get()->groupBy('id_club');
+        $daftarProker = Proker::with('club')->get()->groupBy('id_club');
 
-        return view('auth.login', compact('prokers'));
+        return view('auth.login', compact('daftarProker'));
     }
 
-    public function login(Request $request)
+    public function login(Request $permintaan)
     {
-        $credentials = $request->validate([
+        $kredensial = $permintaan->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-        $user = \App\Models\User::where('email', $credentials['email'])->first();
 
-        if (!$user) {
+        $pengguna = \App\Models\User::where('email', $kredensial['email'])->first();
+
+        if (!$pengguna) {
             return back()->withErrors([
                 'email' => 'Email tidak ditemukan di sistem.',
             ]);
         }
 
-        if ($user->status === 'nonactive') {
+        if ($pengguna->status === 'nonactive') {
             return back()->withErrors([
                 'email' => 'Akun Anda belum aktif. Silakan lakukan registrasi ulang atau aktivasi.',
             ]);
         }
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        if (Auth::attempt($kredensial)) {
+            $permintaan->session()->regenerate();
             return redirect()->intended('dashboard');
         }
 
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ]);
-    }
-
-
-    public function registerForm()
-    {
-        $clubs = Clubs::all();
-        $divisions = Division::all();
-        $prokers = Proker::with('club')->get()->groupBy('id_club');
-
-        return view('auth.register', compact('clubs', 'divisions', 'prokers'));
     }
 
     public function register(Request $request)
@@ -95,7 +86,6 @@ class AuthController extends Controller
         }
     }
 
-
     public function logout(Request $request)
     {
         Auth::logout();
@@ -107,37 +97,39 @@ class AuthController extends Controller
     public function index()
     {
         $users = User::all();
-        $notification = Proker::where(function ($query) {
+        $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
+        $jumlahNotifikasi = $notifikasi->count();
 
-        return view('users.index', compact('users', 'notification', 'notificationCount'));
+        return view('users.index', compact('users', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function create()
     {
-        $clubs = Clubs::all();
-        $divisions = Division::all();
-        $notification = Proker::where(function ($query) {
+        $daftarOrmawa = Clubs::all();
+        $daftarDivisi = Division::all();
+
+        $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
 
-        return view('users.create', compact('clubs', 'divisions', 'notification', 'notificationCount'));
+        $jumlahNotifikasi = $notifikasi->count();
+
+        return view('users.create', compact('daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $dataValidasi = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'id_club' => ['required', 'integer'],
@@ -145,63 +137,63 @@ class AuthController extends Controller
             'status' => ['required', 'string'],
         ]);
 
-        $password = '12345678';
+        $passwordDefault = '12345678';
 
         User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($password),
-            'id_club' => $data['id_club'],
+            'name' => $dataValidasi['name'],
+            'email' => $dataValidasi['email'],
+            'password' => Hash::make($passwordDefault),
+            'id_club' => $dataValidasi['id_club'],
             'id_division' => $request->get('id_division'),
-            'role' => $data['role'],
-            'status' => $data['status'],
+            'role' => $dataValidasi['role'],
+            'status' => $dataValidasi['status'],
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('users.index')->with('success', 'User berhasil dibuat.');
     }
 
     public function edit(User $user)
     {
-        $clubs = Clubs::all();
-        $divisions = Division::all();
-        $notification = Proker::where(function ($query) {
+        $daftarOrmawa = Clubs::all();
+        $daftarDivisi = Division::all();
+        $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
-
-        return view('users.edit', compact('user', 'clubs', 'divisions', 'notification', 'notificationCount'));
+        $jumlahNotifikasi = $notifikasi->count();
+    
+        return view('users.edit', compact('user', 'daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
     }
-
+    
     public function update(Request $request, User $user)
     {
-        $data = $request->validate([
+        $dataPengguna = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'id_club' => ['required', 'integer'],
             'role' => ['required', 'string'],
             'status' => ['required', 'string'],
         ]);
-
-        $user->name = $data['name'];
-        $user->email = $data['email'];
-        $user->id_club = $data['id_club'];
+    
+        $user->name = $dataPengguna['name'];
+        $user->email = $dataPengguna['email'];
+        $user->id_club = $dataPengguna['id_club'];
         $user->id_division = $request->get('id_division');
-        $user->role = $data['role'];
-        $user->status = $data['status'];
-
+        $user->role = $dataPengguna['role'];
+        $user->status = $dataPengguna['status'];
+    
         if ($request->filled('password')) {
-            $user->password = Hash::make($data['name'] . '123');
+            $user->password = Hash::make($dataPengguna['name'] . '123');
         }
-
+    
         $user->save();
-
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+    
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
-
+    
     public function destroy(User $user)
     {
         $user->delete();

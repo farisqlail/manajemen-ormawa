@@ -13,34 +13,34 @@ class ProkerController extends Controller
 {
     public function index(Request $request)
     {
-        $idClub = Auth::user()->id_club;
-        $search = $request->input('search');
+        $idOrmawa = Auth::user()->id_club;
+        $pencarian = $request->input('search');
 
-        $query = Proker::where('id_club', $idClub);
+        $kueriProker = Proker::where('id_club', $idOrmawa);
 
-        if ($search) {
-            $query->where('name', 'like', '%' . $search . '%');
+        if ($pencarian) {
+            $kueriProker->where('name', 'like', '%' . $pencarian . '%');
         }
 
-        $prokers = $query->paginate(10)->appends(['search' => $search]);
+        $daftarProker = $kueriProker->paginate(10)->appends(['search' => $pencarian]);
 
-        $notification = Proker::where(function ($query) {
-            $query->whereNull('status_laporan')
+        $notifikasiProker = Proker::where(function ($kueri) {
+            $kueri->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
 
-        $notificationCount = $notification->count();
+        $jumlahNotifikasi = $notifikasiProker->count();
 
-        return view('prokers.index', compact('prokers', 'notification', 'notificationCount', 'search'));
+        return view('prokers.index', compact('daftarProker', 'notifikasiProker', 'jumlahNotifikasi', 'pencarian'));
     }
 
     public function create()
     {
-        $clubs = Clubs::all();
-        return view('prokers.create', compact('clubs'));
+        $daftarOrmawa = Clubs::all();
+        return view('prokers.create', compact('daftarOrmawa'));
     }
 
     public function store(Request $request)
@@ -54,23 +54,23 @@ class ProkerController extends Controller
                 'target_event' => 'required|date',
             ]);
 
-            $filePath = null;
+            $lokasiFile = null;
             if ($request->hasFile('proposal_file')) {
-                $filePath = $request->file('proposal_file')->store('proposals', 'public');
+                $lokasiFile = $request->file('proposal_file')->store('proposals', 'public');
             }
 
             Proker::create([
                 'id_club' => $request->id_club,
                 'name' => $request->name,
-                'proposal' => $filePath,
+                'proposal' => $lokasiFile,
                 'budget' => $request->budget,
                 'target_event' => $request->target_event,
                 'status' => "pending",
             ]);
 
-            return redirect()->route('prokers.index')->with('success', 'Proker created successfully.');
+            return redirect()->route('prokers.index')->with('success', 'Proker berhasil dibuat.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to create Proker: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal membuat Proker: ' . $e->getMessage());
         }
     }
 
@@ -83,8 +83,8 @@ class ProkerController extends Controller
 
     public function edit(Proker $proker)
     {
-        $clubs = Clubs::all();
-        return view('prokers.edit', compact('proker', 'clubs'));
+        $daftarOrmawa = Clubs::all();
+        return view('prokers.edit', compact('proker', 'daftarOrmawa'));
     }
 
     public function update(Request $request, Proker $proker)
@@ -99,7 +99,7 @@ class ProkerController extends Controller
                 'laporan_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
             ]);
 
-            $dataToUpdate = [
+            $dataProker = [
                 'id_club' => $request->id_club,
                 'name' => $request->name,
                 'budget' => $request->budget,
@@ -113,25 +113,26 @@ class ProkerController extends Controller
                 if ($proker->proposal && Storage::disk('public')->exists($proker->proposal)) {
                     Storage::disk('public')->delete($proker->proposal);
                 }
-                $proposalPath = $request->file('proposal_file')->store('proposals', 'public');
-                $dataToUpdate['proposal'] = $proposalPath;
+                $pathProposal = $request->file('proposal_file')->store('proposals', 'public');
+                $dataProker['proposal'] = $pathProposal;
             }
 
             if ($request->hasFile('laporan_file')) {
                 if ($proker->laporan && Storage::disk('public')->exists($proker->laporan)) {
                     Storage::disk('public')->delete($proker->laporan);
                 }
-                $laporanPath = $request->file('laporan_file')->store('laporan', 'public');
-                $dataToUpdate['laporan'] = $laporanPath;
+                $pathLaporan = $request->file('laporan_file')->store('laporan', 'public');
+                $dataProker['laporan'] = $pathLaporan;
             }
 
-            $proker->update($dataToUpdate);
+            $proker->update($dataProker);
 
-            return redirect()->route('prokers.index')->with('success', 'Proker updated successfully.');
+            return redirect()->route('prokers.index')->with('success', 'Proker berhasil diperbarui.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update Proker: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui Proker: ' . $e->getMessage());
         }
     }
+
     public function destroy(Proker $proker)
     {
         $proker->delete();
@@ -151,6 +152,7 @@ class ProkerController extends Controller
 
         return response()->download(storage_path('app/public' . '/' . $proker->document_lpj), $fileName);
     }
+
     public function approveProker($id)
     {
         $proker = Proker::findOrFail($id);
@@ -173,12 +175,23 @@ class ProkerController extends Controller
     {
         $proker = Proker::findOrFail($id);
 
-        $proker->status_laporan = 'rejected';
+        $proker->status_laporan = 'pending';
         $proker->reason = $request->get('reason');
         $proker->save();
 
         return redirect()->back()->with('success', 'Proker rejected successfully.');
     }
+
+    public function rejectProkerNoReason(Request $request, $id)
+    {
+        $proker = Proker::findOrFail($id);
+
+        $proker->status_laporan = 'rejected';
+        $proker->save();
+
+        return redirect()->back()->with('success', 'Proker rejected successfully.');
+    }
+
     public function approveProkerLaporan($id)
     {
         $proker = Proker::findOrFail($id);
@@ -198,6 +211,15 @@ class ProkerController extends Controller
         $proker = Proker::findOrFail($id);
         $proker->status_laporan = 'rejected';
         $proker->reason = $request->get('reason');
+        $proker->save();
+
+        return redirect()->back()->with('success', 'Proker rejected successfully.');
+    }
+
+    public function rejectProposalNoReason(Request $request, $id)
+    {
+        $proker = Proker::findOrFail($id);
+        $proker->status = 'rejected';
         $proker->save();
 
         return redirect()->back()->with('success', 'Proker rejected successfully.');

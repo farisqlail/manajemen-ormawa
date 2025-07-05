@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $club->name }} - Profil Ormawa</title>
+    <title>{{ $ormawa->name }} - Profil Ormawa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .club-header {
@@ -50,19 +50,19 @@
 <body>
     <div class="container mt-5 mb-5">
         <div class="club-header text-center">
-            <img src="{{ asset('storage/' . $club->logo) }}" alt="Logo" class="logo-img mb-3">
-            <h1 class="fw-bold">{{ $club->name }}</h1>
-            <p class="mt-3">{!! $club->description !!}</p>
+            <img src="{{ asset('storage/' . $ormawa->logo) }}" alt="Logo" class="logo-img mb-3">
+            <h1 class="fw-bold">{{ $ormawa->name }}</h1>
+            <p class="mt-3">{!! $ormawa->description !!}</p>
         </div>
 
         <div class="section-title">
             <h3 class="fw-semibold">📌 Daftar Proker</h3>
         </div>
-        @if($prokers->isEmpty())
+        @if($daftarProker->isEmpty())
             <p class="text-muted">Belum ada program kerja.</p>
         @else
             <div class="row row-cols-1 row-cols-md-2 g-3">
-                @foreach($prokers as $proker)
+                @foreach($daftarProker as $proker)
                     <div class="col">
                         <div class="card shadow-sm h-100">
                             <div class="card-body">
@@ -80,18 +80,18 @@
         <div class="section-title">
             <h3 class="fw-semibold">🎯 Daftar Aktivitas</h3>
         </div>
-        @if($activities->isEmpty())
+        @if($daftarKegiatan->isEmpty())
             <p class="text-muted">Belum ada aktivitas tercatat.</p>
         @else
             <div class="row g-3">
-                @foreach($activities as $activity)
+                @foreach($daftarKegiatan as $kegiatan)
                     <div class="col-md-6">
                         <div class="card shadow-sm h-100">
                             <div class="card-body">
-                                <h5 class="card-title">{{ $activity->name }}</h5>
-                                <p class="card-text">{!! $activity->description !!}</p>
+                                <h5 class="card-title">{{ $kegiatan->name }}</h5>
+                                <p class="card-text">{!! $kegiatan->description !!}</p>
                                 <div class="d-flex flex-wrap gap-2 mt-3">
-                                    @foreach (json_decode($activity->photos) as $photo)
+                                    @foreach (json_decode($kegiatan->photos) as $photo)
                                         <img src="{{ Storage::url($photo) }}" class="activity-img" style="width: 100px; height: 100px;" alt="Photo">
                                     @endforeach
                                 </div>

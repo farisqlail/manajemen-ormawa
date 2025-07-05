@@ -4,36 +4,37 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <h1>Divisions for {{ $club->name }}</h1>
+            <h1>Divisi untuk {{ $dataOrmawa->name }}</h1>
             @if(Auth::user()->role == 'ormawa')
-            <a href="{{ route('divisions.create', $club->id) }}" class="btn btn-primary mb-3">Tambah Divisi</a>
+            <a href="{{ route('divisions.create', $dataOrmawa->id) }}" class="btn btn-primary mb-3">Tambah Divisi</a>
             @endif
 
             @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
             @endif
+
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Nama Divisi</th>
                         @if(Auth::user()->role == 'ormawa')
-                        <th>Actions</th>
+                        <th>Aksi</th>
                         @endif
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($divisions as $division)
+                    @foreach($daftarDivisi as $divisi)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $division->name }}</td>
+                        <td>{{ $divisi->name }}</td>
                         @if(Auth::user()->role == 'ormawa')
                         <td>
-                            <a href="{{ route('divisions.edit', $division->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('divisions.destroy', $division->id) }}" method="POST" style="display:inline;">
+                            <a href="{{ route('divisions.edit', $divisi->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('divisions.destroy', $divisi->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus divisi ini?')">Delete</button>
                             </form>
                         </td>
                         @endif
@@ -41,6 +42,7 @@
                     @endforeach
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>

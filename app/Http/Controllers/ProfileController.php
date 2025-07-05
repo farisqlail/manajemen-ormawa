@@ -19,12 +19,12 @@ class ProfileController extends Controller
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
+        $jumlahNotifikasi = $notification->count();
 
         if (!$club) {
             return redirect()->route('home')->with('error', 'Club not found.');
         }
 
-        return view('profile.index', compact('club', 'notification', 'notificationCount'));
+        return view('profile.index', compact('club', 'notification', 'jumlahNotifikasi'));
     }
 }

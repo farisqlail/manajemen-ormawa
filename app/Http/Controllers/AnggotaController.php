@@ -14,29 +14,32 @@ class AnggotaController extends Controller
 {
     public function index()
     {
-        $userIdClub = Auth::user()->id_club;
-        $anggotas = Anggota::with(['club', 'division'])
-            ->where('id_club', $userIdClub)
+        $idKlubPengguna = Auth::user()->id_club;
+
+        $daftarAnggota = Anggota::with(['club', 'division'])
+            ->where('id_club', $idKlubPengguna)
             ->get();
-        $notification = Proker::where(function ($query) {
+
+        $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
 
-        return view('anggotas.index', compact('anggotas', 'notification', 'notificationCount'));
+        $jumlahNotifikasi = $notifikasi->count();
+
+        return view('anggotas.index', compact('daftarAnggota', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function create()
     {
-        $user = Auth::user();
-        $clubs = Clubs::where('id', $user->id_club)->get();
-        $divisions = Division::where('id_clubs', $user->id_club)->get();
+        $pengguna = Auth::user();
+        $daftarOrmawa = Clubs::where('id', $pengguna->id_club)->get();
+        $daftarDivisi = Division::where('id_clubs', $pengguna->id_club)->get();
 
-        return view('anggotas.create', compact('clubs', 'divisions'));
+        return view('anggotas.create', compact('daftarOrmawa', 'daftarDivisi'));
     }
 
     public function store(Request $request)
@@ -47,7 +50,8 @@ class AnggotaController extends Controller
         ]);
 
         Anggota::create($request->all());
-        return redirect()->route('anggotas.index')->with('success', 'Anggota created successfully.');
+
+        return redirect()->route('anggotas.index')->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     public function show(Anggota $anggota)
@@ -57,12 +61,12 @@ class AnggotaController extends Controller
 
     public function edit($id)
     {
-        $anggota = Anggota::findOrFail($id);
-        $userIdClub = Auth::user()->id_club;
-        $clubs = Clubs::where('id', $userIdClub)->get();
-        $divisions = Division::where('id_clubs', $userIdClub)->get();
+        $dataAnggota = Anggota::findOrFail($id);
+        $idOrmawaPengguna = Auth::user()->id_club;
+        $daftarOrmawa = Clubs::where('id', $idOrmawaPengguna)->get();
+        $daftarDivisi = Division::where('id_clubs', $idOrmawaPengguna)->get();
 
-        return view('anggotas.edit', compact('anggota', 'clubs', 'divisions'));
+        return view('anggotas.edit', compact('dataAnggota', 'daftarOrmawa', 'daftarDivisi'));
     }
 
     public function update(Request $request, Anggota $anggota)
@@ -73,7 +77,8 @@ class AnggotaController extends Controller
         ]);
 
         $anggota->update($request->all());
-        return redirect()->route('anggotas.index')->with('success', 'Anggota updated successfully.');
+
+        return redirect()->route('anggotas.index')->with('success', 'Anggota berhasil diperbarui.');
     }
 
     public function destroy(Anggota $anggota)

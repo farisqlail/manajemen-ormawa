@@ -24,30 +24,30 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin mengubah password">
                 </div>
                 <div class="form-group mb-3">
                     <label for="password_confirmation">Konfirmasi Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Leave blank to keep current password">
+                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Kosongkan jika tidak ingin mengubah password">
                 </div>
                 <div class="form-group mb-3">
                     <label for="id_club">Ormawa</label>
                     <select id="id_club" name="id_club" class="form-control" required>
-                        @foreach ($clubs as $club)
-                        <option value="{{ $club->id }}" {{ $user->id_club == $club->id ? 'selected' : '' }}>{{ $club->name }}</option>
+                        @foreach ($daftarOrmawa as $ormawa)
+                        <option value="{{ $ormawa->id }}" {{ $user->id_club == $ormawa->id ? 'selected' : '' }}>{{ $ormawa->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="id_division">Division</label>
+                    <label for="id_division">Divisi</label>
                     <select id="id_division" name="id_division" class="form-control" required>
-                        @foreach ($divisions as $division)
-                        <option value="{{ $division->id }}" {{ $user->id_division == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
+                        @foreach ($daftarDivisi as $divisi)
+                        <option value="{{ $divisi->id }}" {{ $user->id_division == $divisi->id ? 'selected' : '' }}>{{ $divisi->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group mb-3">
-                    <label for="role">Role</label>
+                    <label for="role">Peran</label>
                     <select id="role" name="role" class="form-control" required>
                         <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="ormawa" {{ $user->role == 'ormawa' ? 'selected' : '' }}>Ormawa</option>
@@ -56,9 +56,9 @@
                 <input type="hidden" id="status" name="status" value="active">
                 <div class="form-group mb-3">
                     <label>Status</label>
-                    <input type="text" class="form-control" value="Active" readonly>
+                    <input type="text" class="form-control" value="active" readonly>
                 </div>
-                <button type="submit" class="btn btn-primary">Edit Pengguna</button>
+                <button type="submit" class="btn btn-primary">Perbarui Pengguna</button>
                 <a href="{{ route('users.index') }}" class="btn btn-secondary">Kembali</a>
             </form>
         </div>

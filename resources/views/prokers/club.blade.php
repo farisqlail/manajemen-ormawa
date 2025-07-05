@@ -8,19 +8,18 @@
 
     <div class="card">
         <div class="card-body">
-            @if($pendingProkers->isNotEmpty())
-            <h2>Proker menunggu persetujuan {{ $pendingProkers->first()->club->name }}</h2>
+            @if($prokerPending->isNotEmpty())
+            <h2>Proker menunggu persetujuan {{ $prokerPending->first()->club->name }}</h2>
             @else
-            <h2>Tidak ada proker diormawa ini.</h2>
+            <h2>Tidak ada proker di ormawa ini.</h2>
             @endif
 
-
-            @if($pendingProkers->isEmpty())
-            <p class="text-muted">Tidak ada proker yang sedang pending diormawa ini.</p>
+            @if($prokerPending->isEmpty())
+            <p class="text-muted">Tidak ada proker yang sedang pending di ormawa ini.</p>
             @else
 
             @php
-            $showLaporanColumn = $pendingProkers->contains(function($proker) {
+            $tampilkanKolomLaporan = $prokerPending->contains(function($proker) {
             return !empty($proker->status_laporan) && $proker->status_laporan !== '';
             });
             @endphp
@@ -30,19 +29,21 @@
                     <tr>
                         <th>No</th>
                         <th>Nama Proker</th>
+                        <th>Dana</th>
                         <th>Berlangsung pada</th>
                         <th>Proposal</th>
-                        @if($showLaporanColumn)
+                        @if($tampilkanKolomLaporan)
                         <th>Laporan (LPJ)</th>
                         @endif
-                        <th>Actions</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($pendingProkers as $proker)
+                    @foreach($prokerPending as $proker)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $proker->name }}</td>
+                        <td>Rp {{ number_format($proker->budget, 0, ',', '.') }}</td>
                         <td>{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</td>
                         <td>
                             @if(!empty($proker->proposal))
@@ -53,7 +54,7 @@
                             <span>-</span>
                             @endif
                         </td>
-                        @if($showLaporanColumn)
+                        @if($tampilkanKolomLaporan)
                         <td>
                             @if(!empty($proker->status_laporan) && $proker->status_laporan !== '')
                             <a href="{{ route('prokers.exportLaporan', $proker->id) }}" class="btn btn-info mr-2 btn-sm">
@@ -64,21 +65,51 @@
                         @endif
                         <td>
                             @if(!empty($proker->proposal))
-                            @if(Auth::user()->role == 'admin' && $proker->status == 'pending')
+                            {{-- Tombol Admin --}}
+                            @if(Auth::user()->role == 'admin')
+
+                            {{-- Jika status proposal masih pending --}}
+                            @if($proker->status == 'pending' && $proker->reason == null)
                             <form action="{{ route('prokers.approve', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
-                                <button type="submit" class="btn btn-info btn-sm">Approve</button>
+                                <button type="submit" class="btn btn-success btn-sm">Setujui</button>
                             </form>
-                            @elseif(Auth::user()->role == 'admin' && $proker->status_laporan == 'pending')
+                            <form action="{{ route('prokers.rejectNoReason.proposal', $proker->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm">Tolak</button>
+                            </form>
+                            <button class="btn btn-info btn-sm" onclick="openRejectModal({{ $proker->id }})">Komentar</button>
+
+                            {{-- Jika status laporan masih pending --}}
+                            @elseif($proker->status_laporan == 'pending' && $proker->reason == null)
                             <form action="{{ route('prokers.approve.laporan', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
-                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                <button type="submit" class="btn btn-success btn-sm">Setujui</button>
                             </form>
+                            <form action="{{ route('prokers.rejectNoReason.laporan', $proker->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm">Tolak</button>
+                            </form>
+                            <button class="btn btn-info btn-sm" onclick="openRejectModal({{ $proker->id }})">Komentar</button>
                             @endif
 
-                            <button class="btn btn-danger btn-sm" onclick="openRejectModal({{ $proker->id }})">
-                                Reject
-                            </button>
+                            @endif
+
+                            {{-- Status tampilan untuk siapa pun --}}
+                            @if($proker->status == 'approved')
+                            <div><span class="badge bg-success text-white">Proposal sudah disetujui</span></div>
+                            @elseif($proker->status == 'rejected')
+                            <div><span class="badge bg-danger text-white">Proposal sudah ditolak</span></div>
+                            @elseif($proker->status_laporan == 'approved')
+                            <div><span class="badge bg-success text-white">Laporan sudah disetujui</span></div>
+                            @elseif($proker->status_laporan == 'rejected')
+                            <div><span class="badge bg-danger text-white">Laporan sudah ditolak</span></div>
+                            @elseif(!empty($proker->reason) && $proker->status == 'pending')
+                            <div><span class="badge bg-warning text-dark">Proposal sudah dikomentari</span></div>
+                            @elseif(!empty($proker->reason) && $proker->status_laporan == 'pending')
+                            <div><span class="badge bg-warning text-dark">Laporan sudah dikomentari</span></div>
+                            @endif
+
                             @else
                             <span>-</span>
                             @endif
@@ -109,7 +140,7 @@
                         <label for="reason" class="form-label">Masukkan alasan:</label>
                         <textarea name="reason" id="reason" class="form-control" rows="4" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-danger">Submit Reject</button>
+                    <button type="submit" class="btn btn-danger">Submit Penolakan</button>
                 </form>
             </div>
         </div>

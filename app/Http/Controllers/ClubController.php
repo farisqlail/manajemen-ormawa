@@ -12,145 +12,149 @@ class ClubController extends Controller
 {
     public function index()
     {
-        $clubs = Clubs::all();
-        $notification = Proker::where(function ($query) {
+        $daftarOrmawa = Clubs::all();
+        $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
+        $jumlahNotifikasi = $notifikasi->count();
 
-        return view('clubs.index', compact('clubs', 'notification', 'notificationCount'));
+        return view('clubs.index', compact('daftarOrmawa', 'notifikasi', 'jumlahNotifikasi'));
     }
+
 
     public function create()
     {
-        $notification = Proker::where(function ($query) {
-            $query->whereNull('status_laporan')
+        $notifikasi = Proker::where(function ($kueri) {
+            $kueri->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
 
-        return view('clubs.create', compact('notification', 'notificationCount'));
+        $jumlahNotifikasi = $notifikasi->count();
+
+        return view('clubs.create', compact('notifikasi', 'jumlahNotifikasi'));
     }
 
-    public function store(Request $request)
+    public function store(Request $permintaan)
     {
         try {
-            $request->validate([
+            $permintaan->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'required',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'photo_structure' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $data = $request->all();
+            $dataOrmawa = $permintaan->all();
 
-            if ($request->hasFile('logo')) {
-                $data['logo'] = $request->file('logo')->store('logos', 'public');
+            if ($permintaan->hasFile('logo')) {
+                $dataOrmawa['logo'] = $permintaan->file('logo')->store('logos', 'public');
             }
 
-            if ($request->hasFile('photo_structure')) {
-                $data['photo_structure'] = $request->file('photo_structure')->store('photos', 'public');
+            if ($permintaan->hasFile('photo_structure')) {
+                $dataOrmawa['photo_structure'] = $permintaan->file('photo_structure')->store('photos', 'public');
             }
 
-            Clubs::create($data);
+            Clubs::create($dataOrmawa);
 
-            return redirect()->route('clubs.index')->with('success', 'Club created successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to create Club: ' . $e->getMessage());
+            return redirect()->route('clubs.index')->with('success', 'Ormawa berhasil ditambahkan.');
+        } catch (\Exception $kesalahan) {
+            return redirect()->back()->with('error', 'Gagal menambahkan Ormawa: ' . $kesalahan->getMessage());
         }
     }
 
-    public function edit(Clubs $club)
+    public function edit(Clubs $ormawa)
     {
-        $notification = Proker::where(function ($query) {
-            $query->whereNull('status_laporan')
+        $notifikasi = Proker::where(function ($kueri) {
+            $kueri->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
 
-        return view('clubs.edit', compact('club', 'notification', 'notificationCount'));
+        $jumlahNotifikasi = $notifikasi->count();
+
+        return view('clubs.edit', compact('ormawa', 'notifikasi', 'jumlahNotifikasi'));
     }
 
-    public function editOrmawa(Clubs $club)
-    {
-        return view('clubs.editOrmawa', compact('club'));
-    }
-
-    public function update(Request $request, Clubs $club)
+    public function update(Request $permintaan, Clubs $ormawa)
     {
         try {
-            $request->validate([
+            $permintaan->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'required',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'photo_structure' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $data = $request->all();
+            $data = $permintaan->all();
 
-            if ($request->hasFile('logo')) {
-                if ($club->logo) {
-                    Storage::disk('public')->delete($club->logo);
+            if ($permintaan->hasFile('logo')) {
+                if ($ormawa->logo) {
+                    Storage::disk('public')->delete($ormawa->logo);
                 }
-                $data['logo'] = $request->file('logo')->store('logos', 'public');
+                $data['logo'] = $permintaan->file('logo')->store('logos', 'public');
             }
 
-            if ($request->hasFile('photo_structure')) {
-                if ($club->photo_structure) {
-                    Storage::disk('public')->delete($club->photo_structure);
+            if ($permintaan->hasFile('photo_structure')) {
+                if ($ormawa->photo_structure) {
+                    Storage::disk('public')->delete($ormawa->photo_structure);
                 }
-                $data['photo_structure'] = $request->file('photo_structure')->store('photos', 'public');
+                $data['photo_structure'] = $permintaan->file('photo_structure')->store('photos', 'public');
             }
 
-            $club->update($data);
+            $ormawa->update($data);
 
-            return redirect()->route('clubs.index')->with('success', 'Club updated successfully.');
+            return redirect()->route('clubs.index')->with('success', 'Data ormawa berhasil diperbarui.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update Club: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui ormawa: ' . $e->getMessage());
         }
     }
 
-    public function updateOrmawa(Request $request, Clubs $club)
+
+    public function editOrmawa(Clubs $ormawa)
+    {
+        return view('clubs.editOrmawa', compact('ormawa'));
+    }
+
+    public function updateOrmawa(Request $permintaan, Clubs $ormawa)
     {
         try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'required',
+            $permintaan->validate([
+                'nama' => 'required|string|max:255',
+                'deskripsi' => 'required',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'photo_structure' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto_struktur' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $data = $request->all();
+            $data = $permintaan->all();
 
-            if ($request->hasFile('logo')) {
-                if ($club->logo) {
-                    Storage::disk('public')->delete($club->logo);
+            if ($permintaan->hasFile('logo')) {
+                if ($ormawa->logo) {
+                    Storage::disk('public')->delete($ormawa->logo);
                 }
-                $data['logo'] = $request->file('logo')->store('logos', 'public');
+                $data['logo'] = $permintaan->file('logo')->store('logos', 'public');
             }
 
-            if ($request->hasFile('photo_structure')) {
-                if ($club->photo_structure) {
-                    Storage::disk('public')->delete($club->photo_structure);
+            if ($permintaan->hasFile('foto_struktur')) {
+                if ($ormawa->foto_struktur) {
+                    Storage::disk('public')->delete($ormawa->foto_struktur);
                 }
-                $data['photo_structure'] = $request->file('photo_structure')->store('photos', 'public');
+                $data['foto_struktur'] = $permintaan->file('foto_struktur')->store('photos', 'public');
             }
 
-            $club->update($data);
+            $ormawa->update($data);
 
-            return redirect()->route('profile')->with('success', 'Club updated successfully.');
+            return redirect()->route('profile')->with('success', 'Data ormawa berhasil diperbarui.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update Club: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui data ormawa: ' . $e->getMessage());
         }
     }
 
@@ -162,10 +166,10 @@ class ClubController extends Controller
 
     public function showProfile($id)
     {
-        $club = Clubs::findOrFail($id);
-        $prokers = Proker::where('id_club', $id)->get();
-        $activities = Activity::where('id_club', $id)->get();
+        $ormawa = Clubs::findOrFail($id);
+        $daftarProker = Proker::where('id_club', $id)->get();
+        $daftarKegiatan = Activity::where('id_club', $id)->get();
 
-        return view('ormawa.profile', compact('club', 'prokers', 'activities'));
+        return view('ormawa.profile', compact('ormawa', 'daftarProker', 'daftarKegiatan'));
     }
 }

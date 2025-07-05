@@ -5,9 +5,18 @@
     <div class="card">
         <div class="card-body">
             <h2>Kegiatan</h2>
+
+            {{-- Menampilkan jumlah notifikasi jika ada --}}
+            @if($jumlahNotifikasi > 0)
+            <div class="alert alert-warning">
+                Terdapat {{ $jumlahNotifikasi }} proker yang menunggu persetujuan atau laporan.
+            </div>
+            @endif
+
             @if(Auth::user()->role == 'ormawa')
             <a href="{{ route('activities.create') }}" class="btn btn-primary mb-3">Tambah Kegiatan</a>
             @endif
+
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -15,43 +24,37 @@
                         <th>Nama Kegiatan</th>
                         <th>Deskripsi</th>
                         <th>Foto Kegiatan</th>
-                        @if(Auth::user()->role == 'ormawa')
-                        <th>Actions</th>
-                        @else
-                        <th>Actions</th>
-                        @endif
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if($activities->isEmpty())
+                    @if($kegiatan->isEmpty())
                     <tr>
-                        <td colspan="5" class="text-center">No activities found. Please create a new activity.</td>
+                        <td colspan="5" class="text-center">Tidak ada kegiatan ditemukan. Silakan tambahkan kegiatan baru.</td>
                     </tr>
                     @else
-                    @foreach ($activities as $activity)
+                    @foreach ($kegiatan as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $activity->name }}</td>
-                        <td>{!! Str::limit($activity->description, 50) !!}</td>
+                        <td>{{ $item->name }}</td>
+                        <td>{!! Str::limit($item->description, 50) !!}</td>
                         <td>
-                            @foreach (json_decode($activity->photos) as $photo)
-                            <img src="{{ Storage::url($photo) }}" width="50" height="50" alt="Photo">
+                            @foreach (json_decode($item->photos) as $photo)
+                            <img src="{{ Storage::url($photo) }}" width="50" height="50" alt="Foto Kegiatan">
                             @endforeach
                         </td>
-                        @if(Auth::user()->role == 'ormawa')
                         <td>
-                            <a href="{{ route('activities.edit', $activity->id) }}" class="btn btn-warning">Edit</a>
-                            <form action="{{ route('activities.destroy', $activity->id) }}" method="POST" style="display:inline-block;">
+                            @if(Auth::user()->role == 'ormawa')
+                            <a href="{{ route('activities.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+                            <form action="{{ route('activities.destroy', $item->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger">Hapus</button>
                             </form>
+                            @else
+                            <a href="{{ route('activities.show', $item->id) }}" class="btn btn-info">Lihat</a>
+                            @endif
                         </td>
-                        @else
-                        <td>
-                            <a href="{{ route('activities.show', $activity->id) }}" class="btn btn-info">Lihat</a>
-                        </td>
-                        @endif
                     </tr>
                     @endforeach
                     @endif

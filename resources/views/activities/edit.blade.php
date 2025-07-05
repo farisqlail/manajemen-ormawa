@@ -2,31 +2,36 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2>Edit Activity</h2>
+    <h2>Edit Kegiatan</h2>
     <form action="{{ route('activities.update', $activity->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-        <input type="number" name="id_club" value="{{Auth::user()->id_club}}" hidden>
+        <input type="number" name="id_club" value="{{ Auth::user()->id_club }}" hidden>
+        
         <div class="form-group mb-3">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" value="{{ $activity->name }}" class="form-control" required>
+            <label for="nama_kegiatan">Nama Kegiatan</label>
+            <input type="text" id="nama_kegiatan" name="nama_kegiatan" value="{{ $activity->name }}" class="form-control" required>
         </div>
+        
         <div class="form-group mb-3">
-            <label for="description">Description</label>
-            <textarea id="description" name="description" class="form-control" required>{{ $activity->description }}</textarea>
+            <label for="deskripsi">Deskripsi</label>
+            <textarea id="deskripsi" name="deskripsi" class="form-control" required>{{ $activity->description }}</textarea>
         </div>
+        
         <div class="form-group mb-3">
-            <label for="photos">Photos (max 5) <small class="text-danger">MAX: 2MB</small></label>
-            <input type="file" id="photos" name="photos[]" class="form-control" multiple>
+            <label for="foto">Foto Kegiatan (maks 5) <small class="text-danger">MAX: 2MB</small></label>
+            <input type="file" id="foto" name="foto[]" class="form-control" multiple>
         </div>
+        
         <div class="mb-3">
-            <strong>Current Photos:</strong>
+            <strong>Foto Saat Ini:</strong><br>
             @foreach (json_decode($activity->photos) as $photo)
                 <img src="{{ Storage::url($photo) }}" width="50" height="50" alt="Photo">
             @endforeach
         </div>
-        <button type="submit" class="btn btn-primary">Update Activity</button>
-        <a href="{{ route('activities.index') }}" class="btn btn-secondary">Back</a>
+        
+        <button type="submit" class="btn btn-primary">Perbarui Kegiatan</button>
+        <a href="{{ route('activities.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection

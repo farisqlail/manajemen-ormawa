@@ -29,16 +29,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'loginForm'])->name('login');
 
-Route::get('/ormawa/{id}', [ClubController::class, 'showProfile'])->name('ormawa.profile');  
-Route::get('/ormawa/{id}/prokers', [ClubController::class, 'showProkers'])->name('ormawa.prokers');  
-Route::get('/ormawa/{id}/activities', [ClubController::class, 'showActivities'])->name('ormawa.activities');  
+Route::get('/ormawa/{id}', [ClubController::class, 'showProfile'])->name('ormawa.profile');
+Route::get('/ormawa/{id}/prokers', [ClubController::class, 'showProkers'])->name('ormawa.prokers');
+Route::get('/ormawa/{id}/activities', [ClubController::class, 'showActivities'])->name('ormawa.activities');
 
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
 });
 
 Route::middleware('auth')->group(function () {
@@ -46,9 +44,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard')->middleware('auth');
 
     //clubs
-    Route::resource('clubs', ClubController::class);
-    Route::get('/clubs/{club}/editOramawa', [ClubController::class, 'editOrmawa'])->name('clubs.editOrmawa');
-    Route::put('/clubs/ormawa/{club}', [ClubController::class, 'updateOrmawa'])->name('clubs.updateOrmawa');
+    Route::resource('clubs', ClubController::class)->parameters([
+        'clubs' => 'ormawa'
+    ]);
+    Route::get('/clubs/{ormawa}/editOramawa', [ClubController::class, 'editOrmawa'])->name('clubs.editOrmawa');
+    Route::put('/clubs/ormawa/{ormawa}', [ClubController::class, 'updateOrmawa'])->name('clubs.updateOrmawa');
 
     //divisions
     Route::get('/clubs/{id_club}/divisions', [DivisionController::class, 'index'])->name('divisions.index');
@@ -89,8 +89,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/prokers/{id}/reject', [ProkerController::class, 'rejectProker'])->name('prokers.reject');
     Route::post('/prokers/{id}/approve/laporan', [ProkerController::class, 'approveProkerLaporan'])->name('prokers.approve.laporan');
     Route::delete('/prokers/{id}/reject/laporan', [ProkerController::class, 'rejectProkerLaporan'])->name('prokers.reject.laporan');
+    Route::post('/prokers/{id}/reject/laporan', [ProkerController::class, 'rejectProkerNoReason'])->name('prokers.rejectNoReason.laporan');
+    Route::post('/prokers/{id}/reject/proposal', [ProkerController::class, 'rejectProposalNoReason'])->name('prokers.rejectNoReason.proposal');
     Route::get('/prokers/{id}/download', [ProkerController::class, 'downloadLPJ'])->name('prokers.download');
 
     Route::post('/reset-notification', [NotificationController::class, 'resetNotification']);
-
 });

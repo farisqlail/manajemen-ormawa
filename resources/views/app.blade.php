@@ -76,7 +76,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/clubs">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>clubs</span></a>
+                    <span>Ormawa</span></a>
             </li>
             @endif
 
@@ -138,7 +138,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter" id="notificationCounter">{{$notificationCount}}</span>
+                                <span class="badge badge-danger badge-counter" id="jumlahNotifikasier">{{$jumlahNotifikasi}}</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -146,7 +146,7 @@
                                 <h6 class="dropdown-header">
                                     Alerts Center
                                 </h6>
-                                @foreach($notification as $item)
+                                @foreach($notifikasi as $item)
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-warning">
@@ -275,11 +275,11 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("alertsDropdown").addEventListener("click", function() {
-                let notificationCounter = document.getElementById("notificationCounter");
+                let jumlahNotifikasier = document.getElementById("jumlahNotifikasier");
 
-                if (notificationCounter) {
-                    notificationCounter.textContent = "0";
-                    notificationCounter.classList.add("d-none");
+                if (jumlahNotifikasier) {
+                    jumlahNotifikasier.textContent = "0";
+                    jumlahNotifikasier.classList.add("d-none");
                 }
             });
         });

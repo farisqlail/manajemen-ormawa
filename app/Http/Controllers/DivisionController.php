@@ -11,24 +11,24 @@ class DivisionController extends Controller
 {
     public function index($id_club)
     {
-        $club = Clubs::findOrFail($id_club);
-        $divisions = Division::where('id_clubs', $id_club)->get();
-        $notification = Proker::where(function ($query) {
+        $dataOrmawa = Clubs::findOrFail($id_club);
+        $daftarDivisi = Division::where('id_clubs', $id_club)->get();
+        $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
+        $jumlahNotifikasi = $notifikasi->count();
 
-        return view('divisions.index', compact('divisions', 'club', 'notification', 'notificationCount'));
+        return view('divisions.index', compact('daftarDivisi', 'dataOrmawa', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function create($id_club)
     {
-        $club = Clubs::findOrFail($id_club);
-        return view('divisions.create', compact('club'));
+        $dataOrmawa = Clubs::findOrFail($id_club);
+        return view('divisions.create', compact('dataOrmawa'));
     }
 
     public function store(Request $request, $id_club)
@@ -42,14 +42,14 @@ class DivisionController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('divisions.index', $id_club)->with('success', 'Division created successfully.');
+        return redirect()->route('divisions.index', $id_club)->with('success', 'Divisi berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
-        $division = Division::findOrFail($id);
-        $club = Clubs::findOrFail($division->id_clubs);
-        return view('divisions.edit', compact('division', 'club'));
+        $dataDivisi = Division::findOrFail($id);
+        $dataOrmawa = Clubs::findOrFail($dataDivisi->id_clubs);
+        return view('divisions.edit', compact('dataDivisi', 'dataOrmawa'));
     }
 
     public function update(Request $request, $id)
@@ -58,12 +58,12 @@ class DivisionController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $division = Division::findOrFail($id);
-        $division->update([
+        $dataDivisi = Division::findOrFail($id);
+        $dataDivisi->update([
             'name' => $request->name,
         ]);
 
-        return redirect()->route('divisions.index', $division->id_clubs)->with('success', 'Division updated successfully.');
+        return redirect()->route('divisions.index', $dataDivisi->id_clubs)->with('success', 'Divisi berhasil diperbarui.');
     }
 
     public function destroy($id)

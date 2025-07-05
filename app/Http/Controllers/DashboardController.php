@@ -12,38 +12,35 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $user = Auth::user();
+        $pengguna = Auth::user();
 
-        $pendingUsers = User::where('status', 'pending')->get();
+        $penggunaPending = User::where('status', 'pending')->get();
 
-        $clubs = Clubs::all();
-        $notification = Proker::where(function ($query) {
+        $daftarOrmawa = Clubs::all();
+
+        $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
 
-        $pendingProkers = Proker::where('status', 'pending')
-            ->where('target_event', '>=', now())
-            ->orWhereNotNull('status_laporan')
-            ->get();
+        $jumlahNotifikasi = $notifikasi->count();
 
-        $pendingProkers = Proker::where('id_club', $user->id_club)
+        $prokerPending = Proker::where('id_club', $pengguna->id_club)
             ->where(function ($query) {
                 $query->where('status', 'pending')
                     ->where('target_event', '>=', now());
             })
-            ->orWhere(function ($query) use ($user) {
-                $query->where('id_club', $user->id_club)
+            ->orWhere(function ($query) use ($pengguna) {
+                $query->where('id_club', $pengguna->id_club)
                     ->whereNotNull('status_laporan')
                     ->where('status_laporan', 'pending');
             })
             ->get();
 
-        $pendingProkersAdmin = Proker::where('status', 'approved')
+        $prokerPendingAdmin = Proker::where('status', 'approved')
             ->orWhere(function ($query) {
                 $query->whereNotNull('status_laporan')
                     ->where('status_laporan', 'pending');
@@ -53,8 +50,7 @@ class DashboardController extends Controller
             ->get()
             ->groupBy('id_club');
 
-
-        $pendingProkersPembinaAdmin = Proker::where('status', 'pending')
+        $prokerPendingPembina = Proker::where('status', 'pending')
             ->orWhere(function ($query) {
                 $query->whereNotNull('status_laporan')
                     ->where('status_laporan', 'pending');
@@ -63,19 +59,19 @@ class DashboardController extends Controller
             ->get()
             ->groupBy('id_club');
 
-        $nonPendingProkers = Proker::where('id_club', $user->id_club)
+        $prokerNonPending = Proker::where('id_club', $pengguna->id_club)
             ->where(function ($query) {
                 $query->where('status', '!=', 'pembina')
                     ->where('target_event', '>=', now());
             })
-            ->orWhere(function ($query) use ($user) {
-                $query->where('id_club', $user->id_club)
+            ->orWhere(function ($query) use ($pengguna) {
+                $query->where('id_club', $pengguna->id_club)
                     ->whereNotNull('status_laporan')
                     ->where('status_laporan', '!=', 'pending');
             })
             ->get();
 
-        $approvedProkers =  Proker::where('status', 'approved')
+        $prokerDisetujui = Proker::where('status', 'approved')
             ->orWhere(function ($query) {
                 $query->whereNull('status_laporan')
                     ->where('status_laporan', null);
@@ -84,41 +80,42 @@ class DashboardController extends Controller
             ->get()
             ->groupBy('id_club');
 
-        $members = Anggota::where('id_club', $user->id_club)->paginate(10);
+        $anggota = Anggota::where('id_club', $pengguna->id_club)->paginate(10);
 
         return view('dashboard.index', compact(
-            'pendingUsers',
-            'pendingProkers',
-            'pendingProkersAdmin',
-            'pendingProkersPembinaAdmin',
-            'nonPendingProkers',
-            'approvedProkers',
-            'members',
-            'clubs',
-            'notification',
-            'notificationCount'
+            'penggunaPending',
+            'prokerPending',
+            'prokerPendingAdmin',
+            'prokerPendingPembina',
+            'prokerNonPending',
+            'prokerDisetujui',
+            'anggota',
+            'daftarOrmawa',
+            'notifikasi',
+            'jumlahNotifikasi'
         ));
     }
 
-    public function showClubProkers($clubId)
+    public function showClubProkers($idOrmawa)
     {
-        $prokers = Proker::where('id_club', $clubId)->get();
-        $notification = Proker::where(function ($query) {
+        $daftarProker = Proker::where('id_club', $idOrmawa)->get();
+
+        $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
         })
             ->with('club')
             ->where('status', 'pending')
             ->get();
-        $notificationCount = $notification->count();
+
+        $jumlahNotifikasi = $notifikasi->count();
 
         if (Auth::user()->role == 'admin') {
-            $pendingProkers = $prokers->where('status', 'pending')
-                ->merge($prokers->where('status_laporan', 'pending'));
+            $prokerPending = $daftarProker->sortByDesc('created_at');
         } else {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses.');
         }
 
-        return view('prokers.club', compact('pendingProkers', 'notification', 'notificationCount'));
+        return view('prokers.club', compact('prokerPending', 'notifikasi', 'jumlahNotifikasi'));
     }
 }

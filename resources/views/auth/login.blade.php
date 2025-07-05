@@ -64,20 +64,20 @@
 
             {{-- Alert error validasi --}}
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
 
             {{-- Alert pesan status (informasi) --}}
             @if(session('status'))
-                <div class="alert alert-info">
-                    {{ session('status') }}
-                </div>
+            <div class="alert alert-info">
+                {{ session('status') }}
+            </div>
             @endif
 
             <form method="POST" action="{{ route('login') }}">
@@ -91,30 +91,27 @@
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Masuk</button>
-                <div class="text-center mt-2">
-                    <a href="/register" class="w-100">Daftar sebagai ormawa</a>
-                </div>
             </form>
         </div>
 
         {{-- Side Panel: Daftar Ormawa --}}
         <div class="side-panel">
             <h2 class="mb-4">Daftar Ormawa</h2>
-            @if($prokers->isEmpty())
-                <p class="text-muted">Belum ada data ormawa.</p>
+            @if($daftarProker->isEmpty())
+            <p class="text-muted">Belum ada data ormawa.</p>
             @else
-                <ul class="list-group ormawa-list">
-                    @foreach($prokers as $clubId => $clubProkers)
-                        @if($clubProkers->isNotEmpty())
-                            <li class="list-group-item">
-                                <span>{{ $clubProkers->first()->club->name }}</span>
-                                <a href="{{ route('ormawa.profile', $clubProkers->first()->club->id) }}" class="btn btn-outline-primary btn-sm">
-                                    Lihat Profil
-                                </a>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
+            <ul class="list-group ormawa-list">
+                @foreach($daftarProker as $idOrmawa => $prokerOrmawa)
+                @if($prokerOrmawa->isNotEmpty())
+                <li class="list-group-item">
+                    <span>{{ $prokerOrmawa->first()->club->name }}</span>
+                    <a href="{{ route('ormawa.profile', $prokerOrmawa->first()->club->id) }}" class="btn btn-outline-primary btn-sm">
+                        Lihat Profil
+                    </a>
+                </li>
+                @endif
+                @endforeach
+            </ul>
             @endif
         </div>
     </div>

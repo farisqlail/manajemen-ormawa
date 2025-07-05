@@ -14,13 +14,13 @@
     @if(Auth::user()->role == 'admin')
     <div class="row mt-4">
         <div class="col-md-12">
-            <h4>Prokers Pending <span class="badge badge-primary rounded-circle">{{ $pendingProkersPembinaAdmin->count() }}</span></h4>
+            <h4>Prokers Pending <span class="badge badge-primary rounded-circle">{{ $prokerPendingPembina->count() }}</span></h4>
             <div class="card">
                 <div class="card-body">
-                    @if($pendingProkersPembinaAdmin->isEmpty())
+                    @if($prokerPendingPembina->isEmpty())
                     <p class="text-muted">No pending prokers available.</p>
                     @else
-                    @foreach($pendingProkersPembinaAdmin as $clubId => $prokers)
+                    @foreach($prokerPendingPembina as $clubId => $prokers)
                     <h5>Club: {{ $prokers->first()->club->name }}</h5>
                     <table class="table table-bordered">
                         <thead>
@@ -28,7 +28,7 @@
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Target Date</th>
-                                <th>Actions</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,7 +56,7 @@
             <h4>List Ormawa</h4>
             <div class="card">
                 <div class="card-body">
-                    @if($approvedProkers->isEmpty())
+                    @if($prokerDisetujui->isEmpty())
                     <p class="text-muted">No approved prokers available.</p>
                     @else
                     <table class="table table-bordered">
@@ -64,17 +64,17 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>Actions</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($clubs as $club)
+                            @foreach($daftarOrmawa as $ormawa)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $club->name }}</td>
+                                <td>{{ $ormawa->name }}</td>
 
                                 <td>
-                                    <a href="{{ route('prokers.club', $club->id) }}" class="btn btn-info btn-sm">Lihat</a>
+                                    <a href="{{ route('prokers.club', $ormawa->id) }}" class="btn btn-info btn-sm">Lihat</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -90,15 +90,15 @@
     <div class="row mt-4">
         @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
         <div class="col-md-6">
-            <h4>Prokers Pending <span class="badge badge-primary rounded-circle">{{ $pendingProkers->count() }}</span></h4>
+            <h4>Prokers Pending <span class="badge badge-primary rounded-circle">{{ $prokerPending->count() }}</span></h4>
             <div class="list-group">
-                @if($pendingProkers->isEmpty())
+                @if($prokerPending->isEmpty())
                 <p class="text-muted">No pending prokers available.</p>
                 @else
-                @foreach($pendingProkers as $proker)
+                @foreach($prokerPending as $proker)
                 <a href="{{ route('prokers.show', $proker->id) }}" class="list-group-item list-group-item-action">
                     {{ $proker->name }} - Tanggal Target: {{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}
-                    <span class="badge badge-warning float-right">Pending</span> <!-- Label status -->
+                    <span class="badge badge-warning float-right">Pending</span>
                 </a>
                 @endforeach
                 @endif
@@ -109,10 +109,10 @@
         <div class="col-md-6">
             <h4>Proker Mendatang</h4>
             <div class="list-group">
-                @if($nonPendingProkers->isEmpty())
+                @if($prokerNonPending->isEmpty())
                 <p class="text-muted">No non-pending prokers available.</p>
                 @else
-                @foreach($nonPendingProkers as $proker)
+                @foreach($prokerNonPending as $proker)
                 <a href="{{ route('prokers.show', $proker->id) }}" class="list-group-item list-group-item-action">
                     {{ $proker->name }} - Tanggal Target: {{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}
                     @if($proker->status == 'approved' && Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
@@ -142,15 +142,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if($members->isEmpty())
+                            @if($anggota->isEmpty())
                             <tr>
                                 <td colspan="3" class="text-center">No members available.</td>
                             </tr>
                             @else
-                            @foreach($members as $member)
+                            @foreach($anggota as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $member->name }}</td>
+                                <td>{{ $item->name }}</td>
                             </tr>
                             @endforeach
                             @endif
@@ -158,7 +158,7 @@
                     </table>
 
                     <div class="mt-3">
-                        {{ $members->links() }}
+                        {{ $anggota->links() }}
                     </div>
                 </div>
             </div>

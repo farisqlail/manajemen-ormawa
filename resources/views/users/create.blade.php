@@ -14,6 +14,7 @@
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+
                 <div class="form-group mb-3">
                     <label for="role">Role</label>
                     <select id="role" name="role" class="form-control" required onchange="toggleDivision()">
@@ -21,6 +22,7 @@
                         <option value="ormawa">Ormawa</option>
                     </select>
                 </div>
+
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" class="form-control" required placeholder="cnth: agus@gmail.com ...">
@@ -28,31 +30,37 @@
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+
                 <div class="form-group mb-3">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" class="form-control" required readonly placeholder="Auto-generated password">
                 </div>
+
                 <div class="form-group mb-3">
                     <label for="password_confirmation">Konfirmasi Password</label>
                     <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required readonly placeholder="Auto-generated password">
                 </div>
+
                 <div class="form-group mb-3">
-                    <label for="id_club">Club</label>
+                    <label for="id_club">Ormawa</label>
                     <select id="id_club" name="id_club" class="form-control" required>
-                        @foreach ($clubs as $club)
-                        <option value="{{ $club->id }}">{{ $club->name }}</option>
+                        @foreach ($daftarOrmawa as $ormawa)
+                        <option value="{{ $ormawa->id }}">{{ $ormawa->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group mb-3" id="">
+
+                <div class="form-group mb-3">
                     <label for="">PIC</label>
                     <input type="text" value="Ketua" class="form-control" readonly>
                 </div>
-                <input type="hidden" id="status" name="status" value="nonactive">
+
+                <input type="hidden" id="status" name="status" value="active">
                 <div class="form-group mb-3">
                     <label>Status</label>
-                    <input type="text" class="form-control" value="Non Active" readonly>
+                    <input type="text" class="form-control" value="active" readonly>
                 </div>
+
                 <button type="submit" class="btn btn-primary">Buat Pengguna</button>
                 <a href="{{ route('users.index') }}" class="btn btn-secondary">Kembali</a>
             </form>

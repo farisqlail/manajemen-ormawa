@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <div class="card">
         <div class="card-body">
-            <h2>Anggota List</h2>
+            <h2>Daftar Anggota</h2>
             @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
             <a href="{{ route('anggotas.create') }}" class="btn btn-primary mb-3">Tambah Anggota</a>
             @endif
@@ -16,17 +16,17 @@
                         <th>Divisi</th>
                         <th>Nama</th>
                         @if(Auth::user()->role == 'ormawa')
-                        <th>Actions</th>
+                        <th>Aksi</th>
                         @endif
                     </tr>
                 </thead>
                 <tbody>
-                    @if($anggotas->isEmpty())
+                    @if($daftarAnggota->isEmpty())
                     <tr>
                         <td colspan="5" class="text-center">Tidak ada anggota yang ditemukan.</td>
                     </tr>
                     @else
-                    @foreach ($anggotas as $anggota)
+                    @foreach ($daftarAnggota as $anggota)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $anggota->club->name ?? '-' }}</td>
@@ -38,7 +38,7 @@
                             <form action="{{ route('anggotas.destroy', $anggota->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirmDelete();">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger">Hapus</button>
                             </form>
                         </td>
                         @endif
