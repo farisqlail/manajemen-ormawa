@@ -13,13 +13,9 @@
                 <div class="row mb-3">
                     <div class="col">
                         <div class="form-group">
-                            <label for="id_club">Pilih Ormawa</label>
-                            <select name="id_club" id="id_club" class="form-control" required>
-                                <option value="">-- Pilih Ormawa --</option>
-                                @foreach($daftarOrmawa as $ormawa)
-                                <option value="{{ $ormawa->id }}">{{ $ormawa->name }}</option>
-                                @endforeach
-                            </select>
+                            <label for="id_club">Ormawa</label>
+                            <input type="text" class="form-control" id="id_club" value="{{ Auth::user()->club->name ?? 'N/A' }}" readonly>
+                            <input type="hidden" name="id_club" value="{{ Auth::user()->id_club }}">
                         </div>
                     </div>
                     <div class="col">
