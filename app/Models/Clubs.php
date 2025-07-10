@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Clubs extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'logo', 'photo_structure',];
+    protected $fillable = ['name', 'description', 'logo', 'photo_structure'];
+    protected $dates = ['deleted_at'];
 
     public function divisions()
     {

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('description');
             $table->json('photos')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
-        
     }
 
     /**
@@ -27,6 +27,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('activities');
+        Schema::table('activities', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

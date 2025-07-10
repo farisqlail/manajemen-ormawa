@@ -24,6 +24,7 @@ return new class extends Migration
             $table->longText('reason')->nullable();
             $table->string('pdf_file')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -32,6 +33,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prokers');
+        Schema::table('prokers', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

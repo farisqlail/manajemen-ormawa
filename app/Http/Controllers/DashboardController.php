@@ -98,7 +98,14 @@ class DashboardController extends Controller
 
     public function showClubProkers($idOrmawa)
     {
-        $daftarProker = Proker::where('id_club', $idOrmawa)->get();
+        $query = Proker::where('id_club', $idOrmawa);
+
+        if (request()->has('search') && request('search') !== '') {
+            $search = request('search');
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $daftarProker = $query->get();
 
         $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')

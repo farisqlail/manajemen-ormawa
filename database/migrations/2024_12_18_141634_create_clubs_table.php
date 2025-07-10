@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->string('logo')->nullable(); 
+            $table->string('logo')->nullable();
             $table->string('photo_structure')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +27,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clubs');
+        Schema::table('clubs', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

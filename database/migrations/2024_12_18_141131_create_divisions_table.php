@@ -16,6 +16,7 @@ return new class extends Migration
             $table->biginteger('id_clubs');
             $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -24,6 +25,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('divisions');
+        Schema::table('divisions', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

@@ -24,6 +24,13 @@
             });
             @endphp
 
+            <form method="GET" action="{{ route('prokers.club', ['clubId' => $prokerPending->first()->id_club ?? '' ]) }}" class="mb-3">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Cari nama proker..." value="{{ request('search') }}">
+                    <button class="btn btn-outline-secondary" type="submit">Cari</button>
+                </div>
+            </form>
+
             <table class="table table-bordered">
                 <thead>
                     <tr>

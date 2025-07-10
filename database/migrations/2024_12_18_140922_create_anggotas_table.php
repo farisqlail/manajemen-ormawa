@@ -17,6 +17,7 @@ return new class extends Migration
             $table->biginteger('id_division');
             $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -25,6 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anggotas');
+        Schema::table('anggotas', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };
