@@ -5,7 +5,19 @@
     <h2>Tambah Kegiatan</h2>
     <form action="{{ route('activities.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="number" name="id_club" value="{{ Auth::user()->id_club }}" hidden>
+        @if(Auth::user()->role === 'superadmin')
+        <div class="form-group mb-3">
+            <label for="id_club">Ormawa</label>
+            <select name="id_club" id="id_club" class="form-control" required>
+                <option value="">-- Pilih Ormawa --</option>
+                @foreach($clubs as $club)
+                <option value="{{ $club->id }}">{{ $club->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        @else
+        <input type="hidden" name="id_club" value="{{ Auth::user()->id_club }}">
+        @endif
 
         <div class="form-group mb-3">
             <label for="nama_kegiatan">Nama Kegiatan</label>

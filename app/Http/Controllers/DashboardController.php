@@ -117,7 +117,7 @@ class DashboardController extends Controller
 
         $jumlahNotifikasi = $notifikasi->count();
 
-        if (Auth::user()->role == 'admin') {
+        if (Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin') {
             $prokerPending = $daftarProker->sortByDesc('created_at');
         } else {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses.');

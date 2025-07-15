@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-body">
             <h2>Daftar Anggota</h2>
-            @if(Auth::user()->role == 'ormawa' && Auth::user()->status == 'active')
+            @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'superadmin')
             <a href="{{ route('anggotas.create') }}" class="btn btn-primary mb-3">Tambah Anggota</a>
             @endif
             <table class="table table-bordered">
@@ -15,7 +15,7 @@
                         <th>Ormawa</th>
                         <th>Divisi</th>
                         <th>Nama</th>
-                        @if(Auth::user()->role == 'ormawa')
+                        @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'superadmin')
                         <th>Aksi</th>
                         @endif
                     </tr>
@@ -32,7 +32,7 @@
                         <td>{{ $anggota->club->name ?? '-' }}</td>
                         <td>{{ $anggota->division->name ?? '-' }}</td>
                         <td>{{ $anggota->name }}</td>
-                        @if(Auth::user()->role == 'ormawa')
+                        @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'superadmin')
                         <td>
                             <a href="{{ route('anggotas.edit', $anggota->id) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ route('anggotas.destroy', $anggota->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirmDelete();">

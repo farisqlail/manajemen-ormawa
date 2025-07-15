@@ -13,7 +13,7 @@
             </div>
             @endif
 
-            @if(Auth::user()->role == 'ormawa')
+            @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'superadmin')
             <a href="{{ route('activities.create') }}" class="btn btn-primary mb-3">Tambah Kegiatan</a>
             @endif
 
@@ -21,6 +21,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Nama Ormawa</th>
                         <th>Nama Kegiatan</th>
                         <th>Deskripsi</th>
                         <th>Foto Kegiatan</th>
@@ -36,6 +37,9 @@
                     @foreach ($kegiatan as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
+                        @if(Auth::user()->role === 'superadmin')
+                        <td>{{ $item->club->name ?? '-' }}</td>
+                        @endif
                         <td>{{ $item->name }}</td>
                         <td>{!! Str::limit($item->description, 50) !!}</td>
                         <td>
@@ -44,7 +48,7 @@
                             @endforeach
                         </td>
                         <td>
-                            @if(Auth::user()->role == 'ormawa')
+                            @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'superadmin')
                             <a href="{{ route('activities.edit', $item->id) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ route('activities.destroy', $item->id) }}" method="POST" style="display:inline-block;">
                                 @csrf

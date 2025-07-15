@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-body">
             <h1>Divisi untuk {{ $dataOrmawa->name }}</h1>
-            @if(Auth::user()->role == 'ormawa')
+            @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'superadmin')
             <a href="{{ route('divisions.create', $dataOrmawa->id) }}" class="btn btn-primary mb-3">Tambah Divisi</a>
             @endif
 
@@ -18,7 +18,7 @@
                     <tr>
                         <th>#</th>
                         <th>Nama Divisi</th>
-                        @if(Auth::user()->role == 'ormawa')
+                        @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'superadmin')
                         <th>Aksi</th>
                         @endif
                     </tr>
@@ -28,7 +28,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $divisi->name }}</td>
-                        @if(Auth::user()->role == 'ormawa')
+                        @if(Auth::user()->role == 'ormawa' || Auth::user()->role == 'superadmin')
                         <td>
                             <a href="{{ route('divisions.edit', $divisi->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('divisions.destroy', $divisi->id) }}" method="POST" style="display:inline;">

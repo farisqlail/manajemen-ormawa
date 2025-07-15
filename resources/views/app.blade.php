@@ -34,7 +34,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/dashboard">
                 <div class="sidebar-brand-icon">
                     <img src="{{ asset('/assets/logo.png') }}" width="50" alt="">
                 </div>
@@ -44,44 +44,46 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
+            <!-- Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="/dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
+                </a>
             </li>
 
-            <!-- Divider -->
             <hr class="sidebar-divider">
 
+            {{-- Menu untuk Ormawa --}}
             @if(Auth::user()->role === 'ormawa')
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Ormawa
-            </div>
-
+            <div class="sidebar-heading">Ormawa</div>
             <li class="nav-item">
                 <a class="nav-link" href="/prokers">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Proker</span></a>
+                    <span>Proker</span>
+                </a>
             </li>
             @endif
 
-            @if(Auth::user()->role === 'admin')
+            {{-- Menu untuk Admin & Superadmin --}}
+            @if(Auth::user()->role === 'admin' || Auth::user()->role === 'superadmin')
+            <div class="sidebar-heading">Admin Panel</div>
             <li class="nav-item">
                 <a class="nav-link" href="/users">
                     <i class="fas fa-fw fa-user"></i>
-                    <span>Pengguna</span></a>
+                    <span>Pengguna</span>
+                </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/clubs">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Ormawa</span></a>
+                    <span>Ormawa</span>
+                </a>
             </li>
             @endif
 
-            @if(Auth::user()->role === 'ormawa')
-            <!-- Nav Item - Pages Collapse Menu -->
+            {{-- Menu Organisasi untuk Ormawa --}}
+            @if(Auth::user()->role === 'ormawa' || Auth::user()->role === 'superadmin')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#organization"
                     aria-expanded="true" aria-controls="organization">
@@ -91,22 +93,25 @@
                 <div id="organization" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Organisasi :</h6>
-                        @if(Auth::user()->role === 'ormawa')
+                        @if(Auth::user()->id_club)
                         <a class="collapse-item" href="/profile">Profile</a>
-                        <a class="collapse-item" href="/anggotas">Anggota</a>
-                        <a class="collapse-item" href="{{route('divisions.index', ['id_club' => Auth::user()->id_club])}}">Divisi</a>
-                        <a class="collapse-item" href="/activities">Kegiatan</a>
-                        @else
-                        <a class="collapse-item" href="/clubs">Ormawa</a>
                         @endif
+                        <a class="collapse-item" href="/anggotas">Anggota</a>
+
+                        @if(Auth::user()->id_club)
+                        <a class="collapse-item" href="{{ route('divisions.index', ['id_club' => Auth::user()->id_club]) }}">Divisi</a>
+                        @else
+                        <a class="collapse-item disabled" href="javascript:void(0)" onclick="return false;">Divisi (Tidak tersedia)</a>
+                        @endif
+
+                        <a class="collapse-item" href="/activities">Kegiatan</a>
                     </div>
                 </div>
             </li>
-            <!-- Divider -->
             <hr class="sidebar-divider">
             @endif
 
-            <!-- Sidebar Toggler (Sidebar) -->
+            <!-- Sidebar Toggler -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>

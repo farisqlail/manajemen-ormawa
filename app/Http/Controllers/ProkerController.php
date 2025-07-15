@@ -104,11 +104,10 @@ class ProkerController extends Controller
                 'name' => $request->name,
                 'budget' => $request->budget,
                 'target_event' => $request->target_event,
-                'status_laporan' => $request->get('status_laporan'),
-                'status' => $request->get('status'),
                 'reason' => '',
             ];
 
+            // Handle proposal file
             if ($request->hasFile('proposal_file')) {
                 if ($proker->proposal && Storage::disk('public')->exists($proker->proposal)) {
                     Storage::disk('public')->delete($proker->proposal);
@@ -117,12 +116,28 @@ class ProkerController extends Controller
                 $dataProker['proposal'] = $pathProposal;
             }
 
+            $laporanDiupload = false;
+
+            // Handle laporan file
             if ($request->hasFile('laporan_file')) {
                 if ($proker->laporan && Storage::disk('public')->exists($proker->laporan)) {
                     Storage::disk('public')->delete($proker->laporan);
                 }
                 $pathLaporan = $request->file('laporan_file')->store('laporan', 'public');
                 $dataProker['laporan'] = $pathLaporan;
+                $dataProker['status_laporan'] = 'pending';
+                $laporanDiupload = true;
+            }
+
+            // Logic status
+            if ($request->get('status') === 'approved') {
+                if (!$laporanDiupload) {
+                    $dataProker['status'] = 'pending';
+                } else {
+                    $dataProker['status'] = 'approved';
+                }
+            } else {
+                $dataProker['status'] = $request->get('status');
             }
 
             $proker->update($dataProker);

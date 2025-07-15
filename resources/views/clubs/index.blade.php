@@ -25,6 +25,7 @@
                         <td>{{ $ormawa->name }}</td>
                         <td>{!! Str::limit($ormawa->description, 100, '...') !!}</td>
                         <td>
+                            <a href="{{ route('divisions.index', ['id_club' => $ormawa->id]) }}" class="btn btn-info btn-sm">Divisi</a>
                             <a href="{{ route('clubs.edit', $ormawa->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('clubs.destroy', $ormawa->id) }}" method="POST" style="display:inline;">
                                 @csrf

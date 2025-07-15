@@ -22,4 +22,9 @@ class Activity extends Model
     ];
 
     protected $dates = ['deleted_at'];
+
+    public function club()
+    {
+        return $this->belongsTo(Clubs::class, 'id_club');
+    }
 }

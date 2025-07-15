@@ -42,7 +42,9 @@
                         @if($tampilkanKolomLaporan)
                         <th>Laporan (LPJ)</th>
                         @endif
+                        @if(Auth::user()->role == 'admin')
                         <th>Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -70,13 +72,19 @@
                             @endif
                         </td>
                         @endif
+                        @if(Auth::user()->role == 'admin')
                         <td>
                             @if(!empty($proker->proposal))
+                            @php
+                            $showButtons = false;
+                            @endphp
+
                             {{-- Tombol Admin --}}
                             @if(Auth::user()->role == 'admin')
 
                             {{-- Jika status proposal masih pending --}}
                             @if($proker->status == 'pending' && $proker->reason == null)
+                            @php $showButtons = true; @endphp
                             <form action="{{ route('prokers.approve', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 <button type="submit" class="btn btn-success btn-sm">Setujui</button>
@@ -89,6 +97,7 @@
 
                             {{-- Jika status laporan masih pending --}}
                             @elseif($proker->status_laporan == 'pending' && $proker->reason == null)
+                            @php $showButtons = true; @endphp
                             <form action="{{ route('prokers.approve.laporan', $proker->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 <button type="submit" class="btn btn-success btn-sm">Setujui</button>
@@ -99,15 +108,15 @@
                             </form>
                             <button class="btn btn-info btn-sm" onclick="openRejectModal({{ $proker->id }})">Komentar</button>
                             @endif
-
                             @endif
 
-                            {{-- Status tampilan untuk siapa pun --}}
-                            @if($proker->status == 'approved')
+                            {{-- Status tampilan hanya jika tombol tidak ditampilkan --}}
+                            @unless($showButtons)
+                            @if($proker->status == 'approved' && $proker->status_laporan == null)
                             <div><span class="badge bg-success text-white">Proposal sudah disetujui</span></div>
                             @elseif($proker->status == 'rejected')
                             <div><span class="badge bg-danger text-white">Proposal sudah ditolak</span></div>
-                            @elseif($proker->status_laporan == 'approved')
+                            @elseif($proker->status == 'approved' && $proker->status_laporan == 'approved')
                             <div><span class="badge bg-success text-white">Laporan sudah disetujui</span></div>
                             @elseif($proker->status_laporan == 'rejected')
                             <div><span class="badge bg-danger text-white">Laporan sudah ditolak</span></div>
@@ -116,11 +125,13 @@
                             @elseif(!empty($proker->reason) && $proker->status_laporan == 'pending')
                             <div><span class="badge bg-warning text-dark">Laporan sudah dikomentari</span></div>
                             @endif
+                            @endunless
 
                             @else
                             <span>-</span>
                             @endif
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>

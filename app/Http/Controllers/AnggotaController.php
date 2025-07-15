@@ -14,12 +14,7 @@ class AnggotaController extends Controller
 {
     public function index()
     {
-        $idKlubPengguna = Auth::user()->id_club;
-
-        $daftarAnggota = Anggota::with(['club', 'division'])
-            ->where('id_club', $idKlubPengguna)
-            ->get();
-
+        $user = Auth::user();
         $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
                 ->orWhere('status_laporan', 'pending');
@@ -30,22 +25,39 @@ class AnggotaController extends Controller
 
         $jumlahNotifikasi = $notifikasi->count();
 
+        if ($user->role === 'superadmin' && is_null($user->id_club)) {
+            $daftarAnggota = Anggota::with(['club', 'division'])->get();
+        } else {
+            $daftarAnggota = Anggota::with(['club', 'division'])
+                ->where('id_club', $user->id_club)
+                ->get();
+        }
+
         return view('anggotas.index', compact('daftarAnggota', 'notifikasi', 'jumlahNotifikasi'));
+    }
+
+
+    public function getByClub($id)
+    {
+        $divisions = Division::where('id_clubs', $id)->get();
+        return response()->json($divisions);
     }
 
     public function create()
     {
         $pengguna = Auth::user();
+        $daftarOrmawaNonUser = Clubs::all();
         $daftarOrmawa = Clubs::where('id', $pengguna->id_club)->get();
         $daftarDivisi = Division::where('id_clubs', $pengguna->id_club)->get();
 
-        return view('anggotas.create', compact('daftarOrmawa', 'daftarDivisi'));
+        return view('anggotas.create', compact('daftarOrmawa', 'daftarOrmawaNonUser', 'daftarDivisi'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'id_club' => 'required|integer',
+            'id_division' => 'required|integer',
             'name' => 'required|string|max:255',
         ]);
 
@@ -63,16 +75,18 @@ class AnggotaController extends Controller
     {
         $dataAnggota = Anggota::findOrFail($id);
         $idOrmawaPengguna = Auth::user()->id_club;
+        $daftarOrmawaNonUser = Clubs::all();
         $daftarOrmawa = Clubs::where('id', $idOrmawaPengguna)->get();
         $daftarDivisi = Division::where('id_clubs', $idOrmawaPengguna)->get();
 
-        return view('anggotas.edit', compact('dataAnggota', 'daftarOrmawa', 'daftarDivisi'));
+        return view('anggotas.edit', compact('dataAnggota', 'daftarOrmawa', 'daftarOrmawaNonUser', 'daftarDivisi'));
     }
 
     public function update(Request $request, Anggota $anggota)
     {
         $request->validate([
             'id_club' => 'required|integer',
+            'id_division' => 'required|integer',
             'name' => 'required|string|max:255',
         ]);
 

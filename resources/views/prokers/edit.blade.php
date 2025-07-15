@@ -14,7 +14,6 @@
                 <input type="hidden" id="status_laporan" name="status_laporan" value="">
                 @else
                 <input type="hidden" id="status" name="status" value="approved">
-                <input type="hidden" id="status_laporan" name="status_laporan" value="pending">
                 @endif
 
                 <div class="row mb-3">
@@ -84,7 +83,7 @@
                     @endif
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Ubah</button>
             </form>
         </div>
     </div>

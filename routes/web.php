@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
 
     //anggota
     Route::resource('anggotas', AnggotaController::class);
+    Route::get('/get-divisi-by-club/{id}', [AnggotaController::class, 'getByClub']);
 
     //proker ormawa
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');

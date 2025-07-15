@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Clubs;
 use App\Models\Proker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,11 @@ class ActivityController extends Controller
 {
     public function index()
     {
-        $kegiatan = Activity::where('id_club', Auth::user()->id_club)->get();
+        if (Auth::user()->role === 'superadmin') {
+            $kegiatan = Activity::with('club')->get(); 
+        } else {
+            $kegiatan = Activity::where('id_club', Auth::user()->id_club)->get();
+        }
 
         $notifikasi = Proker::where(function ($query) {
             $query->whereNull('status_laporan')
@@ -29,7 +34,13 @@ class ActivityController extends Controller
 
     public function create()
     {
-        return view('activities.create');
+        $clubs = [];
+
+        if (Auth::user()->role === 'superadmin') {
+            $clubs = Clubs::all();
+        }
+
+        return view('activities.create', compact('clubs'));
     }
 
     public function store(Request $request)
@@ -38,7 +49,7 @@ class ActivityController extends Controller
             'id_club' => 'required',
             'nama_kegiatan' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'foto.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi foto
+            'foto.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $daftarFoto = [];
@@ -51,7 +62,7 @@ class ActivityController extends Controller
 
         Activity::create([
             'id_club' => $request->id_club,
-            'name' => $request->nama_kegiatan, // Tetap pakai kolom `name` di database
+            'name' => $request->nama_kegiatan,
             'description' => $request->deskripsi,
             'photos' => json_encode($daftarFoto),
         ]);
@@ -68,7 +79,13 @@ class ActivityController extends Controller
 
     public function edit(Activity $activity)
     {
-        return view('activities.edit', compact('activity'));
+        $clubs = [];
+
+        if (Auth::user()->role === 'superadmin') {
+            $clubs = Clubs::all();
+        }
+
+        return view('activities.edit', compact('activity', 'clubs'));
     }
 
     public function update(Request $request, Activity $activity)
@@ -77,10 +94,10 @@ class ActivityController extends Controller
             'id_club' => 'required',
             'nama_kegiatan' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'foto.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi foto
+            'foto.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $foto = json_decode($activity->photos, true); // Menyimpan nama lama jika tidak diganti
+        $foto = json_decode($activity->photos, true);
 
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $file) {
