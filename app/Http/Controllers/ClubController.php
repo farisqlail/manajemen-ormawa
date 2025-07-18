@@ -22,7 +22,7 @@ class ClubController extends Controller
             ->get();
         $jumlahNotifikasi = $notifikasi->count();
 
-        return view('clubs.index', compact('daftarOrmawa', 'notifikasi', 'jumlahNotifikasi'));
+        return view('ormawa.index', compact('daftarOrmawa', 'notifikasi', 'jumlahNotifikasi'));
     }
 
 
@@ -38,7 +38,7 @@ class ClubController extends Controller
 
         $jumlahNotifikasi = $notifikasi->count();
 
-        return view('clubs.create', compact('notifikasi', 'jumlahNotifikasi'));
+        return view('ormawa.buat', compact('notifikasi', 'jumlahNotifikasi'));
     }
 
     public function store(Request $permintaan)
@@ -63,7 +63,7 @@ class ClubController extends Controller
 
             Clubs::create($dataOrmawa);
 
-            return redirect()->route('clubs.index')->with('success', 'Ormawa berhasil ditambahkan.');
+            return redirect()->route('ormawa.index')->with('success', 'Ormawa berhasil ditambahkan.');
         } catch (\Exception $kesalahan) {
             return redirect()->back()->with('error', 'Gagal menambahkan Ormawa: ' . $kesalahan->getMessage());
         }
@@ -81,7 +81,7 @@ class ClubController extends Controller
 
         $jumlahNotifikasi = $notifikasi->count();
 
-        return view('clubs.edit', compact('ormawa', 'notifikasi', 'jumlahNotifikasi'));
+        return view('ormawa.edit', compact('ormawa', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function update(Request $permintaan, Clubs $ormawa)
@@ -112,7 +112,7 @@ class ClubController extends Controller
 
             $ormawa->update($data);
 
-            return redirect()->route('clubs.index')->with('success', 'Data ormawa berhasil diperbarui.');
+            return redirect()->route('ormawa.index')->with('success', 'Data ormawa berhasil diperbarui.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memperbarui ormawa: ' . $e->getMessage());
         }
@@ -121,7 +121,7 @@ class ClubController extends Controller
 
     public function editOrmawa(Clubs $ormawa)
     {
-        return view('clubs.editOrmawa', compact('ormawa'));
+        return view('ormawa.editOrmawa', compact('ormawa'));
     }
 
     public function updateOrmawa(Request $permintaan, Clubs $ormawa)
@@ -161,7 +161,7 @@ class ClubController extends Controller
     public function destroy(Clubs $club)
     {
         $club->delete();
-        return redirect()->route('clubs.index')->with('success', 'Club deleted successfully.');
+        return redirect()->route('ormawa.index')->with('success', 'Club deleted successfully.');
     }
 
     public function showProfile($id)

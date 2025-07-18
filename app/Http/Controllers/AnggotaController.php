@@ -33,7 +33,7 @@ class AnggotaController extends Controller
                 ->get();
         }
 
-        return view('anggotas.index', compact('daftarAnggota', 'notifikasi', 'jumlahNotifikasi'));
+        return view('anggota.index', compact('daftarAnggota', 'notifikasi', 'jumlahNotifikasi'));
     }
 
 
@@ -50,7 +50,7 @@ class AnggotaController extends Controller
         $daftarOrmawa = Clubs::where('id', $pengguna->id_club)->get();
         $daftarDivisi = Division::where('id_clubs', $pengguna->id_club)->get();
 
-        return view('anggotas.create', compact('daftarOrmawa', 'daftarOrmawaNonUser', 'daftarDivisi'));
+        return view('anggota.buat', compact('daftarOrmawa', 'daftarOrmawaNonUser', 'daftarDivisi'));
     }
 
     public function store(Request $request)
@@ -63,12 +63,12 @@ class AnggotaController extends Controller
 
         Anggota::create($request->all());
 
-        return redirect()->route('anggotas.index')->with('success', 'Anggota berhasil ditambahkan.');
+        return redirect()->route('anggota.index')->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     public function show(Anggota $anggota)
     {
-        return view('anggotas.show', compact('anggota'));
+        return view('anggota.show', compact('anggota'));
     }
 
     public function edit($id)
@@ -79,7 +79,7 @@ class AnggotaController extends Controller
         $daftarOrmawa = Clubs::where('id', $idOrmawaPengguna)->get();
         $daftarDivisi = Division::where('id_clubs', $idOrmawaPengguna)->get();
 
-        return view('anggotas.edit', compact('dataAnggota', 'daftarOrmawa', 'daftarOrmawaNonUser', 'daftarDivisi'));
+        return view('anggota.edit', compact('dataAnggota', 'daftarOrmawa', 'daftarOrmawaNonUser', 'daftarDivisi'));
     }
 
     public function update(Request $request, Anggota $anggota)
@@ -92,12 +92,12 @@ class AnggotaController extends Controller
 
         $anggota->update($request->all());
 
-        return redirect()->route('anggotas.index')->with('success', 'Anggota berhasil diperbarui.');
+        return redirect()->route('anggota.index')->with('success', 'Anggota berhasil diperbarui.');
     }
 
     public function destroy(Anggota $anggota)
     {
         $anggota->delete();
-        return redirect()->route('anggotas.index')->with('success', 'Anggota deleted successfully.');
+        return redirect()->route('anggota.index')->with('success', 'Anggota deleted successfully.');
     }
 }

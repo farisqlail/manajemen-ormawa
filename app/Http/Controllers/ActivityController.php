@@ -40,7 +40,7 @@ class ActivityController extends Controller
             $clubs = Clubs::all();
         }
 
-        return view('activities.create', compact('clubs'));
+        return view('activities.buat', compact('clubs'));
     }
 
     public function store(Request $request)
@@ -67,14 +67,14 @@ class ActivityController extends Controller
             'photos' => json_encode($daftarFoto),
         ]);
 
-        return redirect()->route('activities.index')->with('success', 'Kegiatan berhasil ditambahkan.');
+        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil ditambahkan.');
     }
 
     public function show($id)
     {
         $kegiatan = Activity::findOrFail($id);
 
-        return view('activities.show', compact('kegiatan'));
+        return view('kegiatan.tampil', compact('kegiatan'));
     }
 
     public function edit(Activity $activity)
@@ -85,7 +85,7 @@ class ActivityController extends Controller
             $clubs = Clubs::all();
         }
 
-        return view('activities.edit', compact('activity', 'clubs'));
+        return view('kegiatan.edit', compact('activity', 'clubs'));
     }
 
     public function update(Request $request, Activity $activity)
@@ -113,7 +113,7 @@ class ActivityController extends Controller
             'photos' => json_encode($foto),
         ]);
 
-        return redirect()->route('activities.index')->with('success', 'Kegiatan berhasil diperbarui.');
+        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
     public function destroy(Activity $activity)
@@ -124,6 +124,6 @@ class ActivityController extends Controller
         }
 
         $activity->delete();
-        return redirect()->route('activities.index')->with('success', 'Activity deleted successfully.');
+        return redirect()->route('kegiatan.index')->with('success', 'Activity deleted successfully.');
     }
 }

@@ -22,13 +22,13 @@ class DivisionController extends Controller
             ->get();
         $jumlahNotifikasi = $notifikasi->count();
 
-        return view('divisions.index', compact('daftarDivisi', 'dataOrmawa', 'notifikasi', 'jumlahNotifikasi'));
+        return view('divisi.index', compact('daftarDivisi', 'dataOrmawa', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function create($id_club)
     {
         $dataOrmawa = Clubs::findOrFail($id_club);
-        return view('divisions.create', compact('dataOrmawa'));
+        return view('divisi.buat', compact('dataOrmawa'));
     }
 
     public function store(Request $request, $id_club)
@@ -42,14 +42,14 @@ class DivisionController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('divisions.index', $id_club)->with('success', 'Divisi berhasil ditambahkan.');
+        return redirect()->route('divisi.index', $id_club)->with('success', 'Divisi berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
         $dataDivisi = Division::findOrFail($id);
         $dataOrmawa = Clubs::findOrFail($dataDivisi->id_clubs);
-        return view('divisions.edit', compact('dataDivisi', 'dataOrmawa'));
+        return view('divisi.edit', compact('dataDivisi', 'dataOrmawa'));
     }
 
     public function update(Request $request, $id)
@@ -63,7 +63,7 @@ class DivisionController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('divisions.index', $dataDivisi->id_clubs)->with('success', 'Divisi berhasil diperbarui.');
+        return redirect()->route('divisi.index', $dataDivisi->id_clubs)->with('success', 'Divisi berhasil diperbarui.');
     }
 
     public function destroy($id)

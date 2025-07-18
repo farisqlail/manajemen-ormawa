@@ -123,6 +123,6 @@ class DashboardController extends Controller
             return redirect()->back()->with('error', 'Anda tidak memiliki akses.');
         }
 
-        return view('prokers.club', compact('prokerPending', 'notifikasi', 'jumlahNotifikasi'));
+        return view('prokers.ormawa', compact('prokerPending', 'notifikasi', 'jumlahNotifikasi'));
     }
 }

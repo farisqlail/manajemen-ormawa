@@ -124,7 +124,7 @@ class AuthController extends Controller
 
         $jumlahNotifikasi = $notifikasi->count();
 
-        return view('users.create', compact('daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
+        return view('pengguna.create', compact('daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function store(Request $request)
@@ -149,7 +149,7 @@ class AuthController extends Controller
             'status' => $dataValidasi['status'],
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil dibuat.');
+        return redirect()->route('pengguna.index')->with('success', 'User berhasil dibuat.');
     }
 
     public function edit(User $user)
@@ -165,7 +165,7 @@ class AuthController extends Controller
             ->get();
         $jumlahNotifikasi = $notifikasi->count();
     
-        return view('users.edit', compact('user', 'daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
+        return view('pengguna.edit', compact('user', 'daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
     }
     
     public function update(Request $request, User $user)
@@ -191,13 +191,13 @@ class AuthController extends Controller
     
         $user->save();
     
-        return redirect()->route('users.index')->with('success', 'Pengguna berhasil diperbarui.');
+        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
     
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('pengguna.index')->with('success', 'User deleted successfully.');
     }
 
     public function approveUser($id)

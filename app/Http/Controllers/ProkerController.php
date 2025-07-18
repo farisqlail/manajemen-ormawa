@@ -40,7 +40,7 @@ class ProkerController extends Controller
     public function create()
     {
         $daftarOrmawa = Clubs::all();
-        return view('prokers.create', compact('daftarOrmawa'));
+        return view('prokers.buat', compact('daftarOrmawa'));
     }
 
     public function store(Request $request)
@@ -78,7 +78,7 @@ class ProkerController extends Controller
     {
         $proker = Proker::with('club')->findOrFail($id);
 
-        return view('prokers.show', compact('proker'));
+        return view('prokers.tampil', compact('proker'));
     }
 
     public function edit(Proker $proker)
@@ -107,7 +107,6 @@ class ProkerController extends Controller
                 'reason' => '',
             ];
 
-            // Handle proposal file
             if ($request->hasFile('proposal_file')) {
                 if ($proker->proposal && Storage::disk('public')->exists($proker->proposal)) {
                     Storage::disk('public')->delete($proker->proposal);
@@ -118,7 +117,6 @@ class ProkerController extends Controller
 
             $laporanDiupload = false;
 
-            // Handle laporan file
             if ($request->hasFile('laporan_file')) {
                 if ($proker->laporan && Storage::disk('public')->exists($proker->laporan)) {
                     Storage::disk('public')->delete($proker->laporan);
@@ -129,7 +127,6 @@ class ProkerController extends Controller
                 $laporanDiupload = true;
             }
 
-            // Logic status
             if ($request->get('status') === 'approved') {
                 if (!$laporanDiupload) {
                     $dataProker['status'] = 'pending';
@@ -172,10 +169,6 @@ class ProkerController extends Controller
     {
         $proker = Proker::findOrFail($id);
 
-        // if (Auth::user()->role == 'pembina' && $proker->status == 'pending') {
-        //     $proker->status = 'pembina';
-        //     $proker->reason = '';
-        // } else
         if (Auth::user()->role == 'admin') {
             $proker->status = 'approved';
             $proker->reason = '';
