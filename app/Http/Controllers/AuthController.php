@@ -124,7 +124,7 @@ class AuthController extends Controller
 
         $jumlahNotifikasi = $notifikasi->count();
 
-        return view('pengguna.create', compact('daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
+        return view('pengguna.buat', compact('daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function store(Request $request)

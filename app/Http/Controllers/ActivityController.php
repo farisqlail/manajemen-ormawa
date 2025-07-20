@@ -29,7 +29,7 @@ class ActivityController extends Controller
 
         $jumlahNotifikasi = $notifikasi->count();
 
-        return view('activities.index', compact('kegiatan', 'notifikasi', 'jumlahNotifikasi'));
+        return view('kegiatan.index', compact('kegiatan', 'notifikasi', 'jumlahNotifikasi'));
     }
 
     public function create()
@@ -40,7 +40,7 @@ class ActivityController extends Controller
             $clubs = Clubs::all();
         }
 
-        return view('activities.buat', compact('clubs'));
+        return view('kegiatan.buat', compact('clubs'));
     }
 
     public function store(Request $request)

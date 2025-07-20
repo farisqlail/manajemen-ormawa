@@ -100,8 +100,6 @@
 
                         @if(Auth::user()->id_club)
                         <a class="collapse-item" href="{{ route('divisions.index', ['id_club' => Auth::user()->id_club]) }}">Divisi</a>
-                        @else
-                        <a class="collapse-item disabled" href="javascript:void(0)" onclick="return false;">Divisi (Tidak tersedia)</a>
                         @endif
 
                         <a class="collapse-item" href="/activities">Kegiatan</a>
