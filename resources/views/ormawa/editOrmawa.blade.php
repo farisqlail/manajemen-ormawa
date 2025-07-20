@@ -2,17 +2,36 @@
 
 @section('content')
 <div class="container">
+
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <h1>Edit Ormawa</h1>
     <form action="{{ route('clubs.updateOrmawa', $ormawa->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="form-group mb-3">
             <label for="name">Nama</label>
-            <input type="text" id="name" name="name" value="{{ $ormawa->name }}" class="form-control" required>
+            <input type="text" id="name" name="nama" value="{{ $ormawa->name }}" class="form-control">
         </div>
         <div class="form-group mb-3">
             <label for="description">Deskripsi</label>
-            <textarea id="description" name="description" class="form-control" rows="4" required>{{ $ormawa->description }}</textarea>
+            <textarea id="description" name="deskripsi" class="form-control" rows="4" required>{{ $ormawa->description }}</textarea>
         </div>
         <div class="form-group mb-3">
             <label for="logo">Logo <small class="text-danger">MAX: 2MB</small></label>

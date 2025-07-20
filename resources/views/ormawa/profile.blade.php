@@ -59,47 +59,47 @@
             <h3 class="fw-semibold">📌 Daftar Proker</h3>
         </div>
         @if($daftarProker->isEmpty())
-            <p class="text-muted">Belum ada program kerja.</p>
+        <p class="text-muted">Belum ada program kerja.</p>
         @else
-            <div class="row row-cols-1 row-cols-md-2 g-3">
-                @foreach($daftarProker as $proker)
-                    <div class="col">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $proker->name }}</h5>
-                                <p class="card-text text-muted">
-                                    Target Event: <span class="badge bg-info text-dark">{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</span>
-                                </p>
-                            </div>
-                        </div>
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+            @foreach($daftarProker as $proker)
+            <div class="col">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $proker->name }}</h5>
+                        <p class="card-text text-muted">
+                            Target Event: <span class="badge bg-info text-dark">{{ \Carbon\Carbon::parse($proker->target_event)->format('d M Y') }}</span>
+                        </p>
                     </div>
-                @endforeach
+                </div>
             </div>
+            @endforeach
+        </div>
         @endif
 
         <div class="section-title">
             <h3 class="fw-semibold">🎯 Daftar Aktivitas</h3>
         </div>
         @if($daftarKegiatan->isEmpty())
-            <p class="text-muted">Belum ada aktivitas tercatat.</p>
+        <p class="text-muted">Belum ada aktivitas tercatat.</p>
         @else
-            <div class="row g-3">
-                @foreach($daftarKegiatan as $kegiatan)
-                    <div class="col-md-6">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $kegiatan->name }}</h5>
-                                <p class="card-text">{!! $kegiatan->description !!}</p>
-                                <div class="d-flex flex-wrap gap-2 mt-3">
-                                    @foreach (json_decode($kegiatan->photos) as $photo)
-                                        <img src="{{ Storage::url($photo) }}" class="activity-img" style="width: 100px; height: 100px;" alt="Photo">
-                                    @endforeach
-                                </div>
-                            </div>
+        <div class="row g-3">
+            @foreach($daftarKegiatan as $kegiatan)
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $kegiatan->name }}</h5>
+                        <p class="card-text">{!! $kegiatan->description !!}</p>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            @foreach (json_decode($kegiatan->photos) as $photo)
+                            <img src="{{ Storage::url($photo) }}" class="activity-img" style="width: 100px; height: 100px;" alt="Photo">
+                            @endforeach
                         </div>
                     </div>
-                @endforeach
+                </div>
             </div>
+            @endforeach
+        </div>
         @endif
     </div>
 

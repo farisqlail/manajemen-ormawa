@@ -14,6 +14,12 @@
         </div>
     </div>
 
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
     <div class="card shadow-sm border-0 p-4">
         <div class="text-center mb-4">
             @if($club->logo)

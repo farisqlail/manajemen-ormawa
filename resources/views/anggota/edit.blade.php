@@ -13,8 +13,10 @@
                 <div class="form-group">
                     <label for="club_id">Ormawa</label>
                     @if(Auth::user()->id_club)
-                    <input type="text" class="form-control" id="club_id"
-                        value="{{ Auth::user()->club->name ?? 'N/A' }}" readonly>
+                    <!-- Tetap pakai select, tapi di-disable -->
+                    <select class="form-control" id="club_id" disabled>
+                        <option value="{{ Auth::user()->id_club }}">{{ Auth::user()->club->name ?? 'N/A' }}</option>
+                    </select>
                     <input type="hidden" name="id_club" value="{{ Auth::user()->id_club }}">
                     @else
                     <select class="form-control" name="id_club" id="club_id" required>
@@ -54,6 +56,7 @@
     </div>
 </div>
 
+<!-- Script AJAX untuk load divisi -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -69,21 +72,38 @@
                             $('#id_division').append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
                         });
                     },
+                    error: function() {
+                        $('#id_division').empty().append('<option value="">Gagal memuat divisi</option>');
+                    }
                 });
             } else {
                 $('#id_division').empty().append('<option value="">Pilih Divisi</option>');
             }
         }
 
+        // Trigger jika user mengubah club
         $('#club_id').on('change', function() {
             const clubId = $(this).val();
             loadDivisi(clubId);
         });
 
-        const initialClubId = $('#club_id').val();
-        const initialDivisionId = "{{ $dataAnggota->id_division }}";
-        if (initialClubId) {
-            loadDivisi(initialClubId, initialDivisionId);
+        // Cek user tidak punya id_club (artinya pakai select)
+        const clubSelect = $('#club_id');
+        const isClubDropdown = !clubSelect.prop('disabled'); // dropdown = tidak disabled
+        const selectedClubId = clubSelect.val();
+        const selectedDivisionId = "{{ $dataAnggota->id_division }}";
+
+        if (isClubDropdown && selectedClubId) {
+            // Kalau club sudah terisi saat load awal, langsung muat divisinya
+            loadDivisi(selectedClubId, selectedDivisionId);
+        }
+
+        // Jika user punya id_club (input hidden), pakai cara sebelumnya
+        if (!isClubDropdown) {
+            const hiddenClubId = $('input[name="id_club"]').val();
+            if (hiddenClubId) {
+                loadDivisi(hiddenClubId, selectedDivisionId);
+            }
         }
     });
 </script>

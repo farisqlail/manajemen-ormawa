@@ -112,7 +112,7 @@ class ClubController extends Controller
 
             $ormawa->update($data);
 
-            return redirect()->route('ormawa.index')->with('success', 'Data ormawa berhasil diperbarui.');
+            return redirect()->route('clubs.index')->with('success', 'Data ormawa berhasil diperbarui.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memperbarui ormawa: ' . $e->getMessage());
         }
@@ -126,36 +126,34 @@ class ClubController extends Controller
 
     public function updateOrmawa(Request $permintaan, Clubs $ormawa)
     {
-        try {
-            $permintaan->validate([
-                'nama' => 'required|string|max:255',
-                'deskripsi' => 'required',
-                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'foto_struktur' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
+        $permintaan->validate([
+            'nama' => 'required|string|max:255',
+            'deskripsi' => 'required',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_struktur' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-            $data = $permintaan->all();
+        // Update data dasar
+        $ormawa->name = $permintaan->nama;
+        $ormawa->description = $permintaan->deskripsi;
 
-            if ($permintaan->hasFile('logo')) {
-                if ($ormawa->logo) {
-                    Storage::disk('public')->delete($ormawa->logo);
-                }
-                $data['logo'] = $permintaan->file('logo')->store('logos', 'public');
+        // Handle file uploads
+        if ($permintaan->hasFile('logo')) {
+            if ($ormawa->logo) {
+                Storage::disk('public')->delete($ormawa->logo);
             }
-
-            if ($permintaan->hasFile('foto_struktur')) {
-                if ($ormawa->foto_struktur) {
-                    Storage::disk('public')->delete($ormawa->foto_struktur);
-                }
-                $data['foto_struktur'] = $permintaan->file('foto_struktur')->store('photos', 'public');
-            }
-
-            $ormawa->update($data);
-
-            return redirect()->route('profile')->with('success', 'Data ormawa berhasil diperbarui.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal memperbarui data ormawa: ' . $e->getMessage());
+            $ormawa->logo = $permintaan->file('logo')->store('logos', 'public');
         }
+
+        if ($permintaan->hasFile('foto_struktur')) {
+            if ($ormawa->photo_structure) {
+                Storage::disk('public')->delete($ormawa->photo_structure);
+            }
+            $ormawa->photo_structure = $permintaan->file('foto_struktur')->store('photos', 'public');
+        }
+
+        $ormawa->save();
+        return redirect()->route('profile')->with('success', 'Berhasil update');
     }
 
     public function destroy(Clubs $ormawa)
