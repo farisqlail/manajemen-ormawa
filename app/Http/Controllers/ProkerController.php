@@ -183,11 +183,19 @@ class ProkerController extends Controller
     {
         $proker = Proker::findOrFail($id);
 
-        $proker->status_laporan = 'pending';
-        $proker->reason = $request->get('reason');
-        $proker->save();
+        if ($proker->status === "pending") {
+            $proker->status = 'pending';
+            $proker->reason = $request->get('reason');
+            $proker->save();
 
-        return redirect()->back()->with('success', 'Proker rejected successfully.');
+            return redirect()->back()->with('success', 'Proker rejected successfully.');
+        } else {
+            $proker->status_laporan = 'pending';
+            $proker->reason = $request->get('reason');
+            $proker->save();
+
+            return redirect()->back()->with('success', 'Proker rejected successfully.');
+        }
     }
 
     public function rejectProkerNoReason(Request $request, $id)
