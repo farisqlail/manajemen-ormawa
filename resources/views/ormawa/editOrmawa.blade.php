@@ -53,7 +53,7 @@
             <label for="photo_structure">Foto Struktur <small class="text-danger">MAX: 2MB</small></label>
             <div class="input-group">
                 <div class="custom-file">
-                    <input type="file" id="photo_structure" name="photo_structure" class="custom-file-input" accept="image/*">
+                    <input type="file" id="photo_structure" name="foto_struktur" class="custom-file-input" accept="image/*">
                     <label class="custom-file-label" for="photo_structure">Pilih file</label>
                 </div>
             </div>
