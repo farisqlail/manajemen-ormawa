@@ -42,13 +42,30 @@ class AuthController extends Controller
             ]);
         }
 
+        // DEBUG: Cek password hash
+        \Log::info('=== LOGIN DEBUG ===');
+        \Log::info('Email: ' . $kredensial['email']);
+        \Log::info('Password input: ' . $kredensial['password']);
+        \Log::info('Password hash in DB: ' . $pengguna->password);
+        \Log::info('Hash check result: ' . (Hash::check($kredensial['password'], $pengguna->password) ? 'MATCH' : 'NO MATCH'));
+
+        // Cek manual password
+        if (!Hash::check($kredensial['password'], $pengguna->password)) {
+            \Log::info('Password check failed manually');
+            return back()->withErrors([
+                'password' => 'Password salah.',
+            ]);
+        }
+
         if (Auth::attempt($kredensial)) {
             $permintaan->session()->regenerate();
+            \Log::info('Login successful for: ' . $kredensial['email']);
             return redirect()->intended('dashboard');
         }
 
+        \Log::error('Auth::attempt failed even though Hash::check passed');
         return back()->withErrors([
-            'email' => 'Email atau password salah.',
+            'email' => 'Gagal login. Silakan coba lagi.',
         ]);
     }
 
@@ -164,10 +181,10 @@ class AuthController extends Controller
             ->where('status', 'pending')
             ->get();
         $jumlahNotifikasi = $notifikasi->count();
-    
+
         return view('pengguna.edit', compact('user', 'daftarOrmawa', 'daftarDivisi', 'notifikasi', 'jumlahNotifikasi'));
     }
-    
+
     public function update(Request $request, User $user)
     {
         $dataPengguna = $request->validate([
@@ -186,14 +203,23 @@ class AuthController extends Controller
         $user->status = $dataPengguna['status'];
     
         if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        } 
+        elseif ($request->has('reset_password')) {
             $user->password = Hash::make($dataPengguna['name'] . '123');
         }
     
         $user->save();
     
-        return redirect()->route('users.index')->with('success', 'Pengguna berhasil diperbarui.');
+        $message = 'Pengguna berhasil diperbarui.';
+        if ($request->has('reset_password')) {
+            $message .= ' Password direset menjadi: ' . $dataPengguna['name'] . '123';
+        }
+    
+        return redirect()->route('users.index')->with('success', $message);
     }
     
+
     public function destroy(User $user)
     {
         $user->delete();
