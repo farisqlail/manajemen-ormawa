@@ -105,7 +105,7 @@ class DashboardController extends Controller
             $query->where('name', 'like', '%' . $search . '%');
         }
 
-        $anggota = Anggota::where('id_club', $idOrmawa)->paginate(10);
+        $anggota = Anggota::where('id_club', $idOrmawa)->with('division')->paginate(10);
 
         $daftarProker = $query->get();
 
