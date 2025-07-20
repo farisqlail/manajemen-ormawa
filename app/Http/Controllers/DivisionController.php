@@ -42,7 +42,7 @@ class DivisionController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('division.index', $id_club)->with('success', 'Divisi berhasil ditambahkan.');
+        return redirect()->route('divisions.index', $id_club)->with('success', 'Divisi berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -63,7 +63,7 @@ class DivisionController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('division.index', $dataDivisi->id_clubs)->with('success', 'Divisi berhasil diperbarui.');
+        return redirect()->view('divisions.index', $dataDivisi->id_clubs)->with('success', 'Divisi berhasil diperbarui.');
     }
 
     public function destroy($id)
