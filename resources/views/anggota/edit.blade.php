@@ -69,9 +69,6 @@
                             $('#id_division').append('<option value="' + value.id + '" ' + selected + '>' + value.name + '</option>');
                         });
                     },
-                    error: function() {
-                        alert('Gagal memuat divisi.');
-                    }
                 });
             } else {
                 $('#id_division').empty().append('<option value="">Pilih Divisi</option>');

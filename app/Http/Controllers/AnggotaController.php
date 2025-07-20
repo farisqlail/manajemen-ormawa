@@ -39,7 +39,11 @@ class AnggotaController extends Controller
 
     public function getByClub($id)
     {
-        $divisions = Division::where('id_clubs', $id)->get();
+        $divisions = Division::where('club_id', $id)
+            ->orWhere('id_club', $id)
+            ->orWhere('id_clubs', $id)
+            ->get();
+
         return response()->json($divisions);
     }
 
