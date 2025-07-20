@@ -67,7 +67,7 @@ class ActivityController extends Controller
             'photos' => json_encode($daftarFoto),
         ]);
 
-        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil ditambahkan.');
+        return redirect()->route('activities.index')->with('success', 'Kegiatan berhasil ditambahkan.');
     }
 
     public function show($id)
@@ -113,7 +113,7 @@ class ActivityController extends Controller
             'photos' => json_encode($foto),
         ]);
 
-        return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil diperbarui.');
+        return redirect()->route('activities.index')->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
     public function destroy(Activity $activity)
@@ -124,6 +124,6 @@ class ActivityController extends Controller
         }
 
         $activity->delete();
-        return redirect()->route('kegiatan.index')->with('success', 'Activity deleted successfully.');
+        return redirect()->route('activities.index')->with('success', 'Activity deleted successfully.');
     }
 }

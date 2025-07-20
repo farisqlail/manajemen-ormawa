@@ -158,10 +158,10 @@ class ClubController extends Controller
         }
     }
 
-    public function destroy(Clubs $club)
+    public function destroy(Clubs $ormawa)
     {
-        $club->delete();
-        return redirect()->route('ormawa.index')->with('success', 'Club deleted successfully.');
+        $ormawa->forceDelete();
+        return redirect()->route('clubs.index')->with('success', 'Club deleted successfully.');
     }
 
     public function showProfile($id)

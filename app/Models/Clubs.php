@@ -11,6 +11,7 @@ class Clubs extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name', 'description', 'logo', 'photo_structure'];
+
     protected $dates = ['deleted_at'];
 
     public function divisions()
@@ -20,6 +21,6 @@ class Clubs extends Model
 
     public function prokers()
     {
-        return $this->hasMany(Proker::class, 'id_club'); 
+        return $this->hasMany(Proker::class, 'id_club');
     }
 }

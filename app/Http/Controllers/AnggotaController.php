@@ -63,7 +63,7 @@ class AnggotaController extends Controller
 
         Anggota::create($request->all());
 
-        return redirect()->route('anggota.index')->with('success', 'Anggota berhasil ditambahkan.');
+        return redirect()->route('anggotas.index')->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     public function show(Anggota $anggota)
@@ -92,12 +92,12 @@ class AnggotaController extends Controller
 
         $anggota->update($request->all());
 
-        return redirect()->route('anggota.index')->with('success', 'Anggota berhasil diperbarui.');
+        return redirect()->route('anggotas.index')->with('success', 'Anggota berhasil diperbarui.');
     }
 
     public function destroy(Anggota $anggota)
     {
         $anggota->delete();
-        return redirect()->route('anggota.index')->with('success', 'Anggota deleted successfully.');
+        return redirect()->route('anggotas.index')->with('success', 'Anggota deleted successfully.');
     }
 }
