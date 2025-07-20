@@ -139,6 +139,42 @@
             @endif
         </div>
     </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Data Anggota</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if($anggota->isEmpty())
+                            <tr>
+                                <td colspan="3" class="text-center">Tidak ada anggota.</td>
+                            </tr>
+                            @else
+                            @foreach($anggota as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->name }}</td>
+                            </tr>
+                            @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+
+                    <div class="mt-3">
+                        {{ $anggota->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal Reject -->

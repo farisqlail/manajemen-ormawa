@@ -139,6 +139,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>Divisi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -151,6 +152,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->name }}</td>
+                                <td>{{ $item->division->name }}</td>
                             </tr>
                             @endforeach
                             @endif

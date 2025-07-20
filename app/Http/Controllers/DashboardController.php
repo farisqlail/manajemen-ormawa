@@ -80,7 +80,7 @@ class DashboardController extends Controller
             ->get()
             ->groupBy('id_club');
 
-        $anggota = Anggota::where('id_club', $pengguna->id_club)->paginate(10);
+        $anggota = Anggota::where('id_club', $pengguna->id_club)->with('division')->paginate(10);
 
         return view('dashboard.index', compact(
             'penggunaPending',
@@ -105,6 +105,8 @@ class DashboardController extends Controller
             $query->where('name', 'like', '%' . $search . '%');
         }
 
+        $anggota = Anggota::where('id_club', $idOrmawa)->paginate(10);
+
         $daftarProker = $query->get();
 
         $notifikasi = Proker::where(function ($query) {
@@ -123,6 +125,6 @@ class DashboardController extends Controller
             return redirect()->back()->with('error', 'Anda tidak memiliki akses.');
         }
 
-        return view('prokers.ormawa', compact('prokerPending', 'notifikasi', 'jumlahNotifikasi'));
+        return view('prokers.ormawa', compact('prokerPending', 'notifikasi', 'jumlahNotifikasi', 'anggota'));
     }
 }
