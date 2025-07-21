@@ -184,13 +184,13 @@ class ProkerController extends Controller
         $proker = Proker::findOrFail($id);
 
         if ($proker->status === "pending") {
-            $proker->status = 'pending';
+            $proker->status = 'rejected';
             $proker->reason = $request->get('reason');
             $proker->save();
 
             return redirect()->back()->with('success', 'Proker rejected successfully.');
         } else {
-            $proker->status_laporan = 'pending';
+            $proker->status_laporan = 'rejected';
             $proker->reason = $request->get('reason');
             $proker->save();
 

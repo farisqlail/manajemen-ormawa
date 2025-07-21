@@ -80,20 +80,35 @@
                         @if(Auth::user()->role == 'ormawa')
                         <td>
                             <div class="d-flex flex-wrap">
-                                <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-warning btn-sm mr-2 mb-2">
-                                    <i class="fas fa-fw fa-pen"></i>
-                                </a>
+                                @if($proker->status === 'rejected' || $proker->status_laporan === 'rejected')
+                                {{-- Tampilkan hanya tombol hapus --}}
                                 <form action="{{ route('prokers.destroy', $proker->id) }}" method="POST" class="mr-2 mb-2" onsubmit="return confirm('Yakin hapus proker ini?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-fw fa-trash"></i></button>
                                 </form>
+                                @else
+                                {{-- Tombol Edit --}}
+                                <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-warning btn-sm mr-2 mb-2">
+                                    <i class="fas fa-fw fa-pen"></i>
+                                </a>
+
+                                {{-- Tombol Hapus --}}
+                                <form action="{{ route('prokers.destroy', $proker->id) }}" method="POST" class="mr-2 mb-2" onsubmit="return confirm('Yakin hapus proker ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-fw fa-trash"></i></button>
+                                </form>
+
+                                {{-- Tombol Proposal --}}
                                 @if($proker->proposal !== null)
                                 <a href="{{ route('prokers.export', $proker->id) }}" class="btn btn-primary mr-2 btn-sm">
                                     Proposal
                                 </a>
                                 @endif
-                                @if($proker->status == 'approved' && $proker->laporan == "")
+
+                                {{-- Tombol Upload atau Export Laporan --}}
+                                @if($proker->status === 'approved' && $proker->laporan == "")
                                 <a href="{{ route('prokers.edit', $proker->id) }}" class="btn btn-info btn-sm mr-2 mb-2">
                                     Upload Laporan
                                 </a>
@@ -101,6 +116,7 @@
                                 <a href="{{ route('prokers.exportLaporan', $proker->id) }}" class="btn btn-info mr-2 btn-sm">
                                     Laporan
                                 </a>
+                                @endif
                                 @endif
                             </div>
                         </td>
